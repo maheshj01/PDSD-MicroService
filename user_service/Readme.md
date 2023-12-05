@@ -2,6 +2,25 @@
 
 User Service is a RESTful API built using Node.js, Express, and PostgreSQL. It provides functionality for user authentication, account management, and basic CRUD operations on a user table in a PostgreSQL database.
 
+### Database Schema
+
+```
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    student_id VARCHAR(20),
+    staff_id VARCHAR(20),
+    contact_email VARCHAR(255) NOT NULL,
+    contact_phone VARCHAR(20),
+    mailing_address VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+```
+
 ## Features
 
 1. **User Authentication**: Utilizes JSON Web Tokens (JWT) for user authentication and authorization.

@@ -1,12 +1,16 @@
 // routes/checkoutRoutes.ts
 
-import { Router } from 'express';
-import checkoutController from '../controllers/checkoutController';
+import express from 'express';
+import CheckoutController from '../controllers/checkoutController';
+import { CheckoutService } from '../services/checkoutService';
 
-const checkoutRouter: Router = Router();
+const router = express.Router();
+const app = express();
+const checkoutService = new CheckoutService();
+const checkoutController = new CheckoutController(checkoutService);
 
-checkoutRouter.get('/checkouts', checkoutController.getAllCheckouts);
-checkoutRouter.get('/checkouts/:id', checkoutController.getCheckoutById);
-checkoutRouter.post('/checkouts', checkoutController.addNewCheckout);
+router.get('/checkouts', checkoutController.getAllCheckouts);
+router.get('/checkouts/:id', checkoutController.getCheckoutById);
+router.post('/checkouts', checkoutController.addNewCheckout);
 
-export default checkoutRouter;
+export default router;

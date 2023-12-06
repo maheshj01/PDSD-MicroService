@@ -4,14 +4,11 @@
 
 Microservices are a software development technique—a variant of the service-oriented architecture (SOA) architectural style that structures an application as a collection of loosely coupled services. In a microservices architecture, services are fine-grained and the protocols are lightweight. The benefit of decomposing an application into different smaller services is that it improves modularity. This makes the application easier to understand, develop, test, and become more resilient to architecture erosion. It parallelizes development by enabling small autonomous teams to develop, deploy and scale their respective services independently. It also allows the architecture of an individual service to emerge through continuous refactoring. Microservices-based architectures enable continuous delivery and deployment.
 
-
 ### Micro services in this project
 
 - User Service
 - Book Service
 - Checkout Service
-
-
 
 ### Running the Project
 
@@ -20,7 +17,6 @@ Before running the project, make sure to install the required dependencies:
 ```bash
 ./start.sh
 ```
-
 
 ### Database Schema by Micro Service
 
@@ -44,6 +40,7 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 ```
+
 #### 2. Book Service:
 
 Tables: books, book_checkouts, book_requests
@@ -84,6 +81,7 @@ CREATE TABLE book_requests (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
+
 #### Checkout Service:
 
 Tables: checkouts, checkout_renewals, checkout_holds
@@ -105,6 +103,7 @@ CREATE TABLE checkouts (
 -- Table for handling checkout renewals
 CREATE TABLE checkout_renewals (
     id SERIAL PRIMARY KEY,
+    user_id INTEGER,
     checkout_id INTEGER,
     renewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     new_due_date TIMESTAMP,
@@ -115,6 +114,7 @@ CREATE TABLE checkout_renewals (
 -- Table for tracking holds on checked-out items
 CREATE TABLE checkout_holds (
     id SERIAL PRIMARY KEY,
+    user_id INTEGER,
     checkout_id INTEGER,
     placed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -102,7 +102,7 @@ class CheckoutController {
       await CheckoutService.placeHoldOnBook(userId, bookId);
 
       // Return success
-      res.json({ message: 'Hold placed successfully' });
+      res.status(200).json({ message: 'Hold placed successfully' });
     } catch (error) {
       console.error('Error in placeHoldOnBook:', error);
       res.status(500).json({ error: 'Internal Server Error' });

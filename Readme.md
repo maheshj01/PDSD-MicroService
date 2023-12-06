@@ -114,12 +114,13 @@ CREATE TABLE checkout_renewals (
 -- Table for tracking holds on checked-out items
 CREATE TABLE checkout_holds (
     id SERIAL PRIMARY KEY,
+    book_id INTEGER,
     user_id INTEGER,
-    checkout_id INTEGER,
     placed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 ```
 

@@ -89,10 +89,12 @@ CREATE TABLE book_requests (
 Tables: checkouts, checkout_renewals, checkout_holds
 
 ```bash
+-- Schema Creation
+-- Table for managing checkouts
 CREATE TABLE checkouts (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    book_id INTEGER REFERENCES books(id) ON DELETE CASCADE,
+    user_id INTEGER,
+    book_id INTEGER,
     checkout_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     due_date TIMESTAMP,
     returned BOOLEAN DEFAULT false,
@@ -100,22 +102,25 @@ CREATE TABLE checkouts (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Table for handling checkout renewals
 CREATE TABLE checkout_renewals (
     id SERIAL PRIMARY KEY,
-    checkout_id INTEGER REFERENCES checkouts(id) ON DELETE CASCADE,
+    checkout_id INTEGER,
     renewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     new_due_date TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Table for tracking holds on checked-out items
 CREATE TABLE checkout_holds (
     id SERIAL PRIMARY KEY,
-    checkout_id INTEGER REFERENCES checkouts(id) ON DELETE CASCADE,
+    checkout_id INTEGER,
     placed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 ```
 
 ### Contributing

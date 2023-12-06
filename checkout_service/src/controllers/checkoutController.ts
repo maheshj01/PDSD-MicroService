@@ -74,18 +74,37 @@ class CheckoutController {
     }
   }
 
-  static async placeHoldOnCheckout(req: Request, res: Response): Promise<void> {
+  public static async placeHoldOnBook(req: Request, res: Response): Promise<void> {
     try {
-      const checkoutId = parseInt(req.params.id, 10);
-      if (isNaN(checkoutId) || checkoutId <= 0) {
-        res.status(400).json({ error: 'Invalid checkout ID' });
+      const { userId, bookId } = req.body;
+
+      // Validate and sanitize inputs
+      if (!userId || typeof userId !== 'number' || userId <= 0) {
+        res.status(400).json({ error: 'Invalid user ID' });
         return;
       }
 
-      await CheckoutService.placeHoldOnCheckout(checkoutId);
+      if (!bookId || typeof bookId !== 'number' || bookId <= 0) {
+        res.status(400).json({ error: 'Invalid book ID' });
+        return;
+      }
+
+      const userVerifyTokenUrl = `${process.env.USER_SERVICE_BASE_URL}/api/auth/verify-token`;
+      const token = req.header('Authorization')?.split(' ')[1];
+      const tokenVerificationResponse = await axios.post(userVerifyTokenUrl, {}, { headers: { Authorization: `Bearer ${token}` } });
+
+      if (tokenVerificationResponse.status !== 200) {
+        res.status(401).json({ error: 'Token verification failed' });
+        return;
+      }
+
+      // Call the corresponding methods from CheckoutService
+      await CheckoutService.placeHoldOnBook(userId, bookId);
+
+      // Return success
       res.json({ message: 'Hold placed successfully' });
     } catch (error) {
-      console.error('Error in placeHoldOnCheckout:', error);
+      console.error('Error in placeHoldOnBook:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
   }

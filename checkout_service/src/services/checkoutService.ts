@@ -78,28 +78,40 @@ class CheckoutService {
   }
 
   // New method to place a hold on a checked-out item
-  static async placeHoldOnCheckout(checkoutId: number): Promise<void> {
-    const result = await pool.query(
-      'INSERT INTO checkout_holds (checkout_id) VALUES ($1) RETURNING *',
-      [checkoutId]
-    );
+  public static async placeHoldOnBook(user_id: number, book_id: number): Promise<void> {
+    const client = await pool.connect();
 
-    if (result.rows.length === 0) {
-      throw new Error('Failed to place a hold on the checkout item');
-    }
-
-    // Communicate with BookService to update copies on hold
     try {
-      const bookServiceBaseUrl = process.env.BOOKS_SERVICE_BASE_URL;
-      const bookServiceEndpoint = `/api/books/updateCopiesOnHold/${checkoutId}`;
-      const bookServiceUrl = `${bookServiceBaseUrl}${bookServiceEndpoint}`;
+      await client.query('BEGIN');
 
-      await axios.post(bookServiceUrl);
+      // Check if a hold already exists for the book and user
+      const existingHoldResult = await client.query(
+        'SELECT id FROM checkout_holds WHERE book_id = $1 AND user_id = $2',
+        [book_id, user_id]
+      );
+
+      if (existingHoldResult.rows.length > 0) {
+        // Hold already exists, handle this case based on your application logic
+        throw new Error('Hold already exists for this book and user');
+      }
+
+      // Place a new hold
+      await client.query(
+        'INSERT INTO checkout_holds (user_id, book_id) VALUES ($1, $2)',
+        [user_id, book_id]
+      );
+
+      // Additional logic...
+      const result = await client.query('COMMIT');
+
     } catch (error) {
-      console.error('Error communicating with BookService:', error);
-      // Handle the error as needed
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
     }
   }
+
 
   // New method to renew a checked-out item
   static async renewCheckoutItem(checkoutId: number, newDueDate: Date): Promise<void> {

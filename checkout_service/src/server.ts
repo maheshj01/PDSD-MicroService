@@ -3,7 +3,7 @@
 import express from 'express';
 import checkoutRoutes from './routes/checkoutRoute';
 import CheckoutController from './controllers/checkoutController';
-import { CheckoutService } from './services/checkoutService';
+import CheckoutService from './services/checkoutService';
 import pool from './db/index';
 import dotenv from "dotenv";
 import bodyParser from 'body-parser';
@@ -19,8 +19,6 @@ app.use(bodyParser.json());
 app.use(express.json());
 
 // Create instances of services and controllers
-const checkoutService = new CheckoutService();
-const checkoutController = new CheckoutController(checkoutService);
 
 // Mount the checkout routes
 app.use('/api', checkoutRoutes);

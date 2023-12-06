@@ -2,6 +2,7 @@
 import { QueryResult } from 'pg';
 import { pool } from '../config/config';
 import Book from '../models/Book';
+import axios from 'axios';
 
 class BookService {
     static async searchBooks(params: any): Promise<Book[]> {
@@ -53,7 +54,41 @@ class BookService {
         }
     }
 
+    static async updateCopiesOnCheckout(bookId: number): Promise<boolean> {
+        try {
+            // Ensure bookId is a positive integer
+            if (!Number.isInteger(bookId) || bookId <= 0) {
+                console.error('Invalid bookId provided for updateCopiesOnCheckout');
+                return false;
+            }
 
+            // Check if the book exists
+            const checkBook = await pool.query('SELECT available_copies FROM books WHERE id = $1', [bookId]);
+
+            if (checkBook.rows.length === 0) {
+                console.error('Book not found for updateCopiesOnCheckout');
+                return false;
+            }
+
+            // Perform the necessary database update to decrement the available copies
+            const result = await pool.query(
+                'UPDATE books SET available_copies = CASE WHEN available_copies > 0 THEN available_copies - 1 ELSE 0 END WHERE id = $1 RETURNING *',
+                [bookId]
+            );
+
+            if (result.rows.length > 0) {
+                // Update successful
+                return true;
+            } else {
+                // Unexpected scenario, possibly a database issue
+                console.error('Unexpected issue in updateCopiesOnCheckout');
+                return false;
+            }
+        } catch (error) {
+            console.error('Error in updateCopiesOnCheckout:', error);
+            return false;
+        }
+    }
 
     static async getBookById(id: number): Promise<Book | null> {
         const query = 'SELECT * FROM books WHERE id = $1';
@@ -77,26 +112,23 @@ class BookService {
         return null;
     }
 
-    static async placeHoldOnBook(bookId: number): Promise<void> {
+    static async updateCopiesOnHold(bookId: number): Promise<void> {
         const query = 'UPDATE books SET available_copies = available_copies - 1 WHERE id = $1';
         const values = [bookId];
         await pool.query(query, values);
+
+        // Communicate with CheckoutService to place a hold on the book
+        try {
+            const checkoutServiceBaseUrl = process.env.CHECKOUT_SERVICE_BASE_URL;
+            const checkoutServiceEndpoint = '/api/checkouts/placeHold/';
+            const checkoutServiceUrl = `${checkoutServiceBaseUrl}${checkoutServiceEndpoint}${bookId}`;
+
+            await axios.post(checkoutServiceUrl);
+        } catch (error) {
+            console.error('Error communicating with CheckoutService:', error);
+            // Handle the error as needed
+        }
     }
-
-    // Add more methods as needed for specific book-related operations
-
-    // Example:
-    // static async addBook(book: Book): Promise<void> {
-    //   // Implement addBook logic
-    // }
-
-    // static async updateBook(book: Book): Promise<void> {
-    //   // Implement updateBook logic
-    // }
-
-    // static async deleteBook(id: number): Promise<void> {
-    //   // Implement deleteBook logic
-    // }
 }
 
 export default BookService;

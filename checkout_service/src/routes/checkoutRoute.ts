@@ -2,15 +2,14 @@
 
 import express from 'express';
 import CheckoutController from '../controllers/checkoutController';
-import { CheckoutService } from '../services/checkoutService';
+import CheckoutService from '../services/checkoutService';
 
 const checkoutRoutes = express.Router();
 const app = express();
-const checkoutService = new CheckoutService();
-const checkoutController = new CheckoutController(checkoutService);
 
-checkoutRoutes.get('/checkouts', checkoutController.getAllCheckouts);
-checkoutRoutes.get('/checkouts/:id', checkoutController.getCheckoutById);
-checkoutRoutes.post('/checkouts', checkoutController.addNewCheckout);
-
+checkoutRoutes.get('/checkouts', CheckoutController.getAllCheckouts);
+checkoutRoutes.get('/checkouts/:id', CheckoutController.getCheckoutById);
+checkoutRoutes.post('/checkouts/checkout', CheckoutController.checkoutBook);
+checkoutRoutes.post('/checkouts/:id/place-hold', CheckoutController.placeHoldOnCheckout);
+checkoutRoutes.post('/checkouts/:id/renew', CheckoutController.renewCheckoutItem);
 export default checkoutRoutes;

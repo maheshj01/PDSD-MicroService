@@ -18,4 +18,9 @@ authRouter.get('/protected', authMiddleware, (req, res) => {
     res.json({ message: 'This is a protected route' });
 });
 
+authRouter.post('/verify-token', authMiddleware, (req, res) => {
+    // This route can be used by other microservices to verify the token
+    res.json({ message: 'Token is valid' });
+});
+
 export default authRouter;

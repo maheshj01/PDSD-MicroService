@@ -17,7 +17,7 @@ app.use('/api', bookRoutes);
 pool
     .connect()
     .then(() => {
-        console.log('Connected to the database');
+        console.log('Book Service Connected to the database');
     })
     .catch((error: any) => {
         console.error('Unable to connect to the database:', error);

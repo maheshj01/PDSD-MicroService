@@ -42,8 +42,8 @@ start_database
 # Start each microservice
 start_microservice "book_service"
 start_microservice "user_service"
+start_microservice "checkout_service"
 # Uncomment the following lines if you want to start checkout_service
-# start_microservice "checkout_service"
 #
 # Wait for all background jobs to finish
 wait $(jobs -p)

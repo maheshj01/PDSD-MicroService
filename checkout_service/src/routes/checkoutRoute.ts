@@ -4,13 +4,13 @@ import express from 'express';
 import CheckoutController from '../controllers/checkoutController';
 import { CheckoutService } from '../services/checkoutService';
 
-const router = express.Router();
+const checkoutRoutes = express.Router();
 const app = express();
 const checkoutService = new CheckoutService();
 const checkoutController = new CheckoutController(checkoutService);
 
-router.get('/checkouts', checkoutController.getAllCheckouts);
-router.get('/checkouts/:id', checkoutController.getCheckoutById);
-router.post('/checkouts', checkoutController.addNewCheckout);
+checkoutRoutes.get('/checkouts', checkoutController.getAllCheckouts);
+checkoutRoutes.get('/checkouts/:id', checkoutController.getCheckoutById);
+checkoutRoutes.post('/checkouts', checkoutController.addNewCheckout);
 
-export default router;
+export default checkoutRoutes;

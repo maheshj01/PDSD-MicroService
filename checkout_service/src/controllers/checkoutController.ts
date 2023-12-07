@@ -10,21 +10,10 @@ class CheckoutController {
     try {
       const { userId, bookId, dueDate } = req.body;
 
-      // Validate and sanitize inputs
-      // ... your validation logic ...
-      const base_url = process.env.USER_SERVICE_BASE_URL;
-      const tokenFromHeader = req.header('Authorization')?.split(' ')[1];
-
       // Make a request to the user_service to verify the token
-      const tokenVerificationResponse = await axios.post(
-        `${base_url}/api/auth/verify-token`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${tokenFromHeader}`,
-          },
-        }
-      );
+      const userVerifyTokenUrl = `${process.env.USER_SERVICE_BASE_URL}/api/auth/verify-token`;
+      const token = req.header('Authorization')?.split(' ')[1];
+      const tokenVerificationResponse = await axios.post(userVerifyTokenUrl, {}, { headers: { Authorization: `Bearer ${token}` } });
 
       if (tokenVerificationResponse.status !== 200) {
         res.status(401).json({ error: 'Token verification failed' });
@@ -76,7 +65,8 @@ class CheckoutController {
 
   public static async placeHoldOnBook(req: Request, res: Response): Promise<void> {
     try {
-      const { userId, bookId } = req.body;
+      const bookId = parseInt(req.params.bookId, 10);
+      const userId = req.body.userId;
 
       // Validate and sanitize inputs
       if (!userId || typeof userId !== 'number' || userId <= 0) {
@@ -120,6 +110,15 @@ class CheckoutController {
       const newDueDate = new Date(req.body.newDueDate);
       if (isNaN(newDueDate.getTime())) {
         res.status(400).json({ error: 'Invalid new due date' });
+        return;
+      }
+
+      const userVerifyTokenUrl = `${process.env.USER_SERVICE_BASE_URL}/api/auth/verify-token`;
+      const token = req.header('Authorization')?.split(' ')[1];
+      const tokenVerificationResponse = await axios.post(userVerifyTokenUrl, {}, { headers: { Authorization: `Bearer ${token}` } });
+
+      if (tokenVerificationResponse.status !== 200) {
+        res.status(401).json({ error: 'Token verification failed' });
         return;
       }
 

@@ -112,7 +112,48 @@ class CheckoutService {
     }
   }
 
+  public static async returnCheckoutItem(checkoutId: number): Promise<boolean> {
+    const client = await pool.connect();
 
+    try {
+      await client.query('BEGIN');
+
+      // Check if the checkout exists and has not been returned
+      const checkoutResult = await client.query('SELECT * FROM checkouts WHERE id = $1 AND returned = false', [checkoutId]);
+      const checkout = checkoutResult.rows[0];
+
+      if (!checkout) {
+        throw new Error('Checkout not found or already returned');
+      }
+
+      // Update the checkout as returned
+      await client.query('UPDATE checkouts SET returned = true WHERE id = $1', [checkoutId]);
+      console.log('checkout return success for:', checkoutId, " bookid:", checkout.book_id);
+      // Make an API call to update copies in books_service
+      const booksServiceBaseUrl = process.env.BOOKS_SERVICE_BASE_URL;
+      const returnBookApiUrl = `${booksServiceBaseUrl}/api/books/${checkout.book_id}/return`;
+      console.log('returnBookApiUrl:', returnBookApiUrl);
+
+      const resp = await axios.put(returnBookApiUrl, { 'action': 'add' });
+
+      // Log the response
+      console.log('Response from Books Service:', resp.data);
+
+      if (resp.status === 200) {
+        await client.query('COMMIT');
+        return true;
+      } else {
+        throw new Error('Failed to update copies in Books Service');
+      }
+
+    } catch (error) {
+      await client.query('ROLLBACK');
+      console.error('Error in returnCheckoutItem:', error);
+      return false;
+    } finally {
+      client.release();
+    }
+  }
   // New method to renew a checked-out item
   static async renewCheckoutItem(checkoutId: number, newDueDate: Date): Promise<void> {
     const result = await pool.query(

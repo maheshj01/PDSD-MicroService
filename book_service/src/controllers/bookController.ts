@@ -43,27 +43,21 @@ class BookController {
         }
     }
 
-    static async updateCopiesOnCheckout(req: Request, res: Response): Promise<void> {
-        try {
-            const bookId = parseInt(req.params.bookId, 10);
-            if (isNaN(bookId) || bookId <= 0) {
-                res.status(400).json({ error: 'Invalid book ID' });
-                return;
-            }
-
-            // Call the corresponding method from BookService to update copies
-            const updateResult = await BookService.updateCopiesOnCheckout(bookId);
-
-            if (updateResult) {
-                res.json({ message: 'Copies updated successfully' });
-            } else {
-                res.status(404).json({ error: 'Book not found' });
-            }
-        } catch (error) {
-            console.error('Error in updateCopiesOnCheckout:', error);
-            res.status(500).json({ error: 'Internal Server Error' });
-        }
+    static async updateCopiesOnCheckout(req: Request, res: Response): Promise<boolean> {
+        const bookId = parseInt(req.params.bookId, 10);
+        return await BookService.updateCopies(bookId, 'remove');
     }
+
+    static async updateCopiesOnHold(req: Request, res: Response): Promise<boolean> {
+        const bookId = parseInt(req.params.bookId, 10);
+        return await BookService.updateCopies(bookId, 'remove');
+    }
+
+    static async updateCopiesOnReturn(req: Request, res: Response): Promise<boolean> {
+        const bookId = parseInt(req.params.bookId, 10);
+        return await BookService.updateCopies(bookId, 'add');
+    }
+
 
     static async placeHoldOnBook(bookId: number): Promise<void> {
         try {
@@ -77,27 +71,6 @@ class BookController {
         } catch (error) {
             console.error('Error in placeHoldOnBook:', error);
             throw error; // Rethrow the error for centralized error handling
-        }
-    }
-
-    // This method is called by CheckoutService to update the number of copies on hold for a book
-    static async updateCopiesOnHold(req: Request, res: Response): Promise<void> {
-        try {
-            // Validate and sanitize user input
-            const bookId = parseInt(req.params.bookId, 10);
-            if (isNaN(bookId) || bookId <= 0) {
-                res.status(400).json({ error: 'Invalid checkout ID' });
-                return;
-            }
-
-            // Call corresponding methods from BookService
-            await BookService.updateCopiesOnHold(bookId);
-
-            // Return success
-            res.json({ message: 'Copies on hold updated successfully' });
-        } catch (error) {
-            console.error('Error in updateCopiesOnHold:', error);
-            res.status(500).json({ error: 'Internal Server Error' });
         }
     }
 }

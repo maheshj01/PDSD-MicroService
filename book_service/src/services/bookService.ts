@@ -54,42 +54,6 @@ class BookService {
         }
     }
 
-    static async updateCopiesOnCheckout(bookId: number): Promise<boolean> {
-        try {
-            // Ensure bookId is a positive integer
-            if (!Number.isInteger(bookId) || bookId <= 0) {
-                console.error('Invalid bookId provided for updateCopiesOnCheckout');
-                return false;
-            }
-
-            // Check if the book exists
-            const checkBook = await pool.query('SELECT available_copies FROM books WHERE id = $1', [bookId]);
-
-            if (checkBook.rows.length === 0) {
-                console.error('Book not found for updateCopiesOnCheckout');
-                return false;
-            }
-
-            // Perform the necessary database update to decrement the available copies
-            const result = await pool.query(
-                'UPDATE books SET available_copies = CASE WHEN available_copies > 0 THEN available_copies - 1 ELSE 0 END WHERE id = $1 RETURNING *',
-                [bookId]
-            );
-
-            if (result.rows.length > 0) {
-                // Update successful
-                return true;
-            } else {
-                // Unexpected scenario, possibly a database issue
-                console.error('Unexpected issue in updateCopiesOnCheckout');
-                return false;
-            }
-        } catch (error) {
-            console.error('Error in updateCopiesOnCheckout:', error);
-            return false;
-        }
-    }
-
     static async getBookById(id: number): Promise<Book | null> {
         const query = 'SELECT * FROM books WHERE id = $1';
         const values = [id];
@@ -112,23 +76,49 @@ class BookService {
         return null;
     }
 
-    static async updateCopiesOnHold(bookId: number): Promise<void> {
-        const query = 'UPDATE books SET available_copies = available_copies - 1 WHERE id = $1';
-        const values = [bookId];
-        await pool.query(query, values);
-
-        // Communicate with CheckoutService to place a hold on the book
+    static async updateCopies(bookId: number, action: 'add' | 'remove'): Promise<boolean> {
         try {
-            const checkoutServiceBaseUrl = process.env.CHECKOUT_SERVICE_BASE_URL;
-            const checkoutServiceEndpoint = '/api/checkouts/placeHold/';
-            const checkoutServiceUrl = `${checkoutServiceBaseUrl}${checkoutServiceEndpoint}${bookId}`;
+            console.log("service bookId:", typeof bookId);
+            // Ensure bookId is a positive integer
+            if (!Number.isInteger(bookId) || bookId <= 0) {
+                console.error('Invalid bookId provided for updateCopies');
+                return false;
+            }
 
-            await axios.post(checkoutServiceUrl);
+            console.log("service action:", action, 'bookId:', bookId);
+
+            // Check if the book exists
+            const checkBook = await pool.query('SELECT available_copies FROM books WHERE id = $1', [bookId]);
+
+            if (checkBook.rows.length === 0) {
+                console.error('Book not found for updateCopies');
+                return false;
+            }
+
+            // Determine the operation based on the action parameter
+            const operation = action === 'add' ? '+' : '-';
+
+            // Perform the necessary database update
+            const result = await pool.query(
+                `UPDATE books SET available_copies = CASE WHEN available_copies > 0 THEN available_copies ${operation} 1 ELSE 0 END WHERE id = $1 RETURNING *`,
+                [bookId]
+            );
+
+            if (result.rows.length > 0) {
+                // Update successful
+                console.log('Copies updated successfully');
+                return true;
+            } else {
+                // Unexpected scenario, possibly a database issue
+                console.error('Unexpected issue in updateCopies');
+                return false;
+            }
         } catch (error) {
-            console.error('Error communicating with CheckoutService:', error);
-            // Handle the error as needed
+            console.error('Error in updateCopies:', error);
+            return false;
         }
     }
+
 }
 
 export default BookService;

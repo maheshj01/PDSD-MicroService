@@ -8,6 +8,8 @@ router.get('/books', BookController.searchBooks);
 router.get('/books/:id', BookController.viewBookDetails);
 router.post('/books/:id/hold', BookController.placeHoldOnBook);
 router.put('/books/:bookId', BookController.updateCopiesOnCheckout);
+router.put('/books/:bookId/hold', BookController.updateCopiesOnHold);
+router.put('/books/:bookId/return', BookController.updateCopiesOnReturn);
 // Add more routes as needed
 
 // // Place hold on book route

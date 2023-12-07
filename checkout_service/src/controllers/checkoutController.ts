@@ -99,9 +99,34 @@ class CheckoutController {
     }
   }
 
+  static async returnCheckoutItem(req: Request, res: Response): Promise<void> {
+    try {
+      const checkoutId = parseInt(req.params.checkoutId, 10);
+      if (isNaN(checkoutId) || checkoutId <= 0) {
+        res.status(400).json({ error: 'Invalid checkout ID' });
+        return;
+      }
+
+      // Perform any necessary validations and logic
+      // For example, check if the user has the right to return this item
+
+      // Call the Checkouts service to handle the return
+      const success = await CheckoutService.returnCheckoutItem(checkoutId);
+
+      if (success) {
+        res.json({ message: 'Checkout item returned successfully' });
+      } else {
+        res.status(500).json({ error: 'Failed to return checkout item' });
+      }
+    } catch (error) {
+      console.error('Error in returnCheckoutItem:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+
   static async renewCheckoutItem(req: Request, res: Response): Promise<void> {
     try {
-      const checkoutId = parseInt(req.params.id, 10);
+      const checkoutId = parseInt(req.params.checkoutId, 10);
       if (isNaN(checkoutId) || checkoutId <= 0) {
         res.status(400).json({ error: 'Invalid checkout ID' });
         return;

@@ -11,5 +11,6 @@ checkoutRoutes.get('/checkouts', CheckoutController.getAllCheckouts);
 checkoutRoutes.get('/checkouts/:id', CheckoutController.getCheckoutById);
 checkoutRoutes.post('/checkouts/checkout', CheckoutController.checkoutBook);
 checkoutRoutes.post('/checkouts/:bookId/hold', CheckoutController.placeHoldOnBook);
-checkoutRoutes.post('/checkouts/:id/renew', CheckoutController.renewCheckoutItem);
+checkoutRoutes.post('/checkouts/:checkoutId/renew', CheckoutController.renewCheckoutItem);
+checkoutRoutes.post('/checkouts/:checkoutId/return', CheckoutController.returnCheckoutItem);
 export default checkoutRoutes;

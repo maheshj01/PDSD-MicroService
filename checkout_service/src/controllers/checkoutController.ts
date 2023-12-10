@@ -109,6 +109,14 @@ class CheckoutController {
 
       // Perform any necessary validations and logic
       // For example, check if the user has the right to return this item
+      const userVerifyTokenUrl = `${process.env.USER_SERVICE_BASE_URL}/api/auth/verify-token`;
+      const token = req.header('Authorization')?.split(' ')[1];
+      const tokenVerificationResponse = await axios.post(userVerifyTokenUrl, {}, { headers: { Authorization: `Bearer ${token}` } });
+
+      if (tokenVerificationResponse.status !== 200) {
+        res.status(401).json({ error: 'Token verification failed' });
+        return;
+      }
 
       // Call the Checkouts service to handle the return
       const success = await CheckoutService.returnCheckoutItem(checkoutId);

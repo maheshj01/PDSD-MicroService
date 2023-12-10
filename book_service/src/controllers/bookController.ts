@@ -22,7 +22,7 @@ class BookController {
     static async viewBookDetails(req: Request, res: Response): Promise<void> {
         try {
             // Validate and sanitize user input
-            const bookId = parseInt(req.params.id, 10);
+            const bookId = parseInt(req.params.bookId, 10);
             if (isNaN(bookId) || bookId <= 0) {
                 res.status(400).json({ error: 'Invalid book ID' });
                 return;
@@ -43,23 +43,36 @@ class BookController {
         }
     }
 
-    static async updateCopiesOnCheckout(req: Request, res: Response): Promise<boolean> {
+    static async updateCopiesOnCheckout(req: Request, res: Response): Promise<void> {
         const bookId = parseInt(req.params.bookId, 10);
-        return await BookService.updateCopies(bookId, 'remove');
+        const result = await BookService.updateCopies(bookId, 'remove');
+        if (!result) {
+            throw new Error('Error in updating copies on return');
+        }
+        res.status(200).json({ message: 'Copies updated successfully' });
     }
 
-    static async updateCopiesOnHold(req: Request, res: Response): Promise<boolean> {
+    static async updateCopiesOnHold(req: Request, res: Response): Promise<void> {
         const bookId = parseInt(req.params.bookId, 10);
-        return await BookService.updateCopies(bookId, 'remove');
+        const result = await BookService.updateCopies(bookId, 'remove');
+        if (!result) {
+            throw new Error('Error in updating copies on return');
+        }
+        res.status(200).json({ message: 'Copies updated successfully' });
     }
 
-    static async updateCopiesOnReturn(req: Request, res: Response): Promise<boolean> {
+    static async updateCopiesOnReturn(req: Request, res: Response): Promise<void> {
         const bookId = parseInt(req.params.bookId, 10);
-        return await BookService.updateCopies(bookId, 'add');
+        const result = await BookService.updateCopies(bookId, 'add');
+        if (!result) {
+            throw new Error('Error in updating copies on return');
+        }
+        res.status(200).json({ message: 'Copies updated successfully' });
     }
 
 
-    static async placeHoldOnBook(bookId: number): Promise<void> {
+    static async placeHoldOnBook(req: Request, res: Response): Promise<void> {
+        const bookId = parseInt(req.params.bookId, 10);
         try {
             // Make API call to CheckoutService to place a hold on the book
             const checkoutServiceBaseUrl = process.env.CHECKOUT_SERVICE_BASE_URL;

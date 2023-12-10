@@ -78,13 +78,11 @@ class BookService {
 
     static async updateCopies(bookId: number, action: 'add' | 'remove'): Promise<boolean> {
         try {
-            console.log("service bookId:", typeof bookId);
             // Ensure bookId is a positive integer
             if (!Number.isInteger(bookId) || bookId <= 0) {
                 console.error('Invalid bookId provided for updateCopies');
                 return false;
             }
-
             console.log("service action:", action, 'bookId:', bookId);
 
             // Check if the book exists
@@ -97,16 +95,20 @@ class BookService {
 
             // Determine the operation based on the action parameter
             const operation = action === 'add' ? '+' : '-';
-
             // Perform the necessary database update
             const result = await pool.query(
-                `UPDATE books SET available_copies = CASE WHEN available_copies > 0 THEN available_copies ${operation} 1 ELSE 0 END WHERE id = $1 RETURNING *`,
-                [bookId]
+                `UPDATE books SET available_copies = CASE WHEN available_copies > 0 AND $2 = 'remove'
+                 THEN available_copies - 1
+                 WHEN available_copies >= 0 AND $2 = 'add'
+                 THEN available_copies + 1
+                 ELSE 0
+                 END
+                 WHERE id = $1 RETURNING *`,
+                [bookId, action]
             );
 
             if (result.rows.length > 0) {
                 // Update successful
-                console.log('Copies updated successfully');
                 return true;
             } else {
                 // Unexpected scenario, possibly a database issue

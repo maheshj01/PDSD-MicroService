@@ -114,18 +114,15 @@ class CheckoutService {
 
   public static async returnCheckoutItem(checkoutId: number): Promise<boolean> {
     const client = await pool.connect();
-
     try {
       await client.query('BEGIN');
 
       // Check if the checkout exists and has not been returned
       const checkoutResult = await client.query('SELECT * FROM checkouts WHERE id = $1 AND returned = false', [checkoutId]);
       const checkout = checkoutResult.rows[0];
-
       if (!checkout) {
         throw new Error('Checkout not found or already returned');
       }
-
       // Update the checkout as returned
       await client.query('UPDATE checkouts SET returned = true WHERE id = $1', [checkoutId]);
       console.log('checkout return success for:', checkoutId, " bookid:", checkout.book_id);

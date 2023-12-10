@@ -5,8 +5,8 @@ import BookController from '../controllers/bookController';
 const router = express.Router();
 
 router.get('/books', BookController.searchBooks);
-router.get('/books/:id', BookController.viewBookDetails);
-router.post('/books/:id/hold', BookController.placeHoldOnBook);
+router.get('/books/:bookId', BookController.viewBookDetails);
+router.post('/books/:bookId/hold', BookController.placeHoldOnBook);
 router.put('/books/:bookId', BookController.updateCopiesOnCheckout);
 router.put('/books/:bookId/hold', BookController.updateCopiesOnHold);
 router.put('/books/:bookId/return', BookController.updateCopiesOnReturn);

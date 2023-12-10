@@ -8,6 +8,9 @@ const checkoutRoutes = express.Router();
 const app = express();
 
 checkoutRoutes.get('/checkouts', CheckoutController.getAllCheckouts);
+checkoutRoutes.get('/checkouts/user/:userId', CheckoutController.getUserCheckouts);
+checkoutRoutes.get('/checkouts/:bookId/hold', CheckoutController.getBookHolds);
+checkoutRoutes.get('/checkouts/hold', CheckoutController.getAllHolds);
 checkoutRoutes.get('/checkouts/:id', CheckoutController.getCheckoutById);
 checkoutRoutes.post('/checkouts/checkout', CheckoutController.checkoutBook);
 checkoutRoutes.post('/checkouts/:bookId/hold', CheckoutController.placeHoldOnBook);

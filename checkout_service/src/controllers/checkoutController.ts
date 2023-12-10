@@ -87,7 +87,6 @@ class CheckoutController {
         res.status(401).json({ error: 'Token verification failed' });
         return;
       }
-
       // Call the corresponding methods from CheckoutService
       await CheckoutService.placeHoldOnBook(userId, bookId);
 
@@ -159,6 +158,47 @@ class CheckoutController {
       res.json({ message: 'Checkout item renewed successfully' });
     } catch (error) {
       console.error('Error in renewCheckoutItem:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+
+  static async getUserCheckouts(req: Request, res: Response): Promise<void> {
+    try {
+      const userId = parseInt(req.params.userId, 10);
+      if (isNaN(userId) || userId <= 0) {
+        res.status(400).json({ error: 'Invalid user ID' });
+        return;
+      }
+
+      const checkouts = await CheckoutService.getUserCheckouts(userId);
+      res.json(checkouts);
+    } catch (error) {
+      console.error('Error in getUserCheckouts:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+
+  static async getBookHolds(req: Request, res: Response): Promise<void> {
+    try {
+      const bookId = parseInt(req.params.bookId, 10);
+      if (isNaN(bookId) || bookId <= 0) {
+        res.status(400).json({ error: 'Invalid book ID' });
+        return;
+      }
+
+      const holds = await CheckoutService.getBookHolds(bookId);
+      res.json(holds);
+    } catch (error) {
+      console.error('Error in getBookHolds:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+  static async getAllHolds(req: Request, res: Response): Promise<void> {
+    try {
+      const holds = await CheckoutService.getAllHolds();
+      res.json(holds);
+    } catch (error) {
+      console.error('Error in getBookHolds:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
   }

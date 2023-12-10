@@ -162,6 +162,34 @@ class CheckoutService {
       throw new Error('Failed to renew the checkout item');
     }
   }
-}
 
+  static async getUserCheckouts(userId: number): Promise<Checkout[]> {
+    try {
+      const result = await pool.query('SELECT * FROM checkouts WHERE user_id = $1', [userId]);
+      return result.rows;
+    } catch (error) {
+      console.error('Error in getUserCheckouts:', error);
+      throw new Error('Failed to fetch user checkouts');
+    }
+  }
+
+  static async getBookHolds(bookId: number): Promise<Checkout[]> {
+    try {
+      const result = await pool.query('SELECT * FROM checkout_holds WHERE book_id = $1', [bookId]);
+      return result.rows;
+    } catch (error) {
+      console.error('Error in getBookHolds:', error);
+      throw new Error('Failed to fetch book holds');
+    }
+  }
+  static async getAllHolds(): Promise<Checkout[]> {
+    try {
+      const result = await pool.query('SELECT * FROM checkout_holds');
+      return result.rows;
+    } catch (error) {
+      console.error('Error in getAllHolds:', error);
+      throw new Error('Failed to fetch book holds');
+    }
+  }
+}
 export default CheckoutService;

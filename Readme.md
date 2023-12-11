@@ -70,16 +70,6 @@ CREATE TABLE book_checkouts (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-CREATE TABLE book_requests (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER,
-    book_id INTEGER REFERENCES books(id) ON DELETE CASCADE,
-    justification TEXT,
-    status VARCHAR(50) DEFAULT 'Pending',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 ```
 
 #### Checkout Service:
@@ -120,8 +110,21 @@ CREATE TABLE checkout_holds (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+```
 
+### Request Service
 
+```
+CREATE TABLE requests (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    book_title VARCHAR(255) NOT NULL,
+    book_author VARCHAR(255) NOT NULL,
+    justification TEXT,
+    status VARCHAR(20) DEFAULT 'Pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 ```
 
 ### Contributing

@@ -43,6 +43,7 @@ start_database
 start_microservice "book_service"
 start_microservice "user_service"
 start_microservice "checkout_service"
+start_microservice "request_service"
 # Uncomment the following lines if you want to start checkout_service
 #
 # Wait for all background jobs to finish

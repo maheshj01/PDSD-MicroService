@@ -8,29 +8,33 @@ class BookService {
     static async searchBooks(params: any): Promise<Book[]> {
         try {
             // Construct a dynamic query based on the provided parameters
-            const { title, id, category } = params;
+            const { author, title, category } = params;
             const queryParams: string[] = [];
             const queryValues: any[] = [];
 
+            let paramIndex = 1;
+
             if (title) {
-                queryParams.push('title ILIKE $1');
+                queryParams.push(`title ILIKE $${paramIndex}`);
                 queryValues.push(`%${title}%`);
+                paramIndex++;
             }
 
-            if (id) {
-                queryParams.push('id = $2');
-                queryValues.push(id);
+            if (author) {
+                queryParams.push(`author ILIKE $${paramIndex}`);
+                queryValues.push(`%${author}%`);
+                paramIndex++;
             }
 
             if (category) {
-                queryParams.push('category ILIKE $3');
+                queryParams.push(`category ILIKE $${paramIndex}`);
                 queryValues.push(`%${category}%`);
+                paramIndex++;
             }
-
             const query = `
             SELECT *
             FROM books
-            ${queryParams.length > 0 ? 'WHERE ' + queryParams.join(' OR ') : ''}
+            ${queryParams.length > 0 ? 'WHERE ' + queryParams.join(' AND ') : ''}
           `;
 
             const result: QueryResult = await pool.query(query, queryValues);
@@ -42,7 +46,7 @@ class BookService {
                         row.title,
                         row.author,
                         row.category,
-                        row.ISBN,
+                        row.isbn,
                         row.publication_date,
                         row.available_copies,
                         row.location
@@ -50,7 +54,7 @@ class BookService {
             );
         } catch (error) {
             console.error('Error in searchBooks:', error);
-            throw error; // Rethrow the error for centralized error handling
+            throw error;
         }
     }
 

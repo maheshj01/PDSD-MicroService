@@ -6,10 +6,9 @@ class BookController {
     static async searchBooks(req: Request, res: Response): Promise<void> {
         try {
             // Extract meaningful query parameters
-            const { title, id, category } = req.query;
-
+            const { author, title, category } = req.query;
             // Call the corresponding method from BookService
-            const books = await BookService.searchBooks({ title, id, category });
+            const books = await BookService.searchBooks({ title, author, category });
 
             // Return the result
             res.json(books);

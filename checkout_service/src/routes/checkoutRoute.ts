@@ -2,10 +2,11 @@
 
 import express from 'express';
 import CheckoutController from '../controllers/checkoutController';
-import CheckoutService from '../services/checkoutService';
+import { verifyToken } from '../middleware/authMiddleware';
 
 const checkoutRoutes = express.Router();
-const app = express();
+
+checkoutRoutes.use('/checkouts', verifyToken); // Apply the middleware to all routes starting with /checkouts
 
 checkoutRoutes.get('/checkouts', CheckoutController.getAllCheckouts);
 checkoutRoutes.get('/checkouts/user/:userId', CheckoutController.getUserCheckouts);
@@ -16,4 +17,5 @@ checkoutRoutes.post('/checkouts/checkout', CheckoutController.checkoutBook);
 checkoutRoutes.post('/checkouts/:bookId/hold', CheckoutController.placeHoldOnBook);
 checkoutRoutes.post('/checkouts/:checkoutId/renew', CheckoutController.renewCheckoutItem);
 checkoutRoutes.post('/checkouts/:checkoutId/return', CheckoutController.returnCheckoutItem);
+
 export default checkoutRoutes;

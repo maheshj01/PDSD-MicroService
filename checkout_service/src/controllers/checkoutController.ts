@@ -9,18 +9,6 @@ class CheckoutController {
   static async checkoutBook(req: Request, res: Response): Promise<void> {
     try {
       const { userId, bookId, dueDate } = req.body;
-
-      // Make a request to the user_service to verify the token
-      const userVerifyTokenUrl = `${process.env.USER_SERVICE_BASE_URL}/api/auth/verify-token`;
-      const token = req.header('Authorization')?.split(' ')[1];
-      const tokenVerificationResponse = await axios.post(userVerifyTokenUrl, {}, { headers: { Authorization: `Bearer ${token}` } });
-
-      if (tokenVerificationResponse.status !== 200) {
-        res.status(401).json({ error: 'Token verification failed' });
-        return;
-      }
-
-      // If the token is valid, proceed with the checkout logic
       // Call the corresponding methods from CheckoutService
       const checkoutResult = await CheckoutService.checkoutBook(userId, bookId, dueDate);
 
@@ -79,14 +67,6 @@ class CheckoutController {
         return;
       }
 
-      const userVerifyTokenUrl = `${process.env.USER_SERVICE_BASE_URL}/api/auth/verify-token`;
-      const token = req.header('Authorization')?.split(' ')[1];
-      const tokenVerificationResponse = await axios.post(userVerifyTokenUrl, {}, { headers: { Authorization: `Bearer ${token}` } });
-
-      if (tokenVerificationResponse.status !== 200) {
-        res.status(401).json({ error: 'Token verification failed' });
-        return;
-      }
       // Call the corresponding methods from CheckoutService
       await CheckoutService.placeHoldOnBook(userId, bookId);
 
@@ -103,17 +83,6 @@ class CheckoutController {
       const checkoutId = parseInt(req.params.checkoutId, 10);
       if (isNaN(checkoutId) || checkoutId <= 0) {
         res.status(400).json({ error: 'Invalid checkout ID' });
-        return;
-      }
-
-      // Perform any necessary validations and logic
-      // For example, check if the user has the right to return this item
-      const userVerifyTokenUrl = `${process.env.USER_SERVICE_BASE_URL}/api/auth/verify-token`;
-      const token = req.header('Authorization')?.split(' ')[1];
-      const tokenVerificationResponse = await axios.post(userVerifyTokenUrl, {}, { headers: { Authorization: `Bearer ${token}` } });
-
-      if (tokenVerificationResponse.status !== 200) {
-        res.status(401).json({ error: 'Token verification failed' });
         return;
       }
 
@@ -145,14 +114,6 @@ class CheckoutController {
         return;
       }
 
-      const userVerifyTokenUrl = `${process.env.USER_SERVICE_BASE_URL}/api/auth/verify-token`;
-      const token = req.header('Authorization')?.split(' ')[1];
-      const tokenVerificationResponse = await axios.post(userVerifyTokenUrl, {}, { headers: { Authorization: `Bearer ${token}` } });
-
-      if (tokenVerificationResponse.status !== 200) {
-        res.status(401).json({ error: 'Token verification failed' });
-        return;
-      }
 
       await CheckoutService.renewCheckoutItem(checkoutId, newDueDate);
       res.json({ message: 'Checkout item renewed successfully' });
@@ -185,7 +146,6 @@ class CheckoutController {
         res.status(400).json({ error: 'Invalid book ID' });
         return;
       }
-
       const holds = await CheckoutService.getBookHolds(bookId);
       res.json(holds);
     } catch (error) {

@@ -12,11 +12,19 @@ Microservices are a software development technique—a variant of the service-or
 
 ### Running the Project
 
-Before running the project, make sure to install the required dependencies:
+Before running the project, make sure to install the required dependencies by going into each micro service directory and running the following command:
+
+```bash
+npm install
+```
+
+To run the project, go into the root directory and run the following command:
 
 ```bash
 ./start.sh
 ```
+
+This will start the database and all the micro services.
 
 ### Database Schema by Micro Service
 

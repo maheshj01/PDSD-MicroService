@@ -5,8 +5,8 @@ import requestRoutes from './routes/requestRoutes';
 import dotenv from 'dotenv';
 import pool from './database/dbConfig';
 
-const app = express();
 dotenv.config();
+const app = express();
 
 const PORT = process.env.PORT;
 app.use(bodyParser.json());

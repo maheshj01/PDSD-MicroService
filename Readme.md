@@ -9,6 +9,7 @@ Microservices are a software development technique—a variant of the service-or
 - User Service
 - Book Service
 - Checkout Service
+- Request Service
 
 ### Running the Project
 

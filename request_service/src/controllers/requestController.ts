@@ -1,6 +1,7 @@
 // src/controllers/requestController.ts
 import { Request, Response } from 'express';
 import RequestService from '../services/requestService';
+import { checkUserRole } from '../middleware/roleMiddleware';
 
 class RequestController {
   static async submitRequest(req: Request, res: Response): Promise<void> {
@@ -13,8 +14,11 @@ class RequestController {
         return;
       }
 
-      const result = await RequestService.submitRequest(user_id, book_title, book_author, justification);
-      res.status(201).json({ message: 'Request submitted for review', request: result });
+      // Check user role before allowing the request
+      checkUserRole('staff')(req, res, async () => {
+        const result = await RequestService.submitRequest(user_id, book_title, book_author, justification);
+        res.status(201).json({ message: 'Request submitted for review', request: result });
+      });
     } catch (error) {
       console.error('Error in submitRequest:', error);
       res.status(500).json({ error: 'Internal Server Error' });

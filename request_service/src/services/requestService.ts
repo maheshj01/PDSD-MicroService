@@ -8,7 +8,6 @@ const SELECT_ALL_REQUESTS_QUERY = 'SELECT * FROM requests';
 class RequestService {
   static async submitRequest(user_id: number, book_title: string, book_author: string, justification: string): Promise<Request> {
     // Implement the logic to insert the request into the database
-    console.log('pool connection details:', pool);
     const result = await pool.query(INSERT_REQUEST_QUERY, [user_id, book_title, book_author, justification]);
     return result.rows[0];
   }

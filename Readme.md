@@ -21,7 +21,13 @@ npm install
 To run the project, go into the root directory and run the following command:
 
 ```bash
-./start.sh
+./start.sh dev # to start all the services in watch mode
+```
+
+or
+
+```
+./start
 ```
 
 This will start the database and all the micro services.

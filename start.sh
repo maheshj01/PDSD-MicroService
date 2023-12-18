@@ -2,6 +2,10 @@
 
 base="/Users/mahesh/Desktop/PDSD"
 
+# mode is either start/dev default is start if no argument is passed
+mode=${1:-start}
+
+
 # Function to start the PostgreSQL database server
 start_database() {
     echo "Starting PostgreSQL database server..."
@@ -14,7 +18,7 @@ start_microservice() {
     local service_name=$1
     echo "Starting $service_name microservice..."
     cd "$base/$service_name" || exit 1
-    npm run start &
+    npm run $mode &
 }
 
 # Function to stop the PostgreSQL database server
@@ -38,7 +42,7 @@ cd "$base" || exit 1
 
 # Start the database server
 start_database
-
+ 
 # Start each microservice
 start_microservice "book_service"
 start_microservice "user_service"

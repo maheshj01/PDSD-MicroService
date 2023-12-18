@@ -1,13 +1,40 @@
+// roleMiddleware.ts
+import axios from 'axios';
 import { Request, Response, NextFunction } from 'express';
+import dotenv from 'dotenv';
 
-export const checkUserRole = (requiredRole: string) => {
-    return (req: Request, res: Response, next: NextFunction) => {
-        const userRole = req.body.role;  // Assuming you have a user object in the request with a "role" property
+dotenv.config();
+const userVerifyRoleUrl = `${process.env.USER_SERVICE_BASE_URL}/api/auth/verify-role`;
 
-        if (userRole === requiredRole) {
+export const verifyUserRole = async (token: string, roles: string[]): Promise<boolean> => {
+    try {
+        const response = await axios.post(
+            userVerifyRoleUrl,
+            { roles }, // Send an array of roles
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        return response.status === 200;
+    } catch (error) {
+        console.error('Error verifying user role:', error);
+        return false;
+    }
+};
+
+export const    roleMiddleware = (roles: string | string[]) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        const token = req.header('Authorization')?.split(' ')[1];
+        if (!token) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+
+        const userRoles = Array.isArray(roles) ? roles : [roles];
+        const isAnyRoleValid = await verifyUserRole(token, userRoles);
+
+        if (isAnyRoleValid) {
             next();
         } else {
-            res.status(403).json({ error: 'Access denied. Insufficient privileges.' });
+            return res.status(403).json({ error: 'Access denied. Insufficient privileges.' });
         }
     };
 };

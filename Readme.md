@@ -135,6 +135,16 @@ CREATE TABLE requests (
 );
 ```
 
+### Roles
+
+In the context of your application, the roles could be associated with different levels of access and permissions. Here's a simple set of roles commonly used in applications:
+
+User: A regular user who can perform basic actions, such as searching for books and viewing information.
+
+Staff: A staff member with additional privileges, such as the ability to submit book requests.
+
+Admin: An administrator with full access and control over the application, including managing users, books, and requests.
+
 ### Contributing
 
 Feel free to contribute to the project by opening issues or creating pull requests.

@@ -2,6 +2,41 @@
 
 User Service is a RESTful API built using Node.js, Express, and PostgreSQL. It provides functionality for user authentication, account management, and basic CRUD operations on a user table in a PostgreSQL database.
 
+
+It provides the following functionality:
+
+
+1. User Login (User Service):
+
+   - Test Case 1: Valid User Login
+
+      Input: Valid username and password
+      Expected Output: Successful login
+
+   - Test Case 2: Invalid User Login
+
+      Input: Invalid username or password
+      Expected Output: Error message
+
+   - Test Case 3: Brute Force Attack Protection
+
+      Input: Multiple invalid login attempts within a short time
+      Expected Output: Account lockout or additional security measures
+
+
+12. Edit User Information (Librarians Only) (User Service):
+
+   - Test Case 1: Edit User Contact Details
+
+      Input: Updated contact details
+      Expected Output: User details updated successfully
+
+   - Test Case 2: Edit User Status
+
+      Input: Change in user status
+      Expected Output: User status updated
+
+
 ### Database Schema
 
 ```

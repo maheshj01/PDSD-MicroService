@@ -30,9 +30,8 @@ class UserController {
     }
 
     async editUser(req: express.Request, res: express.Response) {
-        const userId = parseInt(req.params.id, 10);
+        const userId = parseInt(req.params.userId, 10);
         const updatedUser = req.body;
-
         try {
             const user = await userService.updateUser(userId, updatedUser);
 

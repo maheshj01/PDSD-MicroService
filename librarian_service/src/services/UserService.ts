@@ -27,7 +27,6 @@ class UserService {
             return userEditResponse;
         } catch (error) {
             // Handle errors (you may want to log or handle different types of errors)
-            console.error(error);
             throw error;
         }
     }

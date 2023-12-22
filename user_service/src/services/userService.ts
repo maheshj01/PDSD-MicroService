@@ -22,14 +22,62 @@ class UserService {
     }
 
     async updateUser(id: number, updatedUser: any) {
-        const { username, password, role, name, contact_email, contact_phone, mailing_address } = updatedUser;
+        const fieldsToUpdate: string[] = [];
+        const values: any[] = [];
+        console.log('Updating user s', id, updatedUser);
+        var count = 1;
+        // Extract fields from the updatedUser object and construct the SET clause dynamically
+        if (updatedUser.username) {
+            fieldsToUpdate.push('username = $' + count);
+            count++;
+            values.push(sanitizeInput(updatedUser.username));
+        }
+        if (updatedUser.password && updatedUser.password.length > 0) {
+            fieldsToUpdate.push('password = $' + count);
+            count++;
+            values.push(sanitizePassword(updatedUser.password));
+        }
+        if (updatedUser.role) {
+            fieldsToUpdate.push('role = $' + count);
+            count++;
+            values.push(sanitizeInput(updatedUser.role));
+        }
+        if (updatedUser.school_id) {
+            fieldsToUpdate.push('school_id = $' + count);
+            count++;
+            values.push(sanitizeSchoolId(updatedUser.school_id));
+        }
+        if (updatedUser.name) {
+            fieldsToUpdate.push('name = $' + count);
+            count++;
+            values.push(updatedUser.name);
+        }
+        if (updatedUser.contact_email) {
+            fieldsToUpdate.push('contact_email = $' + count);
+            count++;
+            values.push(sanitizeEmail(updatedUser.contact_email));
+        }
+        if (updatedUser.contact_phone) {
+            fieldsToUpdate.push('contact_phone = $' + count);
+            count++;
+            values.push(sanitizePhoneNumber(updatedUser.contact_phone));
+        }
+        if (updatedUser.mailing_address) {
+            fieldsToUpdate.push('mailing_address = $' + count);
+            count++;
+            values.push(updatedUser.mailing_address);
+        }
+        console.log('fieldsToUpdate', fieldsToUpdate);
+        console.log('values', values);
+        // Construct the dynamic SQL query
+        const updateQuery = `UPDATE users SET ${fieldsToUpdate.join(', ')} WHERE id = $${values.length + 1} RETURNING *`;
 
-        const result = await pool.query(
-            'UPDATE users SET username = $1, password = $2, role = $3, name = $4, contact_email = $5, contact_phone = $6, mailing_address = $7 WHERE id = $8 RETURNING *',
-            [sanitizeInput(username), sanitizePassword(password), sanitizeInput(role), name, sanitizeEmail(contact_email), sanitizePhoneNumber(contact_phone), mailing_address, id]
-        );
+        // Execute the query with dynamic values
+        const result = await pool.query(updateQuery, [...values, id]);
+
         return result.rows[0];
     }
+
 
     async deleteUser(id: number) {
         const result = await pool.query('DELETE FROM users WHERE id = $1 RETURNING *', [id]);

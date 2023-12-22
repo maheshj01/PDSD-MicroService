@@ -1,7 +1,6 @@
 // src/models/User.ts
 
 export class User {
-    public id!: number;
     public username!: string;
     public password!: string;
     public role!: string;
@@ -35,6 +34,17 @@ export class User {
         return (
             this.username !== undefined &&
             this.password !== undefined &&
+            this.role !== undefined &&
+            this.name !== undefined &&
+            this.school_id !== undefined &&
+            this.contact_email !== undefined &&
+            this.contact_phone !== undefined &&
+            this.mailing_address !== undefined
+        );
+    }
+    isEditValid(): boolean {
+        return (
+            this.username !== undefined &&
             this.role !== undefined &&
             this.name !== undefined &&
             this.school_id !== undefined &&

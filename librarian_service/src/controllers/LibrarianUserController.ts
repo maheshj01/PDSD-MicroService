@@ -52,22 +52,22 @@ class LibrarianUserController {
                 username,
                 role,
                 name,
-                schoolId,
+                password,
+                school_id,
                 contact_email,
                 contact_phone,
                 mailing_address
             } = req.body;
 
             // Validate user input using UserModel
-            const updatedUser = new UserModel(username, role, name, schoolId, contact_email, contact_phone, contact_email, mailing_address);
-            if (!updatedUser.isValid()) {
-                res.status(400).json({ error: 'Invalid user information' });
-                return;
-            }
+            const updatedUser = new UserModel(username, password, role, name, school_id, contact_email, contact_phone, mailing_address);
+            // if (!updatedUser.isEditValid()) {
+            //     res.status(400).json({ error: 'Invalid user information' });
+            //     return;
+            // }
 
             // Extract user ID from the request parameters
             const userId = req.params.userId;
-
             const response = await UserService.editUser(userId, updatedUser);
 
             // Check the response status from the User Service

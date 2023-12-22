@@ -9,6 +9,7 @@ describe('Authentication Service', () => {
     const password = 'testpassword';
     const role = "student";
     const name = "John Doe";
+    const school_id = "123456789";
     const contact_email = "test.user@gmail.com";
     const contact_phone = "555-1234";
     const mailing_address = "123 Main St; Cityville";
@@ -20,6 +21,7 @@ describe('Authentication Service', () => {
       password,
       role,
       name,
+      school_id,
       contact_email,
       contact_phone,
       mailing_address,
@@ -34,6 +36,7 @@ describe('Authentication Service', () => {
     const password = 'testpassword';
     const role = "student";
     const name = "John Doe";
+    const school_id = "123456789";
     const contact_email = "test.user@gmail.com";
     const contact_phone = "555-1234";
     const mailing_address = "123 Main St; Cityville";
@@ -45,6 +48,7 @@ describe('Authentication Service', () => {
       password,
       role,
       name,
+      school_id,
       contact_email,
       contact_phone,
       mailing_address,

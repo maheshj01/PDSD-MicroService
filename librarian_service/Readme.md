@@ -26,3 +26,15 @@ The librarian service is responsible for managing the library's collection of bo
 
       Input: Incomplete or invalid user information
       Expected Output: Error message
+
+12. Edit User Information (Librarians Only) (Librarian Service):
+
+   - Test Case 1: Edit User Contact Details
+
+      Input: Updated contact details
+      Expected Output: User details updated successfully
+
+   - Test Case 2: Edit User Status
+
+      Input: Change in user status
+      Expected Output: User status updated

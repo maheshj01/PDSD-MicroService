@@ -13,6 +13,7 @@ class AuthService {
     role: string,
     name: string,
     contact_email: string,
+    school_id: string,
     contact_phone: string,
     mailing_address: string
   ): Promise<string | null> {
@@ -20,6 +21,7 @@ class AuthService {
       // Check if the username is already taken
       const sanitizedUsername = sanitizeInput(username);
       const existingUser = await userService.getUserByUsername(username);
+
       if (existingUser) {
         return null; // Username already exists
       }
@@ -32,16 +34,24 @@ class AuthService {
         password: hashedPassword,
         role,
         name,
-        contact_email,
+        school_id,
         contact_phone,
+        contact_email,
         mailing_address,
       });
 
       // Return the user's ID
       return result.id;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error during sign-up:', error);
-      return null; // Handle errors appropriately (log, return error message, etc.)
+
+      // Handle specific errors (example: duplicate username)
+      if (error.name === 'SequelizeUniqueConstraintError') {
+        return 'Username already exists.';
+      }
+
+      // Handle other errors appropriately (log, return error message, etc.)
+      return 'An error occurred during sign-up.';
     }
   }
 

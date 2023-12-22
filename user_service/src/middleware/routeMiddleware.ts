@@ -30,7 +30,6 @@ export const adminMiddleware = (req: Request, res: Response, next: NextFunction)
         }
     } else {
         // Token is invalid or expired
-        console.log('Invalid token');
         res.status(401).json({ message: 'Invalid token' });
     }
 }

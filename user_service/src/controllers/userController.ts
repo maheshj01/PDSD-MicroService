@@ -29,19 +29,7 @@ class UserController {
         }
     }
 
-    async createUser(req: express.Request, res: express.Response) {
-        const newUser = req.body;
-        console.log("creating new user", newUser);
-        try {
-            const user = await userService.createUser(newUser);
-            res.status(201).json(user);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ error: 'Internal Server Error' });
-        }
-    }
-
-    async updateUser(req: express.Request, res: express.Response) {
+    async editUser(req: express.Request, res: express.Response) {
         const userId = parseInt(req.params.id, 10);
         const updatedUser = req.body;
 

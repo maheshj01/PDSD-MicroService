@@ -24,7 +24,6 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     next();
   } else {
     // Token is invalid or expired
-    console.log('Invalid token');
     res.status(401).json({ message: 'Invalid token' });
   }
 };
@@ -42,8 +41,6 @@ export const selfMiddleware = (req: Request, res: Response, next: NextFunction) 
 
   if (valid) {
     // Token is valid, and you can use the payload in your logic
-    console.log('Valid token payload:', payload);
-
     // Optionally, you can set decoded information directly on req.locals or req.session
     // req.locals.user = payload;
     // req.session.user = payload;
@@ -57,7 +54,6 @@ export const selfMiddleware = (req: Request, res: Response, next: NextFunction) 
     }
   } else {
     // Token is invalid or expired
-    console.log('Invalid token');
     res.status(401).json({ message: 'Invalid token' });
   }
 }

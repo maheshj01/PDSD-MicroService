@@ -16,12 +16,9 @@ class CheckoutService {
       const bookServiceUrl = process.env.BOOKS_SERVICE_BASE_URL; // Provide the correct base URL
       const bookInfoResponse = await axios.get(`${bookServiceUrl}/api/books/${book_id}`);
       const availableCopies = bookInfoResponse.data.availableCopies;
-      console.log("availableCopies:", availableCopies, "response:", bookInfoResponse.data);
       if (!availableCopies || availableCopies <= 0) {
         throw new Error('Book is not available for checkout');
       }
-      console.log('availableCopies:', availableCopies);
-
       // Update book availability
       const bookUpdateResponse =
         await axios.put(`${bookServiceUrl}/api/books/${book_id}`,
@@ -125,17 +122,11 @@ class CheckoutService {
       }
       // Update the checkout as returned
       await client.query('UPDATE checkouts SET returned = true WHERE id = $1', [checkoutId]);
-      console.log('checkout return success for:', checkoutId, " bookid:", checkout.book_id);
       // Make an API call to update copies in books_service
       const booksServiceBaseUrl = process.env.BOOKS_SERVICE_BASE_URL;
       const returnBookApiUrl = `${booksServiceBaseUrl}/api/books/${checkout.book_id}/return`;
-      console.log('returnBookApiUrl:', returnBookApiUrl);
 
       const resp = await axios.put(returnBookApiUrl, { 'action': 'add' });
-
-      // Log the response
-      console.log('Response from Books Service:', resp.data);
-
       if (resp.status === 200) {
         await client.query('COMMIT');
         return true;

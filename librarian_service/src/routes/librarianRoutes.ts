@@ -4,6 +4,7 @@ import express from 'express';
 import LibrarianController from '../controllers/LibrarianController';
 import { verifyToken } from '../middleware/AuthMiddleware';
 import { roleMiddleware } from '../middleware/Rolemiddleware';
+import LibrarianUserController from '../controllers/LibrarianUserController';
 
 const librarianRoutes = express.Router();
 
@@ -18,5 +19,9 @@ librarianRoutes.post('/books/add', LibrarianController.addBook);
 librarianRoutes.put('/books/:bookId/update', LibrarianController.updateBook);
 
 // Add other routes as needed
+
+// Routes for user operations
+librarianRoutes.post('/users/register', LibrarianUserController.registerUser);
+librarianRoutes.put('/users/:userId/edit', LibrarianUserController.editUser);
 
 export default librarianRoutes;

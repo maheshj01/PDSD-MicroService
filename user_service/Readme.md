@@ -23,20 +23,6 @@ It provides the following functionality:
       Input: Multiple invalid login attempts within a short time
       Expected Output: Account lockout or additional security measures
 
-
-12. Edit User Information (Librarians Only) (User Service):
-
-   - Test Case 1: Edit User Contact Details
-
-      Input: Updated contact details
-      Expected Output: User details updated successfully
-
-   - Test Case 2: Edit User Status
-
-      Input: Change in user status
-      Expected Output: User status updated
-
-
 ### Database Schema
 
 ```
@@ -46,8 +32,6 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     role VARCHAR(50) NOT NULL,
     name VARCHAR(255) NOT NULL,
-    student_id VARCHAR(20),
-    staff_id VARCHAR(20),
     contact_email VARCHAR(255) NOT NULL,
     contact_phone VARCHAR(20),
     mailing_address VARCHAR(255),

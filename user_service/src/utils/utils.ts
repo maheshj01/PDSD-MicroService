@@ -41,6 +41,15 @@ export const sanitizePhoneNumber = (phoneNumber: string): string | null => {
     return sanitizedPhoneNumber;
 };
 
+export const sanitizeSchoolId = (schoolId: string): string | null => {
+    // Remove any non-numeric characters from the school ID
+    const sanitizedSchoolId = schoolId.replace(/\D/g, '');
+
+    // You can add additional school ID criteria or checks here
+    // For example, minimum and maximum length, etc.
+
+    return sanitizedSchoolId;
+};
 
 const jwtSecret = process.env.JWT_SECRET || 'thisisadummysecretkey';
 

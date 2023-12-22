@@ -49,8 +49,6 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     role VARCHAR(50) NOT NULL,
     name VARCHAR(255) NOT NULL,
-    student_id VARCHAR(20),
-    staff_id VARCHAR(20),
     contact_email VARCHAR(255) NOT NULL,
     contact_phone VARCHAR(20),
     mailing_address VARCHAR(255),

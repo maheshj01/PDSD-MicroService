@@ -162,8 +162,6 @@ class BookService {
                 console.error('Invalid bookId provided for updateCopies');
                 return false;
             }
-            console.log("service action:", action, 'bookId:', bookId);
-
             // Check if the book exists
             const checkBook = await pool.query('SELECT available_copies FROM books WHERE id = $1', [bookId]);
 

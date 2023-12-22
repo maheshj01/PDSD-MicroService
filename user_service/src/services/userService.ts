@@ -1,6 +1,6 @@
 // userService.ts
 import pool from '../db';
-import { sanitizeEmail, sanitizeInput, sanitizePassword, sanitizePhoneNumber } from '../utils/utils';
+import { sanitizeEmail, sanitizeInput, sanitizePassword, sanitizePhoneNumber, sanitizeSchoolId } from '../utils/utils';
 class UserService {
     async getAllUsers() {
         const result = await pool.query('SELECT * FROM users');
@@ -13,10 +13,10 @@ class UserService {
     }
 
     async createUser(user: any) {
-        const { username, password, role, name, contact_email, contact_phone, mailing_address } = user;
+        const { username, password, role, name, school_id, contact_email, contact_phone, mailing_address } = user;
         const result = await pool.query(
-            'INSERT INTO users (username, password, role, name, contact_email, contact_phone, mailing_address) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-            [sanitizeInput(username), sanitizePassword(password), sanitizeInput(role), name, sanitizeEmail(contact_email), sanitizePhoneNumber(contact_phone), mailing_address]
+            'INSERT INTO users (username, password, role, name, school_id, contact_email, contact_phone, mailing_address) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+            [sanitizeInput(username), sanitizePassword(password), sanitizeInput(role), name, sanitizeSchoolId(school_id), sanitizeEmail(contact_email), sanitizePhoneNumber(contact_phone), mailing_address]
         );
         return result.rows[0];
     }

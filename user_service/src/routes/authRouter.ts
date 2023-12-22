@@ -6,7 +6,7 @@ import { sanitizeJwtToken } from '../utils/utils';
 const authRouter = express.Router();
 
 // POST /auth/signup
-authRouter.post('/signup', authController.signup);
+authRouter.post('/register', authController.register);
 
 // POST /auth/login
 authRouter.post('/login', authController.login);

@@ -42,12 +42,13 @@ cd "$base" || exit 1
 
 # Start the database server
 start_database
- 
+
 # Start each microservice
 start_microservice "book_service"
 start_microservice "user_service"
 start_microservice "checkout_service"
 start_microservice "request_service"
+start_microservice "librarian_service"
 # Uncomment the following lines if you want to start checkout_service
 #
 # Wait for all background jobs to finish

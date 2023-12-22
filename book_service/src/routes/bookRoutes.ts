@@ -12,6 +12,9 @@ router.put('/books/:bookId/hold', BookController.updateCopiesOnHold);
 router.put('/books/:bookId/return', BookController.updateCopiesOnReturn);
 // Add more routes as needed
 
+// Routes handled by LibrarianService
+router.post('/librarian/books', BookController.addBook);
+router.put('/librarian/books/:id', BookController.updateBook);
 // // Place hold on book route
 // router.post('/books/hold/:id', BookController.placeHoldOnBook);
 

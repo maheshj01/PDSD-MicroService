@@ -2,7 +2,60 @@
 import { Request, Response } from 'express';
 import BookService from '../services/bookService';
 import axios from 'axios';
+import { Book } from '../models/Book';
 class BookController {
+
+    static async addBook(req: Request, res: Response): Promise<void> {
+        try {
+            const bookData: Book = req.body;
+
+            // Basic validation
+            if (!bookData.title || !bookData.author || !bookData.ISBN) {
+                res.status(400).json({ error: 'Title, author, and ISBN are required fields' });
+                return;
+            }
+
+            // Additional validation as needed
+
+            // Call the corresponding methods from BookService
+            const addedBook = await BookService.addBook(bookData);
+
+            // Return the result
+            res.status(201).json({ message: 'Book added successfully', book: addedBook });
+        } catch (error) {
+            console.error('Error in addBook:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
+
+    static async updateBook(req: Request, res: Response): Promise<void> {
+        try {
+            const bookId = parseInt(req.params.id, 10);
+            if (isNaN(bookId) || bookId <= 0) {
+                res.status(400).json({ error: 'Invalid book ID' });
+                return;
+            }
+
+            const updatedBookData: Book = req.body;
+
+            // Basic validation
+            if (!updatedBookData.title || !updatedBookData.author || !updatedBookData.ISBN) {
+                res.status(400).json({ error: 'Title, author, and ISBN are required fields' });
+                return;
+            }
+
+            // Additional validation as needed
+
+            // Call the corresponding methods from BookService
+            const updatedBook = await BookService.updateBook(bookId, updatedBookData);
+
+            // Return the result
+            res.json({ message: 'Book updated successfully', book: updatedBook });
+        } catch (error) {
+            console.error('Error in updateBook:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
     static async searchBooks(req: Request, res: Response): Promise<void> {
         try {
             // Extract meaningful query parameters

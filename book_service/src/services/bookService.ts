@@ -5,6 +5,79 @@ import Book from '../models/Book';
 import axios from 'axios';
 
 class BookService {
+
+    static async addBook(book: Book): Promise<Book> {
+        try {
+            // Basic input validation
+            if (!book.title || !book.author || !book.ISBN) {
+                throw new Error('Title, author, and ISBN are required fields');
+            }
+
+            // Additional validation as needed
+
+            // Using parameterized queries to prevent SQL injection
+            const result = await pool.query(
+                'INSERT INTO books (title, author, category, isbn, publication_date, available_copies, total_copies, location) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+                [
+                    book.title,
+                    book.author,
+                    book.category,
+                    book.ISBN,
+                    book.publicationDate,
+                    book.availableCopies,
+                    book.totalCopies,
+                    book.location,
+                ]
+            );
+
+            // Ensure the result.rows[0] is not null before returning
+            if (result.rows.length > 0) {
+                return result.rows[0];
+            } else {
+                throw new Error('Failed to add new book');
+            }
+        } catch (error) {
+            console.error('Error in addBook:', error);
+            throw error; // Rethrow the error to be caught by the controller
+        }
+    }
+
+    static async updateBook(bookId: number, updatedBookData: Book): Promise<Book> {
+        try {
+            // Basic input validation
+            if (!updatedBookData.title || !updatedBookData.author || !updatedBookData.ISBN) {
+                throw new Error('Title, author, and ISBN are required fields');
+            }
+
+            // Additional validation as needed
+
+            const result = await pool.query(
+                'UPDATE books SET title = $1, author = $2, category = $3, isbn = $4, publication_date = $5, available_copies = $6, total_copies = $7, location = $8 WHERE id = $9 RETURNING *',
+                [
+                    updatedBookData.title,
+                    updatedBookData.author,
+                    updatedBookData.category,
+                    updatedBookData.ISBN,
+                    updatedBookData.publicationDate,
+                    updatedBookData.availableCopies,
+                    updatedBookData.totalCopies,
+                    updatedBookData.location,
+                    bookId,
+                ]
+            );
+
+            if (result.rows.length > 0) {
+                return result.rows[0];
+            } else {
+                throw new Error('Failed to update the book');
+            }
+        } catch (error) {
+            console.error('Error in updateBook:', error);
+            throw error; // Rethrow the error to be caught by the controller
+        }
+    }
+
+
     static async searchBooks(params: any): Promise<Book[]> {
         try {
             // Construct a dynamic query based on the provided parameters
@@ -49,6 +122,7 @@ class BookService {
                         row.isbn,
                         row.publication_date,
                         row.available_copies,
+                        row.total_copies,
                         row.location
                     )
             );
@@ -73,6 +147,7 @@ class BookService {
                 row.ISBN,
                 row.publication_date,
                 row.available_copies,
+                row.total_copies,
                 row.location
             );
         }

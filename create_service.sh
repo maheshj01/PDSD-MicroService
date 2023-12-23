@@ -36,6 +36,7 @@ npm install express body-parser
 npm i --save-dev @types/pg
 npm install dotenv
 npm install pg
+npm install axios
 
 # For Authentication
 npm install --save-dev @types/bcrypt

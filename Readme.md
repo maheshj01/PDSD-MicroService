@@ -59,7 +59,7 @@ CREATE TABLE users (
 
 #### 2. Book Service:
 
-Tables: books, book_checkouts, book_requests
+Tables: books, book_requests
 
 ```bash
 CREATE TABLE books (
@@ -75,25 +75,13 @@ CREATE TABLE books (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-CREATE TABLE book_checkouts (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER,
-    book_id INTEGER REFERENCES books(id) ON DELETE CASCADE,
-    checkout_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    due_date TIMESTAMP,
-    returned BOOLEAN DEFAULT false,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 ```
 
 #### Checkout Service:
 
-Tables: checkouts, checkout_renewals, checkout_holds
+Tables: checkouts, checkout_holds
 
 ```bash
--- Schema Creation
 -- Table for managing checkouts
 CREATE TABLE checkouts (
     id SERIAL PRIMARY KEY,
@@ -102,17 +90,6 @@ CREATE TABLE checkouts (
     checkout_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     due_date TIMESTAMP,
     returned BOOLEAN DEFAULT false,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Table for handling checkout renewals
-CREATE TABLE checkout_renewals (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER,
-    checkout_id INTEGER,
-    renewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    new_due_date TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

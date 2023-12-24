@@ -37,3 +37,33 @@ The checkout service is responsible for checking out books/ placing holds and ma
 
      Input: Item available in the library
      Expected Output: Error message
+
+
+### Database Schema
+
+Tables: checkouts, checkout_holds
+
+```bash
+-- Schema Creation
+-- Table for managing checkouts
+CREATE TABLE checkouts (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER,
+    book_id INTEGER,
+    checkout_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    due_date TIMESTAMP,
+    returned BOOLEAN DEFAULT false,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table for tracking holds on checked-out items
+CREATE TABLE checkout_holds (
+    id SERIAL PRIMARY KEY,
+    book_id INTEGER,
+    user_id INTEGER,
+    placed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```

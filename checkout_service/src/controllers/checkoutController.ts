@@ -51,6 +51,30 @@ class CheckoutController {
     }
   }
 
+  static async getMostBorrowedBooks(req: Request, res: Response): Promise<void> {
+    try {
+      console.log('Getting most borrowed books');
+      const mostBorrowedBooks = await CheckoutService.getMostBorrowedBooks();
+      res.status(200).json(mostBorrowedBooks);
+    } catch (error: any) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+  static async getOverdueItems(req: Request, res: Response): Promise<void> {
+    try {
+      const overdueItems = await CheckoutService.getOverdueItems();
+
+      res.status(200).json({
+        message: 'Overdue Items Retrieved',
+        data: overdueItems
+      });
+    } catch (error: any) {
+      console.error(error);
+      res.status(error.response?.status || 500).json({ error: error.message || 'Internal Server Error' });
+    }
+  }
+
   public static async placeHoldOnBook(req: Request, res: Response): Promise<void> {
     try {
       const bookId = parseInt(req.params.bookId, 10);

@@ -10,7 +10,6 @@ class UserService {
             const response = await axios.post(`${process.env.USER_SERVICE_BASE_URL}/api/auth/register`, newUser);
             return response;
         } catch (error: any) {
-            console.error('Error registering user:', error);
             return error.response; // Return the complete response object
         }
     }

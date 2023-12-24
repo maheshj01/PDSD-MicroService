@@ -18,4 +18,8 @@ checkoutRoutes.post('/checkouts/:bookId/hold', CheckoutController.placeHoldOnBoo
 checkoutRoutes.post('/checkouts/:checkoutId/renew', CheckoutController.renewCheckoutItem);
 checkoutRoutes.post('/checkouts/:checkoutId/return', CheckoutController.returnCheckoutItem);
 
+// Route for Report Service
+checkoutRoutes.get('/checkouts/reports/most-borrowed-books', CheckoutController.getMostBorrowedBooks);
+checkoutRoutes.get('/checkouts/reports/overdue-items', CheckoutController.getOverdueItems);
+
 export default checkoutRoutes;

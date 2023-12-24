@@ -182,5 +182,38 @@ class CheckoutService {
       throw new Error('Failed to fetch book holds');
     }
   }
+
+  static async getMostBorrowedBooks(): Promise<any[]> {
+    try {
+      console.log('Fetching most borrowed books');
+      const query = {
+        text: 'SELECT book_id, COUNT(book_id) as borrow_count FROM checkouts GROUP BY book_id ORDER BY borrow_count DESC LIMIT 10',
+        values: [],
+      };
+
+      const result = await pool.query(query);
+      return result.rows;
+    } catch (error: any) {
+      console.error(error);
+      throw new Error('Error fetching most borrowed books');
+    }
+  }
+
+  static async getOverdueItems(): Promise<any> {
+    try {
+      const currentDate = new Date();
+
+      // Query overdue items from the database
+      const result = await pool.query(
+        'SELECT * FROM checkouts WHERE due_date < $1 AND returned = false',
+        [currentDate]
+      );
+
+      return result.rows;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Error fetching overdue items');
+    }
+  }
 }
 export default CheckoutService;

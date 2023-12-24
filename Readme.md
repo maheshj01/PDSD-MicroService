@@ -124,6 +124,17 @@ CREATE TABLE requests (
 
 Does not have a database schema, it interacts with book_service and user_service through REST API calls.
 
+
+### Report Service
+
+Does not have a database schema, it interacts with checkout service to generate reports.
+
+### Notification Service
+
+Does not have a database schema, it interacts with checkout service and user service to send notifications.
+
+> NOTE: For email notifications to work you need to sign in admin and store the login token in .env file.
+
 ### Roles
 
 In the context of your application, the roles could be associated with different levels of access and permissions. Here's a simple set of roles commonly used in applications:

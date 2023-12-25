@@ -1,37 +1,38 @@
 // src/services/notificationService.ts
 import axios from 'axios';
 import EmailUtils from '../utils/EmailUtils';
+import UserService from './UserService';
 
 class NotificationService {
     // ... (other methods)
 
-    static async sendEmailNotification(userId: number,): Promise<void> {
+    static async sendEmailNotification(userId: number, bookId: number, dueDate: String): Promise<void> {
         try {
-            const token = process.env.ADMIN_LOGIN_TOKEN;
-            const headers = { Authorization: `Bearer ${token}` };
             // Fetch user information using the User Service API
-            const userResponse = await axios.get(`${process.env.USER_SERVICE_BASE_URL}/api/users/${userId}`,
-                { headers }
-            );
-            const userData = userResponse.data;
+            const userData = await UserService.getUserById(userId);
 
-            // Use the email template
-            const subject = 'Due Date Approaching';
-            const body = `Dear ${userData.name},\n\nYour due date is approaching. Please return the borrowed item soon.`;
+            // Fetch book information using the Book Service API
+            const bookData = await UserService.getBookById(bookId);
 
+            // Get email content with due_date
+            const emailContent = EmailUtils.getEmailContent(userData.name, bookData.title, dueDate);
+            const subject = `Reminder: Return of Borrowed Book due on ${dueDate}`;
             // Send email notification
-            await EmailUtils.sendEmail(userData.contact_email, subject, body);
+            await EmailUtils.sendEmail(userData.contact_email, subject, emailContent);
         } catch (error: any) {
             console.error(error);
             throw new Error('Error sending email notification');
         }
     }
 
-    static async sendInAppNotification(userId: number): Promise<void> {
+    static async sendInAppNotification(userId: number, bookId: number, dueDate: String): Promise<void> {
         try {
             // Fetch user information using the User Service API
-            const userResponse = await axios.get(`${process.env.USER_SERVICE_BASE_URL}/api/users/${userId}`);
-            const userData = userResponse.data;
+            // Fetch user information using the User Service API
+            const userData = await UserService.getUserById(userId);
+
+            // Fetch book information using the Book Service API
+            const bookData = await UserService.getBookById(bookId);
 
             // Send in-app notification
             // Implement in-app notification logic
@@ -50,8 +51,9 @@ class NotificationService {
 
             // Process overdue items and send notifications
             for (const item of overdueItems) {
-                await this.sendEmailNotification(item.user_id);
-                await this.sendInAppNotification(item.user_id);
+                const date = EmailUtils.formatToCustomString(new Date(item.due_date), 'yyyy/mm/dd hh:mm');
+                await this.sendEmailNotification(item.user_id, item.book_id, date);
+                await this.sendInAppNotification(item.user_id, item.book_id, date);
             }
 
         } catch (error: any) {

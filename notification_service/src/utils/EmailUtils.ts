@@ -2,6 +2,7 @@
 import nodemailer from 'nodemailer';
 
 class EmailUtils {
+
   static async sendEmail(to: string, subject: string, body: string): Promise<void> {
     try {
       // Ensure that environment variables are set for email configuration
@@ -35,6 +36,21 @@ class EmailUtils {
       throw new Error('Error sending email');
     }
   }
+
+  static getEmailContent(userName: string, bookTitle: string, dueDate: String): string {
+    return `Dear ${userName},\n\nWe hope this message finds you well. As the due date for the book "${bookTitle}" approaches (Due Date: ${dueDate}), we kindly remind you to return it at your earliest convenience. Your prompt attention to this matter is greatly appreciated. Thank you.`;
+  }
+
+  static formatToCustomString(date: Date, format: string): string {
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
+
 }
 
 export default EmailUtils;

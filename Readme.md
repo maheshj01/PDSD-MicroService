@@ -6,6 +6,8 @@ This project seeks to harness the capabilities of GPT-3 throughout the entire so
 
 Microservices are a software development technique—a variant of the service-oriented architecture (SOA) architectural style that structures an application as a collection of loosely coupled services. In a microservices architecture, services are fine-grained and the protocols are lightweight. The benefit of decomposing an application into different smaller services is that it improves modularity. This makes the application easier to understand, develop, test, and become more resilient to architecture erosion. It parallelizes development by enabling small autonomous teams to develop, deploy and scale their respective services independently. It also allows the architecture of an individual service to emerge through continuous refactoring. Microservices-based architectures enable continuous delivery and deployment.
 
+Each New service has been using a [script](./create_service.sh) to generate the boilerplate code for the service. The script is itself generated using GPT-3
+
 ### Micro services in this project
 
 - [User Service](./user_service/)
@@ -13,6 +15,8 @@ Microservices are a software development technique—a variant of the service-or
 - [Checkout Service](./checkout_service/)
 - [Request Service](./request_service/)
 - [Librarian Service](./librarian_service/)
+- [Report Service](./report_service/)
+- [Notification Service](./notification_service/)
 
 ### Running the Project
 
@@ -34,7 +38,7 @@ or
 ./start
 ```
 
-This will start the database and all the micro services.
+This will start the database and all the microservices.
 
 ### Database Schema by Micro Service
 

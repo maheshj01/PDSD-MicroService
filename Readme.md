@@ -132,6 +132,7 @@ Does not have a database schema, it interacts with checkout service to generate 
 ### Notification Service
 
 Does not have a database schema, it interacts with checkout service and user service to send notifications.
+A cron job is scheduled to run every 24 hours to check for due dates and send notifications to users.
 
 > NOTE: For email notifications to work you need to sign in admin and store the login token in .env file.
 

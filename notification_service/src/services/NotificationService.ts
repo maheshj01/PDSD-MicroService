@@ -46,8 +46,12 @@ class NotificationService {
     static async processDueDateNotifications(): Promise<void> {
         try {
             // Fetch overdue items from Checkout Service API
-            const overdueItemsResponse = await axios.get(`${process.env.CHECKOUT_SERVICE_BASE_URL}/api/checkouts/reports/overdue-items`);
-            const overdueItems = overdueItemsResponse.data;
+            const token = process.env.ADMIN_LOGIN_TOKEN;
+            const headers = { Authorization: `Bearer ${token}` };
+            const overdueItemsResponse = await axios.get(`${process.env.CHECKOUT_SERVICE_BASE_URL}/api/checkouts/reports/overdue-items`,
+                { headers }
+            );
+            const overdueItems = overdueItemsResponse.data.data;
 
             // Process overdue items and send notifications
             for (const item of overdueItems) {

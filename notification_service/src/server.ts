@@ -14,8 +14,9 @@ const PORT = process.env.PORT || 3005;
 app.use(bodyParser.json());
 // ... other setup code for your Express application ...
 
+const cronSchedule = process.env.CRON_SCHEDULE || '0 0 * * *'; // Default to run daily at midnight
 // Schedule a daily task to process due date notifications
-schedule.scheduleJob('0 0 * * *', async () => {
+schedule.scheduleJob(cronSchedule, async () => {
     try {
         await NotificationService.processDueDateNotifications();
     } catch (error: any) {

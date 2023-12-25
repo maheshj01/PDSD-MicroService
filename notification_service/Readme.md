@@ -1,6 +1,6 @@
 ### Notification Service
 
-This service is responsible for sending email/app notifications to users.
+This service is responsible for sending email/app notifications to users. A cron job is scheduled to run every 24 hours to check for due dates and send notifications to users.
 
 
 10. View Due Date Notifications (Notification Service):

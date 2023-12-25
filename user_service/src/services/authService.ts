@@ -78,7 +78,8 @@ class AuthService {
         };
         console.log("payload:", payload);
         const token = jwt.sign(payload, jwtSecret, {
-          expiresIn: '1h', // Adjust the expiration time as needed
+          // expire in 1 day
+          expiresIn: '1d',
         });
         return token;
       } else {

@@ -3,7 +3,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { Book } from "../interfaces/Book"; // Import the Book interface
 
-const BASE_URL = process.env.BOOKS_SERVICE_BASE_URL || 'http://localhost:3001';
+const BASE_URL = process.env.BOOKS_SERVICE_BASE_URL || 'http://localhost:3001/api';
 console.log('BASE_URL', BASE_URL);
 if (!BASE_URL) {
     throw new Error('BOOKS_SERVICE_BASE_URL is not defined in the environment file.');

@@ -38,7 +38,8 @@ const Home: React.FC = () => {
     book.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const bookCover = 'https://content.wepik.com/statics/90897927/preview-page0.jpg';
+  const bookCover =
+    "https://content.wepik.com/statics/90897927/preview-page0.jpg";
 
   return (
     <div className="home-container">

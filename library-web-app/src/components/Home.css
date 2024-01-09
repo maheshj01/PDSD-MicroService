@@ -1,36 +1,89 @@
 /* src/components/Home.css */
 
 .home-container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 20px;
 }
 
-.search-container {
+.header {
+    text-align: center;
     margin-bottom: 20px;
 }
 
-.books-container {
+.search-container {
     display: flex;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.search-container input {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.search-container button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+}
+
+.books-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
 }
 
 .book-card {
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     padding: 10px;
-    text-align: center;
+    border-radius: 5px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.book-card:hover {
+    transform: scale(1.05);
 }
 
 .book-card img {
     max-width: 100%;
     height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.book-details {
+    text-align: center;
+}
+
+.book-details .book-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.book-details .book-author {
+    color: #777;
+    font-size: 14px;
 }
 
 .login-container {
+    text-align: center;
     margin-top: 20px;
 }
 
-button {
-    padding: 10px;
+.login-container button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
     cursor: pointer;
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
 }

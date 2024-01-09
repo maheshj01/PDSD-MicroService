@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import BookService from "../services/BookService";
-import { Book } from "../interfaces/Book"; // Import the Book interface
+import { Book } from "../interfaces/Book";
 import "./Home.css";
 
 const Home: React.FC = () => {
@@ -37,12 +37,15 @@ const Home: React.FC = () => {
   const filteredBooks = books.filter((book) =>
     book.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
   const bookCover =
-    "https://content.wepik.com/statics/90897927/preview-page0.jpg";
-
+  "https://content.wepik.com/statics/90897927/preview-page0.jpg";
   return (
     <div className="home-container">
+      <div className="header">
+        <h1>Welcome to the Library</h1>
+        <p>Explore our collection of books</p>
+      </div>
+
       <div className="search-container">
         <input
           type="text"
@@ -55,15 +58,18 @@ const Home: React.FC = () => {
 
       {loading && <p>Loading...</p>}
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="error-message">{error}</p>}
 
       {!loading && !error && (
         <div className="books-container">
           {filteredBooks.map((book) => (
             <div key={book.id} className="book-card">
               <img src={bookCover} alt={book.title} />
-              <p>{book.title}</p>
-              {/* Add more book details as needed */}
+              <div className="book-details">
+                <p className="book-title">{book.title}</p>
+                <p className="book-author">by {book.author}</p>
+                {/* Add more book details as needed */}
+              </div>
             </div>
           ))}
         </div>

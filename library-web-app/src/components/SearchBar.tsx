@@ -23,16 +23,18 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
   return (
     <div className="search-container">
-      <input
-        type="text"
-        placeholder="Search for books..."
-        value={searchTerm}
-        onChange={handleInputChange}
-      />
-      <button onClick={() => onSearch("", "title")}>Clear</button>
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search for books..."
+          value={searchTerm}
+          onChange={handleInputChange}
+        />
+        <button onClick={() => onSearch("", "title")}>Clear</button>
+      </div>
 
       {/* Add radio buttons for categories */}
-      <div>
+      <div className="radio-container">
         <label>
           <input
             type="radio"

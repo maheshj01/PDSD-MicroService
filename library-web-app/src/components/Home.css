@@ -35,27 +35,8 @@
     cursor: pointer;
 }
 
-.search-bar-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.search-container {
-    display: flex;
-    align-items: center;
-}
-
 input {
     margin-right: 10px;
-}
-
-.radio-buttons {
-    display: flex;
-    justify-content: space-between;
-    width: 200px;
-    /* Adjust the width as needed */
 }
 
 .books-container {

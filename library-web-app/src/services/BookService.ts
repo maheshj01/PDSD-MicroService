@@ -42,12 +42,16 @@ const BookService = {
         term: string,
         category: keyof Book
     ): Promise<Book[]> => {
-        const queryParams = new URLSearchParams({ term, category: category.toString() });
-        const url = `${BASE_URL}/books/search?${queryParams}`;
+        let url = `${BASE_URL}/books`;
+
+        // Append category-specific query parameter
+        if (category === 'title' || category === 'author' || category === 'category') {
+            url += `?${category}=${term}`;
+        }
         console.log(url);
+
         return handleRequest(axios.get<Book[]>(url));
     },
-
     // Add more methods as needed based on your BookService API
 };
 

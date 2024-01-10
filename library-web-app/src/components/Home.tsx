@@ -1,13 +1,15 @@
 // src/components/Home.tsx
 
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import _ from "lodash"; // Import lodash
 import BookService from "../services/BookService";
 import { Book } from "../interfaces/Book";
+import Header from "./Header";
+import SearchBar from "./SearchBar";
+import BookDisplay from "./BookDisplay";
 import "./Home.css";
 
 const Home: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,60 +28,30 @@ const Home: React.FC = () => {
       });
   }, []);
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
+  const handleSearch = _.debounce(
+    async (term: string, category: keyof Book) => {
+      try {
+        setLoading(true);
+        const results = await BookService.searchBooksByCategory(term, category);
+        setBooks(results);
+        setLoading(false);
+      } catch (error) {
+        setError("Error searching books. Please try again later.");
+        setLoading(false);
+        console.error("Error searching books:", error);
+      }
+    },
+    300
+  ); // Adjust the debounce time as needed (e.g., 300 milliseconds)
 
-  const clearSearch = () => {
-    setSearchTerm("");
-  };
-
-  const filteredBooks = books.filter((book) =>
-    book.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  const bookCover =
-  "https://content.wepik.com/statics/90897927/preview-page0.jpg";
   return (
     <div className="home-container">
-      <div className="header">
-        <h1>Welcome to the Library</h1>
-        <p>Explore our collection of books</p>
-      </div>
-
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search for books..."
-          value={searchTerm}
-          onChange={handleSearch}
-        />
-        <button onClick={clearSearch}>Clear</button>
-      </div>
+      <Header />
+      <SearchBar onSearch={handleSearch} />
 
       {loading && <p>Loading...</p>}
-
       {error && <p className="error-message">{error}</p>}
-
-      {!loading && !error && (
-        <div className="books-container">
-          {filteredBooks.map((book) => (
-            <div key={book.id} className="book-card">
-              <img src={bookCover} alt={book.title} />
-              <div className="book-details">
-                <p className="book-title">{book.title}</p>
-                <p className="book-author">by {book.author}</p>
-                {/* Add more book details as needed */}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      <div className="login-container">
-        <Link to="/login">
-          <button>Login</button>
-        </Link>
-      </div>
+      {!loading && !error && <BookDisplay books={books} />}
     </div>
   );
 };

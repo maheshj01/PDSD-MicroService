@@ -1,30 +1,32 @@
-// app.ts
+// src/index.ts
 import express from 'express';
-import bodyParser from 'body-parser';
+import Database from './utils/Database';
 import userRoutes from './routes/userRoutes';
-import authRouter from './routes/authRouter';
-import pool from './db';
-import dotenv from "dotenv";
+import { authMiddleware } from './middleware/AuthMiddleware';
 
 const app = express();
-dotenv.config();
-const port = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
-app.use(bodyParser.json());
-app.use('/api/users', userRoutes);
-app.use('/api/auth', authRouter);
-
-pool
-    .connect()
+// Connect to the database when the application starts
+Database.connect()
     .then(() => {
-        console.log('User Service Connected to the database');
+        console.log('Connected to the database');
+        startServer();
     })
     .catch((error: any) => {
-        console.error('Unable to connect to the database:', error);
+        console.error('Error connecting to the database:', error);
+        process.exit(1);
     });
 
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
-});
+function startServer() {
+    // Other middleware and routes setup
+    app.use(express.json());
 
-export default app;
+    // Example route setup for user-related routes
+    app.use('/users', userRoutes);
+
+    // Start the server
+    app.listen(PORT, () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+    });
+}

@@ -46,19 +46,77 @@ This will start the database and all the microservices.
 
 Table: users
 
-```bash
+```SQL
+-- Create the users table
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    role VARCHAR(50) NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    contact_email VARCHAR(255) NOT NULL,
-    contact_phone VARCHAR(20),
+    user_id SERIAL PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(100) NOT NULL,
+    full_name VARCHAR(100) NOT NULL,
+    user_role VARCHAR(20) NOT NULL,
+    school_id INTEGER CHECK (school_id >= 0 AND school_id <= 9999999999),
     mailing_address VARCHAR(255),
+    phone_number VARCHAR(20),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_school_id UNIQUE (school_id),
+    CONSTRAINT unique_username UNIQUE (username),
+    CONSTRAINT unique_email UNIQUE (email),
+    CONSTRAINT unique_phone_number UNIQUE (phone_number),
+    CONSTRAINT valid_user_role CHECK (user_role IN ('patron', 'staff', 'librarian'))
 );
+
+-- Create the Token table to store authentication tokens
+CREATE TABLE tokens (
+    token_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    token_value VARCHAR(255) NOT NULL UNIQUE,
+    expiration_time TIMESTAMP NOT NULL
+);
+
+-- Create the sessions table for session management
+CREATE TABLE sessions (
+    session_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    session_token VARCHAR(255) NOT NULL UNIQUE,
+    expiration_time TIMESTAMP NOT NULL
+);
+
+
+    -- Insert 10 rows into the users table
+
+    INSERT INTO users (username, email, password_hash, full_name, user_role, school_id, mailing_address, phone_number)
+    VALUES
+    ('john_does', 'john.does@email.com', 'hashed_password_1', 'John Doe', 'patron', 123256789, '123 Main St, Cityville', '123-456-7890'),
+    ('alice_smith', 'alice.smith@email.com', 'hashed_password_2', 'Alice Smith', 'staff', 987654321, '456 Oak St, Townsville', '987-654-3210'),
+    ('bob_jones', 'bob.jones@email.com', 'hashed_password_3', 'Bob Jones', 'patron', 555555555, '789 Pine St, Villagetown', '555-555-5555'),
+    ('susan_wang', 'susan.wang@email.com', 'hashed_password_4', 'Susan Wang', 'patron', 111122223, '101 Elm St, Hamlet', '111-222-3333'),
+    ('michael_smith', 'michael.smith@email.com', 'hashed_password_5', 'Michael Smith', 'staff', 444433332, '202 Cedar St, Suburbia', '444-333-2222'),
+    ('emily_jackson', 'emily.jackson@email.com', 'hashed_password_6', 'Emily Jackson', 'patron', 666677778, '303 Birch St, Countryside', '666-777-8888'),
+    ('ryan_lee', 'ryan.lee@email.com', 'hashed_password_7', 'Ryan Lee', 'staff', 999900001, '404 Maple St, Downtown', '999-000-0111'),
+    ('jessica_martin', 'jessica.martin@email.com', 'hashed_password_8', 'Jessica Martin', 'patron', 121212121, '505 Oak St, Riverside', '121-212-1212'),
+    ('david_smith', 'david.smith@email.com', 'hashed_password_9', 'David Smith', 'patron', 777788889, '606 Pine St, Uptown', '777-888-9999'),
+    ('olivia_wood', 'olivia.wood@email.com', 'hashed_password_10', 'Olivia Wood', 'staff', 333344445, '707 Birch St, Outskirts', '333-444-5555');
+
+    INSERT INTO tokens (user_id, token_value, expiration_time)
+    VALUES
+    (1, 'token_value_1', '2024-01-31 12:00:00'),
+    (2, 'token_value_2', '2024-02-15 14:30:00'),
+    (3, 'token_value_3', '2024-03-05 18:45:00'),
+    (4, 'token_value_4', '2024-04-20 10:15:00'),
+    (5, 'token_value_5', '2024-05-10 08:00:00'),
+    (6, 'token_value_6', '2024-06-25 16:20:00'),
+    (7, 'token_value_7', '2024-07-15 20:30:00'),
+    (8, 'token_value_8', '2024-08-05 22:45:00'),
+    (9, 'token_value_9', '2024-09-10 11:30:00'),
+    (10, 'token_value_10', '2024-10-15 09:00:00');
+```
+
+Incase indexing does not start with 1
+
+```SQL
+SELECT setval('tokens_token_id_seq', 1, false);
 ```
 
 #### 2. Book Service:
@@ -127,7 +185,6 @@ CREATE TABLE requests (
 ### Librarian Service
 
 Does not have a database schema, it interacts with book_service and user_service through REST API calls.
-
 
 ### Report Service
 

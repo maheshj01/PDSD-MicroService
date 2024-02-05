@@ -2,41 +2,53 @@
 
 User Service is a RESTful API built using Node.js, Express, and PostgreSQL. It provides functionality for user authentication, account management, and basic CRUD operations on a user table in a PostgreSQL database.
 
-
 It provides the following functionality:
-
 
 1. User Login (User Service):
 
    - Test Case 1: Valid User Login
 
-      Input: Valid username and password
-      Expected Output: Successful login
+     Input: Valid username and password
+     Expected Output: Successful login
 
    - Test Case 2: Invalid User Login
 
-      Input: Invalid username or password
-      Expected Output: Error message
+     Input: Invalid username or password
+     Expected Output: Error message
 
    - Test Case 3: Brute Force Attack Protection
 
-      Input: Multiple invalid login attempts within a short time
-      Expected Output: Account lockout or additional security measures
+     Input: Multiple invalid login attempts within a short time
+     Expected Output: Account lockout or additional security measures
 
 ### Database Schema
 
-```
+```SQL
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    role VARCHAR(50) NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    contact_email VARCHAR(255) NOT NULL,
-    contact_phone VARCHAR(20),
+    user_id SERIAL PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    full_name VARCHAR(100) NOT NULL,
+    user_role VARCHAR(20) NOT NULL,
+    school_id INTEGER CHECK (school_id >= 0 AND school_id <= 9999999999),
     mailing_address VARCHAR(255),
+    phone_number VARCHAR(20),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_school_id UNIQUE (school_id),
+    CONSTRAINT unique_username UNIQUE (username),
+    CONSTRAINT unique_email UNIQUE (email),
+    CONSTRAINT unique_phone_number UNIQUE (phone_number),
+    CONSTRAINT valid_user_role CHECK (user_role IN ('patron', 'staff', 'librarian'))
+);
+
+-- Create the Token table to store authentication tokens
+CREATE TABLE tokens (
+    token_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    token_value VARCHAR(255) NOT NULL UNIQUE,
+    expiration_time TIMESTAMP NOT NULL
 );
 ```
 
@@ -133,8 +145,5 @@ Feel free to contribute to the project by opening issues or creating pull reques
 Feel free to customize and expand this template based on your project's specific details and requirements.
 
 _Note: This readme was generated using Chat GPT the complete chat can be found here: https://chat.openai.com/share/2bf9150e-b4b8-4881-a4e8-4985121ca4a1_
- 
-
 
 _The summary of this project can be found here: https://gist.github.com/maheshmnj/8b39d6928249aad67732be5279d0dd57_
-

@@ -15,7 +15,7 @@ class TokenManager {
             });
 
             // Expire old sessions for the given user ID
-            SessionManager.expireOldSessions(userId.toString());
+            await SessionManager.expireOldSessions(userId.toString());
 
             const expirationTime = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours from now
 
@@ -54,10 +54,10 @@ class TokenManager {
         try {
             const secret = process.env.JWT_SECRET as string;
             const decodedToken = jwt.verify(token, secret) as { userId: number; userRole: string };
-
+            console.log("decoded=", decodedToken, "token=", token);
             // Validate if the token is still valid in the database (expiration_time > CURRENT_TIMESTAMP)
             const findUserByTokenQuery = `
-                SELECT user_id
+                SELECT *
                 FROM tokens
                 WHERE token_value = $1 AND expiration_time > CURRENT_TIMESTAMP
             `;
@@ -67,8 +67,10 @@ class TokenManager {
             const result: QueryResult = await Database.executeQuery(findUserByTokenQuery, values);
 
             if (result.rows.length > 0) {
+                console.log('Token is valid');
                 return decodedToken;
             } else {
+                console.log('token not found in database');
                 return null;
             }
         } catch (error) {

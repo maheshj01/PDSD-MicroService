@@ -2,7 +2,6 @@
 import express from 'express';
 import Database from './utils/Database';
 import userRoutes from './routes/userRoutes';
-import { authMiddleware } from './middleware/AuthMiddleware';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,7 +22,7 @@ function startServer() {
     app.use(express.json());
 
     // Example route setup for user-related routes
-    app.use('/users', userRoutes);
+    app.use('/api/user', userRoutes);
 
     // Start the server
     app.listen(PORT, () => {

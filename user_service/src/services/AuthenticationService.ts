@@ -8,7 +8,7 @@ class AuthenticationService {
     async handleAuthentication(usernameOrEmail: string, password: string): Promise<Token | null> {
         const user = await UserRepository.retrieveUserByUsernameOrEmail(usernameOrEmail);
 
-        if (user && await this.validatePassword(password, user.passwordHash)) {
+        if (user && await this.validatePassword(password, user.password)) {
             // Generate and return a token if authentication is successful
             const token = await TokenManager.generateToken(user.userId!, user.userRole);
             return token;
@@ -19,7 +19,6 @@ class AuthenticationService {
 
     private async validatePassword(inputPassword: string, hashedPassword: string): Promise<boolean> {
         const result = await bcrypt.compare(inputPassword, hashedPassword);
-        console.log('Password validation result:', result);
         return result;
     }
 }

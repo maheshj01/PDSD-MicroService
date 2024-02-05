@@ -11,7 +11,7 @@ router.post('/register', authMiddleware(['librarian']), UserManager.registerUser
 router.put('/manage/:userId', authMiddleware(), UserManager.manageProfile); // Accessible to authorized users
 router.get('/:userId', authMiddleware(['librarian']), UserManager.getUserById); // Accessible to authorized users
 router.put('/update/:userId', authMiddleware(['librarian']), UserManager.updateUser); // Accessible to librarian only
-// router.post('/expire-logins', authMiddleware(), UserManager.expireOldLogins); // Accessible to authorized users
+router.post('/expire-logins', authMiddleware(), UserManager.expireOldLogins); // Accessible to authorized users
 router.post('/logout/:userId', authMiddleware(), UserManager.logout); // Accessible to authorized users
 router.put('/change-password/:userId', authMiddleware(), UserManager.changePassword); // Accessible to authorized users
 

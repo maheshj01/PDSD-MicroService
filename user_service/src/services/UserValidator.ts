@@ -15,7 +15,7 @@ class UserValidator {
             throw new Error('Invalid email');
         }
 
-        if (!this.validatePassword(user.passwordHash)) {
+        if (!this.validatePassword(user.password)) {
             throw new Error('Invalid password');
         }
 

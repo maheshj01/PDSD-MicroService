@@ -67,7 +67,6 @@ class TokenManager {
             const result: QueryResult = await Database.executeQuery(findUserByTokenQuery, values);
 
             if (result.rows.length > 0) {
-                console.log('Token is valid');
                 return decodedToken;
             } else {
                 console.log('token not found in database');

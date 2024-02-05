@@ -17,7 +17,7 @@ class UserManager {
                 username: username,
                 email: email,
                 fullName: full_name,
-                passwordHash: password,
+                password: password,
                 userRole: user_role,
                 schoolId: school_id,
                 mailingAddress: mailing_address,
@@ -34,7 +34,7 @@ class UserManager {
             }
             // Validate and hash user-provided password
             const hashedPassword = await UserManager.validateAndHashPassword(password);
-            newUser.passwordHash = hashedPassword!;
+            newUser.password = hashedPassword!;
             if (!hashedPassword) {
                 res.status(400).json({ error: 'Invalid password' });
                 return;
@@ -61,7 +61,6 @@ class UserManager {
         if (!UserValidator.validatePassword(password)) {
             return null;
         }
-
         // Hash password
         return await bcrypt.hash(password, 10);
     }
@@ -125,7 +124,6 @@ class UserManager {
             const userId = req.params.userId;
 
             const user = await UserRepository.retrieveUserById(userId);
-
             if (!user) {
                 res.status(404).json({ error: 'User not found' });
                 return;
@@ -204,17 +202,15 @@ class UserManager {
             const userId = req.params.userId;
 
             const { currentPassword, newPassword } = req.body;
-
             // Retrieve user from the database
             const existingUser = await UserRepository.retrieveUserById(userId);
-
             if (!existingUser) {
                 res.status(404).json({ error: 'User not found' });
                 return;
             }
-
+            console.log('existingUser:', existingUser.userId);
             // Validate current password
-            const isPasswordValid = await bcrypt.compare(currentPassword, existingUser.passwordHash);
+            const isPasswordValid = await bcrypt.compare(currentPassword, existingUser.password);
 
             if (!isPasswordValid) {
                 res.status(401).json({ error: 'Invalid current password' });
@@ -230,9 +226,11 @@ class UserManager {
             }
 
             // Update user password in the database
-            existingUser.passwordHash = newPasswordHash;
-            await UserRepository.updateUser(existingUser);
-
+            const success = await UserRepository.updatePassword(existingUser.userId!, newPasswordHash);
+            if (!success) {
+                res.status(500).json({ error: 'Error updating password' });
+                return;
+            }
             res.status(200).json({ message: 'Password changed successfully' });
         } catch (error) {
             console.error('Error changing password:', error);

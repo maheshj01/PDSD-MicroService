@@ -14,7 +14,7 @@ class UserRepository {
         const values = [
             user.username,
             user.email,
-            user.passwordHash,
+            user.password,
             user.fullName,
             user.userRole,
             user.schoolId,
@@ -33,32 +33,56 @@ class UserRepository {
         const query = 'SELECT * FROM users WHERE user_id = $1';
         const values = [userId];
 
-        const { rows } = await Database.executeQuery(query, values);
+        const result: QueryResult = await Database.executeQuery(query, values);
 
-        return rows.length ? rows[0] : null;
+        if (result.rows.length > 0) {
+            return this.mapRowToUser(result.rows[0]);
+        }
+        return null;
     }
 
     async updateUser(user: User): Promise<void> {
-        const updateUserQuery = `
-      UPDATE users
-      SET username = $1, email = $2, full_name = $3, user_role = $4, 
-      school_id = $5, mailing_address = $6, phone_number = $7, updated_at = $8
-      WHERE user_id = $9
-    `;
+        try {
+            const updateUserQuery = `
+            UPDATE users
+            SET username = $1, email = $2, full_name = $3, user_role = $4, 
+            school_id = $5, mailing_address = $6, phone_number = $7, updated_at = $8
+            WHERE user_id = $9
+          `;
 
-        const values = [
-            user.username,
-            user.email,
-            user.fullName,
-            user.userRole,
-            user.schoolId,
-            user.mailingAddress,
-            user.phoneNumber,
-            new Date(),
-            user.userId,
-        ];
+            const values = [
+                user.username,
+                user.email,
+                user.fullName,
+                user.userRole,
+                user.schoolId,
+                user.mailingAddress,
+                user.phoneNumber,
+                new Date(),
+                user.userId,
+            ];
 
-        await Database.executeQuery(updateUserQuery, values);
+            await Database.executeQuery(updateUserQuery, values);
+        } catch (error) {
+            console.error('Error updating user:', error);
+            throw error;
+        }
+    }
+
+    async updatePassword(userId: number, newPassword: string): Promise<boolean> {
+        console.log('Updating password for user:', userId);
+        const updatePasswordQuery = 'UPDATE users SET password = $1 WHERE user_id = $2';
+        const values = [newPassword, userId];
+
+        const result = await Database.executeQuery(updatePasswordQuery, values);
+        if (result.rowCount === 0) {
+            console.error('Error updating password');
+            return false;
+        } else {
+            console.log('Password updated successfully');
+            return true;
+        }
+
     }
 
     async deleteUser(userId: number): Promise<void> {
@@ -95,7 +119,7 @@ class UserRepository {
             userId: row.user_id,
             username: row.username,
             email: row.email,
-            passwordHash: row.password,
+            password: row.password,
             fullName: row.full_name,
             userRole: row.user_role,
             schoolId: row.school_id,

@@ -2,13 +2,11 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import UserRepository from '../services/UserRepository';
-import RoleManager from '../services/RoleManager';
 import UserValidator from '../services/UserValidator';
 import SessionManager from '../services/SessionManager';
 import User from '../models/User';
 import AuthenticationService from '../services/AuthenticationService';
 class UserManager {
-
     async registerUser(req: Request, res: Response): Promise<void> {
         try {
             // Assume userRole is 'librarian' for registration (adjust based on your requirements)
@@ -239,4 +237,4 @@ class UserManager {
     }
 }
 
-export default new UserManager();
+export default UserManager;

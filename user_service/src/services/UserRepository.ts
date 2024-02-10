@@ -4,6 +4,16 @@ import User from '../models/User';
 import { QueryResult } from 'pg';
 
 class UserRepository {
+    async deleteAllUsers(): Promise<void> {
+        try {
+            const deleteAllQuery = 'DELETE FROM users';
+            await Database.executeQuery(deleteAllQuery, []);
+        }
+        catch (error: any) {
+            throw new Error(`Failed to delete users: ${error.message}`);
+        }
+    }
+
     async storeUser(user: User): Promise<void> {
         const insertUserQuery = `
       INSERT INTO users

@@ -2,7 +2,7 @@
 import User from '../models/User';
 
 class UserValidator {
-    validateInput(user: User): boolean {
+    validateInput: (user: User) => boolean = (user: User) => {
         if (!this.validateFullName(user.fullName)) {
             throw new Error('Invalid full name');
         }

@@ -2,13 +2,15 @@
 import { Pool, PoolClient, QueryResult } from 'pg';
 import dotenv from 'dotenv';
 
-dotenv.config();
-
 class Database {
     private pool: Pool;
     private client!: PoolClient;
 
     constructor() {
+        // Load the appropriate .env file based on the NODE_ENV environment variable
+        const envFilePath = process.env.NODE_ENV === 'test' ? '.env.test' : (process.env.NODE_ENV === 'production' ? '.env.prod' : '.env');
+        dotenv.config({ path: envFilePath });
+
         this.pool = new Pool({
             host: process.env.DB_HOST,
             port: parseInt(process.env.DB_PORT || '5432'),

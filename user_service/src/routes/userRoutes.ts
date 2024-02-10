@@ -3,16 +3,18 @@ import express from 'express';
 import UserManager from '../services/UserManager';
 import authMiddleware from '../middleware/AuthMiddleware';
 const router = express.Router();
+
+const userManager = new UserManager();
 // Public route: Authentication (Login)
-router.post('/authenticate', UserManager.authenticateUser);
+router.post('/authenticate', userManager.authenticateUser);
 
 // Authorized routes
-router.post('/register', authMiddleware(['librarian']), UserManager.registerUser); // Accessible only to librarians
-router.put('/manage/:userId', authMiddleware(), UserManager.manageProfile); // Accessible to authorized users
-router.get('/:userId', authMiddleware(['librarian']), UserManager.getUserById); // Accessible to authorized users
-router.put('/update/:userId', authMiddleware(['librarian']), UserManager.updateUser); // Accessible to librarian only
-router.post('/expire-logins', authMiddleware(), UserManager.expireOldLogins); // Accessible to authorized users
-router.post('/logout/:userId', authMiddleware(), UserManager.logout); // Accessible to authorized users
-router.put('/change-password/:userId', authMiddleware(), UserManager.changePassword); // Accessible to authorized users
+router.post('/register', authMiddleware(['librarian']), userManager.registerUser); // Accessible only to librarians
+router.put('/manage/:userId', authMiddleware(), userManager.manageProfile); // Accessible to authorized users
+router.get('/:userId', authMiddleware(['librarian']), userManager.getUserById); // Accessible to authorized users
+router.put('/update/:userId', authMiddleware(['librarian']), userManager.updateUser); // Accessible to librarian only
+router.post('/expire-logins', authMiddleware(), userManager.expireOldLogins); // Accessible to authorized users
+router.post('/logout/:userId', authMiddleware(), userManager.logout); // Accessible to authorized users
+router.put('/change-password/:userId', authMiddleware(), userManager.changePassword); // Accessible to authorized users
 
 export default router;

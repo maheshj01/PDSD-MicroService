@@ -6,6 +6,8 @@ import UserValidator from '../services/UserValidator';
 import SessionManager from '../services/SessionManager';
 import User from '../models/User';
 import AuthenticationService from '../services/AuthenticationService';
+import RoleManager from './RoleManager';
+import TokenManager from './TokenManager';
 class UserManager {
     async registerUser(req: Request, res: Response): Promise<void> {
         try {
@@ -232,6 +234,45 @@ class UserManager {
             res.status(200).json({ message: 'Password changed successfully' });
         } catch (error) {
             console.error('Error changing password:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    }
+
+    async authenticateUserByRole(req: Request, res: Response): Promise<void> {
+        try {
+            const token = req.headers.authorization?.split(' ')[1];
+            const requiredRole = req.body.requiredRole;
+
+            // Validate input
+            if (!token || !requiredRole) {
+                res.status(400).json({ error: 'Token and requiredRole are required' });
+                return;
+            }
+
+            // Decode the token to get user information
+            const decodedToken = await TokenManager.validateToken(token);
+
+            if (!decodedToken) {
+                res.status(401).json({ error: 'Unauthorized: Invalid token' });
+                return;
+            }
+
+            // Retrieve user from the database
+            const user = await UserRepository.retrieveUserById(decodedToken.userId.toString());
+
+            if (!user) {
+                res.status(404).json({ error: 'User not found' });
+                return;
+            }
+
+            // Check if the user has the required role
+            if (RoleManager.validateUserRole(user.userRole, [requiredRole])) {
+                res.status(200).json({ message: 'User has the required role' });
+            } else {
+                res.status(403).json({ error: 'User does not have the required role' });
+            }
+        } catch (error) {
+            console.error('Error authenticating user by role:', error);
             res.status(500).json({ error: 'Internal server error' });
         }
     }

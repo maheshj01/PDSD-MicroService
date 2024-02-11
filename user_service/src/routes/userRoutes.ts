@@ -17,4 +17,5 @@ router.post('/expire-logins', authMiddleware(), userManager.expireOldLogins); //
 router.post('/logout/:userId', authMiddleware(), userManager.logout); // Accessible to authorized users
 router.put('/change-password/:userId', authMiddleware(), userManager.changePassword); // Accessible to authorized users
 
+router.post('/authenticate-by-role', userManager.authenticateUserByRole);
 export default router;

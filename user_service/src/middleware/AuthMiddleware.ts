@@ -1,8 +1,8 @@
 // src/middleware/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import TokenManager from '../services/TokenManager';
-
-const authMiddleware = (allowedRoles: string[] = []) => {
+import RoleManager from '../services/RoleManager';
+const authMiddleware = (allowedRoles: string[] = [], requiredRole?: string) => {
     return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         const token = req.headers.authorization?.split(' ')[1];
 
@@ -18,6 +18,11 @@ const authMiddleware = (allowedRoles: string[] = []) => {
         }
 
         // Check if user has required roles
+        if (requiredRole && !RoleManager.validateUserRole(decodedToken.userRole, [requiredRole])) {
+            res.status(403).json({ error: 'Forbidden: Insufficient role permissions' });
+            return;
+        }
+
         if (allowedRoles.length > 0 && !allowedRoles.includes(decodedToken.userRole)) {
             res.status(403).json({ error: 'Forbidden: Insufficient role permissions' });
             return;

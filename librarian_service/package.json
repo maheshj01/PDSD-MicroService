@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && node dist/server.js",
-    "dev": "npm run watch && nodemon dist/server.js",
+    "start": "npm run build && node dist/app.js",
+    "dev": "npm run watch && nodemon dist/app.js",
     "build": "tsc",
-    "serve": "node dist/server.js",
+    "serve": "node dist/app.js",
     "watch": "tsc -w",
     "test": "jest",
     "test:watch": "jest --watch"

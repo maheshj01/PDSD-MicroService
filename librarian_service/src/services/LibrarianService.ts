@@ -1,42 +1,54 @@
-// src/services/LibrarianService.ts
-
+import BookModel from '../models/BookModel';
+import UserModel from '../models/UserModel';
+import Validator from '../utils/Validator';
 import axios from 'axios';
-import { Book } from '../models/Book';
 
 class LibrarianService {
-    // private static readonly BOOKS_SERVICE_BASE_URL = process.env.BOOKS_SERVICE_BASE_URL;
+    checkLibrarianPrivileges(userId: number): Promise<boolean> {
+        // Implement logic to check if the user has librarian privileges
+        // For demonstration purposes, always return true
+        return Promise.resolve(true);
+    }
 
-    static async addBook(bookData: Book): Promise<Book> {
-        const bookServiceUrl = process.env.BOOKS_SERVICE_BASE_URL;
+    async addNewBooks(bookDetails: BookModel): Promise<boolean> {
         try {
-            const response = await axios.post(`${bookServiceUrl}/api/librarian/books`, bookData);
-
-            if (response.status === 201) {
-                return response.data.book;
-            } else {
-                throw new Error('Failed to add book');
-            }
+            // Add logic to save the new book details to the database
+            // For demonstration purposes, return true
+            console.log('Adding new books to the database:', bookDetails);
+            return true;
         } catch (error) {
-            console.error('Error in LibrarianService.addBook:', error);
-            throw error;
+            console.error('Error adding new books:', error);
+            return false;
         }
     }
 
-    static async updateBook(bookId: number, bookData: Book): Promise<Book | null> {
+    async registerNewUsers(userDetails: UserModel): Promise<boolean> {
         try {
-            const bookServiceUrl = process.env.BOOKS_SERVICE_BASE_URL;
-            const response = await axios.put(`${bookServiceUrl}/api/librarian/books/${bookId}`, bookData);
-            console.log("response:", response);
-            if (response.status === 200) {
-                return response.data.book;
-            } else if (response.status === 404) {
-                throw new Error('Book not found');
+            // Validate user details
+            Validator.validateUserDetails(userDetails);
+
+            // Call the registerUser API from UserService
+            const userServiceResponse = await axios.post('http://userServiceHost/register', {
+                username: userDetails.username,
+                email: userDetails.email,
+                full_name: userDetails.fullName,
+                school_id: userDetails.schoolId,
+                mailing_address: userDetails.mailingAddress,
+                password: userDetails.passwordHash,
+                phone_number: userDetails.phoneNumber,
+                user_role: userDetails.userRole,
+            });
+
+            if (userServiceResponse.status === 201) {
+                // User registered successfully
+                return true;
             } else {
-                throw new Error('Failed to update book');
+                console.error('Error registering user:', userServiceResponse.data.error);
+                return false;
             }
         } catch (error) {
-            console.error('Error in LibrarianService.updateBook:', error);
-            throw error;
+            console.error('Error registering user:', error);
+            return false;
         }
     }
 }

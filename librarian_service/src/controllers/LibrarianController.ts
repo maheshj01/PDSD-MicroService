@@ -1,44 +1,71 @@
+// src/controllers/LibrarianController.ts
 import { Request, Response } from 'express';
-import LibrarianService from '../services/LibrarianService';
-import AuthorizationMiddleware from '../middleware/AuthorizationMiddleware';
+import LibrarianManager from '../services/LibrarianManager';
+import UserDetails from '../models/UserDetails';
+import BookDetails from '../models/BookDetails';
 
 class LibrarianController {
-    private librarianService: LibrarianService;
+    private librarianManager: LibrarianManager;
 
     constructor() {
-        this.librarianService = new LibrarianService();
+        this.librarianManager = new LibrarianManager();
     }
 
-    addNewBooks = async (req: Request, res: Response): Promise<void> => {
-        const bookDetails = req.body;
+    async addNewBooks(req: Request, res: Response): Promise<void> {
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) {
+            res.status(400).json({ error: 'Token is required' });
+            return;
+        }
+
+        const bookDetails = req.body as BookDetails;
+
+        // Check librarian privilege before proceeding
+        const hasPrivilege = await this.librarianManager.checkLibrarianPrivileges(token);
+        if (!hasPrivilege) {
+            res.status(403).json({ error: 'User does not have the required role' });
+            return;
+        }
 
         try {
-            const result = await this.librarianService.addNewBooks(bookDetails);
-            if (result) {
+            const response = await this.librarianManager.addNewBooks(token, bookDetails);
+
+            if (response.status === 200) {
                 res.status(200).json({ success: true, message: 'Books added successfully' });
             } else {
-                res.status(500).json({ success: false, message: 'Failed to add books' });
+                res.status(response.status).json({ success: false, message: response.data });
             }
         } catch (error) {
-            res.status(403).json({ success: false, message: 'Unauthorized access' });
+            res.status(500).json({ success: false, message: 'Failed to add books' });
         }
-    };
+    }
 
-    registerNewUsers = async (req: Request, res: Response): Promise<void> => {
-        const userDetails = req.body;
+    async registerNewUsers(req: Request, res: Response): Promise<void> {
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) {
+            res.status(400).json({ error: 'Token is required' });
+            return;
+        }
+
+        const userDetails = req.body as UserDetails;
+
+        // Check librarian privilege before proceeding
+        const hasPrivilege = await this.librarianManager.checkLibrarianPrivileges(token);
+        if (!hasPrivilege) {
+            res.status(403).json({ error: 'User does not have the required role' });
+            return;
+        }
 
         try {
-            const result = await this.librarianService.registerNewUsers(userDetails);
-            if (result) {
+            const response = await this.librarianManager.registerNewUsers(token, userDetails);
+            if (response.status === 201) {
                 res.status(200).json({ success: true, message: 'Users registered successfully' });
             } else {
-                res.status(500).json({ success: false, message: 'Failed to register users' });
+                res.status(response.status).json({ success: false, message: response.data });
             }
-
-        } catch (error) {
-            res.status(403).json({ success: false, message: 'Unauthorized access' });
+        } catch (error: any) {
+            res.status(error.response?.status || 500).json(error.response?.data ?? { error: error.message || 'Internal Server Error' });
         }
-    };
+    }
 }
-
 export default LibrarianController;

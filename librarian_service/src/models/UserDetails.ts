@@ -1,4 +1,4 @@
-class UserModel {
+class UserDetails {
     userId: number;
     username: string;
     email: string;
@@ -9,7 +9,7 @@ class UserModel {
     mailingAddress: string;
     phoneNumber: string;
 
-    constructor(userData: Partial<UserModel>) {
+    constructor(userData: Partial<UserDetails>) {
         this.userId = userData.userId || 0;
         this.username = userData.username || '';
         this.email = userData.email || '';
@@ -22,4 +22,4 @@ class UserModel {
     }
 }
 
-export default UserModel;
+export default UserDetails;

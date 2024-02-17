@@ -1,4 +1,4 @@
-class BookModel {
+class BookDetails {
     id: number;
     title: string;
     author: string;
@@ -9,7 +9,7 @@ class BookModel {
     totalCopies: number;
     location: string;
 
-    constructor(bookData: Partial<BookModel>) {
+    constructor(bookData: Partial<BookDetails>) {
         this.id = bookData.id || 0;
         this.title = bookData.title || '';
         this.author = bookData.author || '';
@@ -22,4 +22,4 @@ class BookModel {
     }
 }
 
-export default BookModel;
+export default BookDetails;

@@ -30,13 +30,13 @@ class LibrarianController {
         try {
             const response = await this.librarianManager.addNewBooks(token, bookDetails);
 
-            if (response.status === 200) {
+            if (response.status === 201) {
                 res.status(200).json({ success: true, message: 'Books added successfully' });
             } else {
                 res.status(response.status).json({ success: false, message: response.data });
             }
-        } catch (error) {
-            res.status(500).json({ success: false, message: 'Failed to add books' });
+        } catch (error: any) {
+            res.status(error.response?.status || 500).json(error.response?.data ?? { error: error.message || 'Internal Server Error' });
         }
     }
 

@@ -1,7 +1,7 @@
 // src/services/bookService.ts
 import { QueryResult } from 'pg';
 import { pool } from '../config/config';
-import Book from '../models/Book';
+import Book from '../models/BookModel';
 import axios from 'axios';
 
 class BookService {
@@ -9,10 +9,9 @@ class BookService {
     static async addBook(book: Book): Promise<Book> {
         try {
             // Basic input validation
-            if (!book.title || !book.author || !book.ISBN) {
+            if (!book.title || !book.author || !book.isbn) {
                 throw new Error('Title, author, and ISBN are required fields');
             }
-
             // Additional validation as needed
 
             // Using parameterized queries to prevent SQL injection
@@ -22,7 +21,7 @@ class BookService {
                     book.title,
                     book.author,
                     book.category,
-                    book.ISBN,
+                    book.isbn,
                     book.publicationDate,
                     book.availableCopies,
                     book.totalCopies,
@@ -45,7 +44,7 @@ class BookService {
     static async updateBook(bookId: number, updatedBookData: Book): Promise<Book> {
         try {
             // Basic input validation
-            if (!updatedBookData.title || !updatedBookData.author || !updatedBookData.ISBN) {
+            if (!updatedBookData.title || !updatedBookData.author || !updatedBookData.isbn) {
                 throw new Error('Title, author, and ISBN are required fields');
             }
 
@@ -57,7 +56,7 @@ class BookService {
                     updatedBookData.title,
                     updatedBookData.author,
                     updatedBookData.category,
-                    updatedBookData.ISBN,
+                    updatedBookData.isbn,
                     updatedBookData.publicationDate,
                     updatedBookData.availableCopies,
                     updatedBookData.totalCopies,

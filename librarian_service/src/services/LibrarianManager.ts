@@ -13,7 +13,7 @@ class LibrarianManager {
             console.log('Adding new books:', bookDetails);
 
             const response = await axios.post(
-                process.env.BOOK_SERVICE_BASE_URL + '/api/books/add',
+                process.env.BOOKS_SERVICE_BASE_URL + '/api/books/add',
                 bookDetails,
                 {
                     headers: {

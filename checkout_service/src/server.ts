@@ -1,39 +1,42 @@
-// server.ts
+// src/app.ts
 
-import express from 'express';
-import checkoutRoutes from './routes/checkoutRoute';
-import CheckoutController from './controllers/checkoutController';
-import CheckoutService from './services/checkoutService';
-import pool from './db/index';
-import dotenv from "dotenv";
+import express, { Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
+import { CheckoutManager } from './services/checkoutManager';
+import dotenv from 'dotenv';
 
-const app = express();
 dotenv.config();
-
-const port = process.env.PORT;
-
-app.use(bodyParser.json());
+const app = express();
+const port = process.env.PORT || 3002;
 
 // Middleware to parse JSON requests
-app.use(express.json());
+app.use(bodyParser.json());
+const checkoutManager = new CheckoutManager();
 
-// Create instances of services and controllers
-
-// Mount the checkout routes
-app.use('/api', checkoutRoutes);
-
-pool
-  .connect()
-  .then(() => {
-    console.log('CheckoutService Connected to the database');
-  })
-  .catch((error: any) => {
-    console.error('Unable to connect to the database:', error);
-  });
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+app.post('/api/checkout/renew-items', (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const itemsToRenew = req.body.items; // Assuming request body contains an array of items
+    checkoutManager.renewItems(itemsToRenew);
+  } catch (error) {
+    next(error);
+  }
 });
 
-export default app;
+app.post('/api/checkout/checkout-item', (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { bookId, userId, due_date } = req.body;
+    checkoutManager.checkoutItem(bookId, userId, due_date);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Error handling middleware
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Internal Server Error' });
+});
+
+app.listen(port, () => {
+  console.log(`Checkout Service is running on http://localhost:${port}`);
+});

@@ -1,12 +1,30 @@
-// models/checkout.ts
+// src/models/Checkout.ts
 
-export interface Checkout {
-    id: number;
-    user_id: number;
-    book_id: number;
-    checkout_date: Date;
-    due_date: Date;
-    returned: boolean;
-    created_at: Date;
-    updated_at: Date;
+export class Checkout {
+  public checkoutId: number = 0;
+  public userId: string;
+  public bookId: string;
+  public checkoutDate: Date;
+  public dueDate: Date;
+  public returned: boolean;
+  public createdAt: Date;
+  public updatedAt: Date;
+
+  constructor(
+    userId: string,
+    bookId: string,
+    checkoutDate: Date,
+    dueDate: Date,
+    returned: boolean,
+    createdAt: Date,
+    updatedAt: Date
+  ) {
+    this.userId = userId;
+    this.bookId = bookId;
+    this.checkoutDate = checkoutDate;
+    this.dueDate = dueDate;
+    this.returned = returned;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
+}

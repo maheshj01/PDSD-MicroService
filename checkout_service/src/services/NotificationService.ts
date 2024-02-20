@@ -9,7 +9,7 @@ export enum NotificationType {
     CHECKOUT = 'checkout',
 }
 export class NotificationService {
-    public async sendNotification(user_id: string, book_id: string, due_date: Date, type: NotificationType): Promise<void> {
+    public async sendNotification(user_id: string, book_id: string, due_date: Date, type: NotificationType): Promise<boolean> {
         try {
 
             let message = '';
@@ -30,20 +30,21 @@ export class NotificationService {
                     throw new Error('Invalid notification type');
             }
 
-            const notificationApiUrl = process.env.NOTIFICATION_SERVICE_BASE_URL + '/api/notification/send-email'; // Replace with the correct API endpoint
+            const notificationApiUrl = process.env.NOTIFICATION_SERVICE_BASE_URL + '/api/notifications/send-email'; // Replace with the correct API endpoint
             const requestBody = {
                 user_id,
                 book_id,
                 due_date,
                 message,
             };
-
+            console.log('Sending notification...', notificationApiUrl);
             const resp = await axios.post(notificationApiUrl, requestBody);
             if (resp.status !== 200) {
                 throw new Error('Failed to send notification');
             } else {
                 console.log('Notification sent successfully');
             }
+            return true;
         } catch (error: any) {
             console.error(`Error sending notification: ${error.message}`);
             throw new Error('Failed to send notification. Please try again.');

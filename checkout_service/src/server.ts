@@ -13,21 +13,24 @@ const port = process.env.PORT || 3002;
 app.use(bodyParser.json());
 const checkoutManager = new CheckoutManager();
 
-app.post('/api/checkout/renew-items', (req: Request, res: Response, next: NextFunction) => {
+app.post('/api/checkout/renew-items', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const itemsToRenew = req.body.items; // Assuming request body contains an array of items
-    checkoutManager.renewItems(itemsToRenew);
-  } catch (error) {
-    next(error);
+    await checkoutManager.renewItems(itemsToRenew);
+    res.status(200).json({ message: 'Items renewed successfully' });
+  } catch (error: any) {
+    console.error(error.stack);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-app.post('/api/checkout/checkout-item', (req: Request, res: Response, next: NextFunction) => {
+app.post('/api/checkout/checkout-item', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { bookId, userId, due_date } = req.body;
-    checkoutManager.checkoutItem(bookId, userId, due_date);
-  } catch (error) {
-    next(error);
+    const checkedOut = await checkoutManager.checkoutItem(bookId, userId, due_date);
+    res.status(200).json({ message: 'Item checked out successfully', data: checkedOut });
+  } catch (error: any) {
+    console.error(error.stack);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 

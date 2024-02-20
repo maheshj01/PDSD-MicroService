@@ -39,7 +39,7 @@ export class CheckoutManager {
     }
   }
 
-  public async checkoutItem(bookId: string, userId: string, due_date: Date): Promise<void> {
+  public async checkoutItem(bookId: string, userId: string, due_date: Date): Promise<Checkout> {
     try {
       const valid = this.checkoutValidator.validateCheckout(userId, bookId);
 
@@ -60,8 +60,9 @@ export class CheckoutManager {
       const checkedOut = await this.checkoutRepository.storeCheckout(checkout);
       if (checkedOut) {
         console.log('Item checked out successfully');
-        await this.notificationService.sendNotification(userId, bookId, checkout.dueDate, NotificationType.CHECKOUT);
+        const success = await this.notificationService.sendNotification(userId, bookId, checkout.dueDate, NotificationType.CHECKOUT);
       }
+      return checkedOut;
     } catch (error: any) {
       console.error(`Error checking out item: ${error.message}`);
       throw new Error(error.message);

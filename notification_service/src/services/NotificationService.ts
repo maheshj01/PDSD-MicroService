@@ -8,6 +8,9 @@ class NotificationService {
 
     static async sendEmailNotification(userId: number, bookId: number, dueDate: String): Promise<void> {
         try {
+            if (!userId || !bookId || !dueDate) {
+                throw new Error('Invalid input data');
+            }
             // Fetch user information using the User Service API
             const userData = await UserService.getUserById(userId);
 

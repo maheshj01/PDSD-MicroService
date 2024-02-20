@@ -80,7 +80,7 @@ class BookService {
     static async searchBooks(params: any): Promise<Book[]> {
         try {
             // Construct a dynamic query based on the provided parameters
-            const { author, title, category } = params;
+            const { author, title, category, id } = params;
             const queryParams: string[] = [];
             const queryValues: any[] = [];
 
@@ -103,6 +103,12 @@ class BookService {
                 queryValues.push(`%${category}%`);
                 paramIndex++;
             }
+            if (id) {
+                queryParams.push(`id = $${paramIndex}`);
+                queryValues.push(id);
+                paramIndex++;
+            }
+
             const query = `
             SELECT *
             FROM books

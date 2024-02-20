@@ -1,6 +1,6 @@
 // src/repositories/CheckoutRepositoryDB.ts
 
-import { Pool, QueryResult } from 'pg';
+import { Pool, PoolClient, QueryResult } from 'pg';
 import axios from 'axios';
 import { Checkout } from '../models/Checkout';
 import dotenv from 'dotenv';
@@ -9,8 +9,10 @@ dotenv.config();
 
 export class CheckoutRepositoryDB {
     private pool: Pool;
+    private client: PoolClient;
 
     constructor() {
+        this.client = {} as PoolClient;
         this.pool = new Pool({
             user: process.env.DB_USER,
             host: process.env.DB_HOST,
@@ -23,9 +25,11 @@ export class CheckoutRepositoryDB {
     }
 
     private connect(): void {
-        this.pool.connect()
-            .then(() => console.log('Checkout Service Connected to the database'))
-            .catch((err) => console.error('Error connecting to the database:', err.message));
+        this.pool.connect((err, client, done) => {
+            if (err) throw err;
+            this.client = client!;
+            console.log('Connected to the Checkout database');
+        });
     }
 
     public async disconnect(): Promise<void> {
@@ -38,34 +42,42 @@ export class CheckoutRepositoryDB {
     }
 
     public async storeCheckout(checkout: Checkout): Promise<Checkout> {
-        const client = await this.pool.connect();
 
         try {
-            await client.query('BEGIN');
+            await this.client.query('BEGIN');
 
             // Make a request to the Book Service API to get available copies
-            const bookServiceUrl = process.env.BOOKS_SERVICE_BASE_URL; // Provide the correct base URL
-            const bookInfoResponse = await axios.get(`${bookServiceUrl}/api/books/${checkout.bookId}`);
-            const availableCopies = bookInfoResponse.data.availableCopies;
-            if (!availableCopies || availableCopies <= 0) {
-                throw new Error('Book is not available for checkout');
+            const bookSearchApiUrl = process.env.BOOKS_SERVICE_BASE_URL + `/api/books/search?id=${checkout.bookId}`
+            const bookInfoResponse = await axios.get(bookSearchApiUrl);
+
+            if (bookInfoResponse.status !== 200) {
+                console.error(`Failed to retrieve book information. Status Code: ${bookInfoResponse.status}`);
+                console.log(bookInfoResponse.data);
+                throw new Error('Failed to retrieve book information');
             }
-            // Insert checkout record
-            const checkoutQueryResult: QueryResult<Checkout> = await client.query(
-                'INSERT INTO checkouts (user_id, book_id, due_date) VALUES ($1, $2, $3) RETURNING *',
-                [checkout.userId, checkout.bookId, checkout.dueDate]
-            );
 
-            const checkoutResult = checkoutQueryResult.rows[0];
+            const bookInfo = bookInfoResponse.data;
+            const availableCopies = bookInfo.availableCopies;
 
-            await client.query('COMMIT');
+            if (availableCopies < 1) {
+                throw new Error('No available copies of this book');
+            }
 
-            return checkout;
-        } catch (error) {
-            await client.query('ROLLBACK');
+            // check out the book
+            const query = 'INSERT INTO checkouts (user_id, book_id, checkout_date, due_date, returned) VALUES ($1, $2, $3, $4, $5) RETURNING *';
+
+            const values = [checkout.userId, checkout.bookId, checkout.checkoutDate, checkout.dueDate, checkout.returned];
+
+            const result = await this.client.query(query, values);
+            await this.client.query('COMMIT');
+
+            return result.rows[0];
+
+        } catch (error: any) {
+            await this.client.query('ROLLBACK');
             throw error;
         } finally {
-            client.release();
+            this.client.release();
         }
     }
 

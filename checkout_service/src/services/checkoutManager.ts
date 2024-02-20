@@ -1,9 +1,10 @@
 import { Checkout } from '../models/Checkout';
 import { CheckoutRepositoryDB } from '../repositories/CheckoutRepository';
-import { NotificationService } from './NotificationService';
+import { NotificationService, NotificationType } from './NotificationService';
 import { CheckoutValidator } from '../validators/CheckoutValidator';
 import { User } from '../models/User';
 import { Book } from '../models/Book';
+import e from 'express';
 
 export class CheckoutManager {
   private checkoutRepository: CheckoutRepositoryDB;
@@ -27,7 +28,7 @@ export class CheckoutManager {
           checkoutData.dueDate.setDate(checkoutData.dueDate.getDate() + 30); // Extend due date by 30 days
           await this.checkoutRepository.updateCheckout(checkoutData);
           const userId = checkoutData.userId;
-          await this.notificationService.sendNotification(userId, item.bookId, checkoutData.dueDate, 'Item renewed successfully.');
+          await this.notificationService.sendNotification(userId, item.bookId, checkoutData.dueDate, NotificationType.RENEWAL);
         } else {
           throw new Error('Unable to renew the item. It may be returned or the due date is exceeded.');
         }
@@ -58,12 +59,12 @@ export class CheckoutManager {
 
       const checkedOut = await this.checkoutRepository.storeCheckout(checkout);
       if (checkedOut) {
-        console.log('Item checked out successfully.');
-        await this.notificationService.sendNotification(userId, bookId, checkout.dueDate, 'Item checked out successfully.');
+        console.log('Item checked out successfully');
+        await this.notificationService.sendNotification(userId, bookId, checkout.dueDate, NotificationType.CHECKOUT);
       }
     } catch (error: any) {
       console.error(`Error checking out item: ${error.message}`);
-      throw new Error('Failed to check out item. Please try again.');
+      throw new Error(error.message);
     }
   }
 }

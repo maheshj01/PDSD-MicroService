@@ -21,7 +21,7 @@ class NotificationService {
             const emailContent = EmailUtils.getEmailContent(userData.name, bookData.title, dueDate);
             const subject = `Reminder: Return of Borrowed Book due on ${dueDate}`;
             // Send email notification
-            await EmailUtils.sendEmail(userData.contact_email, subject, emailContent);
+            await EmailUtils.sendEmail(userData.email, subject, emailContent);
         } catch (error: any) {
             console.error(error);
             throw new Error('Error sending email notification');

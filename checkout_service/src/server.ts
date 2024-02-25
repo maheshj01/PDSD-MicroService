@@ -34,6 +34,17 @@ app.post('/api/checkout/checkout-item', async (req: Request, res: Response, next
   }
 });
 
+app.get('/api/checkout/checkouts', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // Get all checkouts
+    const checkouts = await checkoutManager.checkouts();
+    res.status(200).json({ data: checkouts });
+  } catch (error: any) {
+    console.error(error.stack);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);

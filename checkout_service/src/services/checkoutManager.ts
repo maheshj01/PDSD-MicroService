@@ -42,7 +42,6 @@ export class CheckoutManager {
   public async checkoutItem(bookId: string, userId: string, due_date: Date): Promise<Checkout> {
     try {
       const valid = this.checkoutValidator.validateCheckout(userId, bookId);
-
       if (!valid) {
         throw new Error('Invalid user or book information');
       }
@@ -56,7 +55,6 @@ export class CheckoutManager {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-
       const checkedOut = await this.checkoutRepository.storeCheckout(checkout);
       if (checkedOut) {
         console.log('Item checked out successfully');
@@ -66,6 +64,16 @@ export class CheckoutManager {
     } catch (error: any) {
       console.error(`Error checking out item: ${error.message}`);
       throw new Error(error.message);
+    }
+  }
+
+  public async checkouts(): Promise<Checkout[]> {
+    try {
+      const checkouts = await this.checkoutRepository.retrieveCheckouts();
+      return checkouts;
+    } catch (error: any) {
+      console.error(`Error retrieving checkouts: ${error.message}`);
+      throw new Error('Failed to retrieve checkouts');
     }
   }
 }

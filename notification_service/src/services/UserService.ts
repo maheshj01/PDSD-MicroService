@@ -5,7 +5,7 @@ class UserService {
         try {
             const token = process.env.ADMIN_LOGIN_TOKEN;
             const headers = { Authorization: `Bearer ${token}` };
-            const response: AxiosResponse = await axios.get(`${process.env.USER_SERVICE_BASE_URL}/api/users/${userId}`, { headers });
+            const response: AxiosResponse = await axios.get(`${process.env.USER_SERVICE_BASE_URL}/api/user/${userId}`, { headers });
             return response.data;
         } catch (error) {
             console.error(error);
@@ -15,7 +15,7 @@ class UserService {
 
     static async getBookById(bookId: number): Promise<any> {
         try {
-            const response: AxiosResponse = await axios.get(`${process.env.BOOKS_SERVICE_BASE_URL}/api/books/${bookId}`);
+            const response: AxiosResponse = await axios.get(`${process.env.BOOKS_SERVICE_BASE_URL}/api/books/search?id=${bookId}`);
             return response.data;
         } catch (error) {
             console.error(error);

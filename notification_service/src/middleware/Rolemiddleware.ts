@@ -14,7 +14,6 @@ export const verifyUserRole = async (token: string, roles: string[]): Promise<bo
             { roles }, // Send an array of roles
             { headers: { Authorization: `Bearer ${token}` } }
         );
-
         return response.status === 200;
     } catch (error) {
         console.error('Error verifying user role:', error);

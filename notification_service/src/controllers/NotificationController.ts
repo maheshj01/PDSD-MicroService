@@ -5,6 +5,7 @@ import EmailUtils from '../utils/EmailUtils';
 class NotificationController {
     static async sendEmailNotification(req: Request, res: Response): Promise<void> {
         try {
+            console.log('Sending email notification');
             // Extract necessary data from the request (e.g., userId)
             const { user_id, book_id, due_date, message } = req.body;
             // Format date to yyyy/mm/dd hh:mm

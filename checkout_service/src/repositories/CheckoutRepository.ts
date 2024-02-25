@@ -108,4 +108,15 @@ export class CheckoutRepositoryDB {
             throw new Error(`Error updating checkout: ${error.message}`);
         }
     }
+
+    public async retrieveCheckouts(): Promise<Checkout[]> {
+        const query = 'SELECT * FROM checkouts';
+        try {
+            const result: QueryResult<Checkout> = await this.pool.query(query);
+            const checkouts = result.rows;
+            return checkouts;
+        } catch (error: any) {
+            throw new Error(`Error retrieving checkouts: ${error.message}`);
+        }
+    }
 }

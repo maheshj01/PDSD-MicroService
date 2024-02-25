@@ -32,6 +32,6 @@ app.use('/api/notifications', notificationRoutes);
 app.listen(PORT, () => {
     console.log(`Notification Service is running on port ${PORT}`);
     // Log cron schedule in human readable format
-    const cronScheduleinHumanReadableFormat = schedule.scheduleJob(cronSchedule, () => {}).nextInvocation().toString();
+    const cronScheduleinHumanReadableFormat = schedule.scheduleJob(cronSchedule, () => { }).nextInvocation().toString();
     console.log(`Next Cron scheduled at ${cronScheduleinHumanReadableFormat}`)
 });

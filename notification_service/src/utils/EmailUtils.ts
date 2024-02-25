@@ -13,6 +13,8 @@ class EmailUtils {
           pass: process.env.EMAIL_PASSWORD,
         },
       };
+      console.log('Email config:', emailConfig);
+      console.log(to, subject, body);
 
       // Sanitize input to prevent CRLF injection
       to = to.replace(/[\r\n]+/g, ''); // Remove any newline characters

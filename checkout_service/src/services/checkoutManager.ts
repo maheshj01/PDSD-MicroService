@@ -57,7 +57,6 @@ export class CheckoutManager {
       };
       const checkedOut = await this.checkoutRepository.storeCheckout(checkout);
       if (checkedOut) {
-        console.log('Item checked out successfully');
         const success = await this.notificationService.sendNotification(userId, bookId, checkout.dueDate, NotificationType.CHECKOUT);
       }
       return checkedOut;
@@ -74,6 +73,16 @@ export class CheckoutManager {
     } catch (error: any) {
       console.error(`Error retrieving checkouts: ${error.message}`);
       throw new Error('Failed to retrieve checkouts');
+    }
+  }
+
+  public async dueCheckouts(): Promise<Checkout[]> {
+    try {
+      const dueCheckouts = await this.checkoutRepository.retrieveDueCheckouts();
+      return dueCheckouts;
+    } catch (error: any) {
+      console.error(`Error retrieving due checkouts: ${error.message}`);
+      throw new Error('Failed to retrieve due checkouts');
     }
   }
 }

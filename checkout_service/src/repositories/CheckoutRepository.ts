@@ -119,4 +119,16 @@ export class CheckoutRepositoryDB {
             throw new Error(`Error retrieving checkouts: ${error.message}`);
         }
     }
+
+    public async retrieveDueCheckouts(): Promise<Checkout[]> {
+        //    due in 3 days
+        const query = 'SELECT * FROM checkouts WHERE due_date < NOW() + INTERVAL \'3 days\'';
+        try {
+            const result: QueryResult<Checkout> = await this.pool.query(query);
+            const checkouts = result.rows;
+            return checkouts;
+        } catch (error: any) {
+            throw new Error(`Error retrieving due checkouts: ${error.message}`);
+        }
+    }
 }

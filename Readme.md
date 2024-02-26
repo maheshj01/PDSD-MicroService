@@ -197,6 +197,30 @@ A cron job is scheduled to run every 24 hours to check for due dates and send no
 
 > NOTE: For email notifications to work you need to sign in admin and store the login token in .env file.
 
+```
+CREATE TABLE notification_preferences (
+    user_id INTEGER NOT NULL PRIMARY KEY,
+    email_enabled BOOLEAN DEFAULT true,
+    in_app_enabled BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+<!-- DUMMY Query with real data -->
+
+INSERT INTO notification_preferences (user_id, email_enabled, in_app_enabled) VALUES
+(1, true, true),
+(2, true, true),
+(3, true, true),
+(4, true, true),
+(5, true, true),
+(6, true, true),
+(7, true, true),
+(8, true, true),
+(9, true, true),
+(17, true, true);
+```
+
 ### Roles
 
 In the context of your application, the roles could be associated with different levels of access and permissions. Here's a simple set of roles commonly used in applications:

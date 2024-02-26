@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 
 dotenv.config();
-const userVerifyRoleUrl = `${process.env.USER_SERVICE_BASE_URL}/api/auth/verify-role`;
+const userVerifyRoleUrl = `${process.env.USER_SERVICE_BASE_URL}/api/user/authenticate-by-role`;
 
 export const verifyUserRole = async (token: string, roles: string[]): Promise<boolean> => {
     try {

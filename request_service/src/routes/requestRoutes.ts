@@ -1,15 +1,13 @@
 // requestRoutes.ts
 import express from 'express';
-import RequestController from '../controllers/requestController';
-import { roleMiddleware } from '../middleware/roleMiddleware';
+import RequestManager from '../services/RequestManager';
 
 const requestRoutes = express.Router();
-
-requestRoutes.post('/submit', roleMiddleware(['staff', 'admin']), RequestController.submitRequest);
-requestRoutes.get('/get', roleMiddleware(['admin', 'staff']), RequestController.getRequests);
-requestRoutes.post('/update/:requestId/approve', roleMiddleware(['admin']), RequestController.approveRequest);
-requestRoutes.post('/update/:requestId/reject', roleMiddleware(['admin']), RequestController.rejectRequest);
-
+const requestManager = new RequestManager()
+requestRoutes.post('/submit', requestManager.submitRequest);
+requestRoutes.get('/get', requestManager.getRequests);
+requestRoutes.post('/update/:requestId/approve', requestManager.updateRequest);
+requestRoutes.post('/update/:requestId/reject', requestManager.updateRequest);
 // Add other routes as needed
 
 export default requestRoutes;

@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 
 class UserService {
-    static async getUserById(userId: number): Promise<any> {
+    static async getUserById(userId: string): Promise<any> {
         try {
             const token = process.env.ADMIN_LOGIN_TOKEN;
             const headers = { Authorization: `Bearer ${token}` };
@@ -13,7 +13,7 @@ class UserService {
         }
     }
 
-    static async getBookById(bookId: number): Promise<any> {
+    static async getBookById(bookId: string): Promise<any> {
         try {
             const response: AxiosResponse = await axios.get(`${process.env.BOOKS_SERVICE_BASE_URL}/api/books/search?id=${bookId}`);
             return response.data;

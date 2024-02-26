@@ -13,8 +13,6 @@ class EmailUtils {
           pass: process.env.EMAIL_PASSWORD,
         },
       };
-      console.log('Email config:', emailConfig);
-      console.log(to, subject, body);
 
       // Sanitize input to prevent CRLF injection
       to = to.replace(/[\r\n]+/g, ''); // Remove any newline characters
@@ -39,8 +37,21 @@ class EmailUtils {
     }
   }
 
-  static getEmailContent(userName: string, bookTitle: string, dueDate: String): string {
+  static getBookDueEmailContent(userName: string, bookTitle: string, dueDate: String): string {
     return `Dear ${userName},\n\nWe hope this message finds you well. As the due date for the book "${bookTitle}" approaches (Due Date: ${dueDate}), we kindly remind you to return it at your earliest convenience. Your prompt attention to this matter is greatly appreciated. Thank you.`;
+  }
+
+  static getBookRequestNotificationContent(userName: string, bookTitle: string, status: string): string {
+    let statusMessage = '';
+    if (status === 'APPROVED') {
+      statusMessage = 'approved';
+    } else if (status === 'REJECTED') {
+      statusMessage = 'rejected';
+    } else {
+      statusMessage = 'processed';
+    }
+
+    return `Dear ${userName},\n\nWe want to inform you that your request for the book "${bookTitle}" has been ${statusMessage}. Thank you for using our library services.`;
   }
 
   static formatToCustomString(date: Date, format: string): string {

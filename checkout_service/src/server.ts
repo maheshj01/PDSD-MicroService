@@ -45,6 +45,18 @@ app.get('/api/checkout/checkouts', async (req: Request, res: Response, next: Nex
   }
 });
 
+
+app.get('/api/checkout/due-checkouts', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // Get all due checkouts
+    const dueCheckouts = await checkoutManager.dueCheckouts();
+    res.status(200).json({ data: dueCheckouts });
+  } catch (error: any) {
+    console.error(error.stack);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);

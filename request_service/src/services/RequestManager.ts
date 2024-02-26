@@ -1,9 +1,11 @@
 // src/controllers/requestController.ts
 import { Request, Response } from 'express';
-import RequestService from '../services/requestService';
+import RequestRepository from '../repositories/RequestRepository';
+import LibrarianApprovalService from './LibrarianApprovalService';
 
-class RequestController {
-  static async submitRequest(req: Request, res: Response): Promise<void> {
+class RequestManager {
+
+  async submitRequest(req: Request, res: Response): Promise<void> {
     try {
       const { user_id, book_title, book_author, justification } = req.body;
 
@@ -13,7 +15,7 @@ class RequestController {
         return;
       }
 
-      const result = await RequestService.submitRequest(user_id, book_title, book_author, justification);
+      const result = await RequestRepository.storeRequest(user_id, book_title, book_author, justification);
       res.status(201).json({ message: 'Request submitted for review', request: result });
     } catch (error) {
       console.error('Error in submitRequest:', error);
@@ -21,9 +23,9 @@ class RequestController {
     }
   }
 
-  static async getRequests(req: Request, res: Response): Promise<void> {
+  async getRequests(req: Request, res: Response): Promise<void> {
     try {
-      const result = await RequestService.getRequests();
+      const result = await RequestRepository.getRequestHistory();
       res.status(200).json({ requests: result });
     } catch (error) {
       console.error('Error in getRequests:', error);
@@ -31,15 +33,16 @@ class RequestController {
     }
   }
 
-  static async approveRequest(req: Request, res: Response): Promise<void> {
+  async updateRequest(req: Request, res: Response): Promise<void> {
     try {
       const requestId = parseInt(req.params.requestId, 10);
+      const newState = req.body.state;
       if (isNaN(requestId) || requestId <= 0) {
         res.status(400).json({ error: 'Invalid request ID' });
         return;
       }
 
-      const result = await RequestService.updateRequestState(requestId, 'approved');
+      const result = await LibrarianApprovalService.updateBookRequest(requestId, newState);
       res.status(200).json({ message: 'Request approved', request: result });
     } catch (error) {
       console.error('Error in approveRequest:', error);
@@ -47,23 +50,8 @@ class RequestController {
     }
   }
 
-  static async rejectRequest(req: Request, res: Response): Promise<void> {
-    try {
-      const requestId = parseInt(req.params.requestId, 10);
-      if (isNaN(requestId) || requestId <= 0) {
-        res.status(400).json({ error: 'Invalid request ID' });
-        return;
-      }
-
-      const result = await RequestService.updateRequestState(requestId, 'rejected');
-      res.status(200).json({ message: 'Request rejected', request: result });
-    } catch (error) {
-      console.error('Error in rejectRequest:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  }
   // Add other controller methods as needed
 }
 
-export default RequestController;
+export default RequestManager;
 

@@ -65,6 +65,24 @@ export class CheckoutManager {
       throw new Error(error.message);
     }
   }
+  public async returnItem(bookId: string, userId: string): Promise<void> {
+    try {
+      const checkoutData = await this.checkoutRepository.retrieveCheckout(bookId, userId);
+
+      if (!checkoutData.returned) {
+        checkoutData.returned = true;
+        await this.checkoutRepository.updateCheckout(checkoutData);
+        const userId = checkoutData.userId;
+        await this.notificationService.sendNotification(userId, bookId, null, NotificationType.RETURN);
+      } else {
+        throw new Error('The item is already returned.');
+      }
+    } catch (error: any) {
+      console.error(`Error returning item: ${error.message}`);
+      throw new Error('Failed to return item. Please try again.');
+    }
+  }
+
 
   public async checkouts(): Promise<Checkout[]> {
     try {

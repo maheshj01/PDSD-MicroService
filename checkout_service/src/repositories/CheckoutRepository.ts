@@ -81,8 +81,8 @@ export class CheckoutRepositoryDB {
         }
     }
 
-    public async retrieveCheckout(bookId: string): Promise<Checkout> {
-        const query = 'SELECT * FROM checkouts WHERE book_id = $1';
+    public async retrieveCheckout(bookId: string, userId?: string): Promise<Checkout> {
+        const query = userId ? 'SELECT * FROM checkouts WHERE book_id = $1 AND user_id = $2' : 'SELECT * FROM checkouts WHERE book_id = $1';
         const values = [bookId];
 
         try {
@@ -101,9 +101,12 @@ export class CheckoutRepositoryDB {
         const query =
             'UPDATE checkouts SET user_id = $1, book_id = $2, checkout_date = $3, due_date = $4, returned = $5 WHERE id = $6';
         const values = [checkout.userId, checkout.bookId, checkout.checkoutDate, checkout.dueDate, checkout.returned, checkout.checkoutId];
-
         try {
-            await this.pool.query(query, values);
+            console.log('Updating checkout:', checkout);
+            const result = await this.pool.query(query, values);
+            if (result.rowCount !== 1) {
+                throw new Error('Failed to update checkout');
+            }
         } catch (error: any) {
             throw new Error(`Error updating checkout: ${error.message}`);
         }

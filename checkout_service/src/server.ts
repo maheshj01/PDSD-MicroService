@@ -23,6 +23,18 @@ app.post('/api/checkout/renew-items', async (req: Request, res: Response, next: 
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+app.post('/api/checkout/return-item', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { bookId,userId } = req.body;
+    await checkoutManager.returnItem(bookId,userId);
+    res.status(200).json({ message: 'Item returned successfully' });
+  } catch (error: any) {
+    console.error(error.stack);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 app.post('/api/checkout/checkout-item', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { bookId, userId, due_date } = req.body;

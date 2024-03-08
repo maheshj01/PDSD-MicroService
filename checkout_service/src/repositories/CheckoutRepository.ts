@@ -47,7 +47,7 @@ export class CheckoutRepositoryDB {
             await this.client.query('BEGIN');
 
             // Make a request to the Book Service API to get available copies
-            const bookSearchApiUrl = process.env.BOOKS_SERVICE_BASE_URL + `/api/books/search?id=${checkout.bookId}`
+            const bookSearchApiUrl = process.env.BOOKS_SERVICE_BASE_URL + `/api/books/search?id=${checkout.book_id}`
             const bookInfoResponse = await axios.get(bookSearchApiUrl);
 
             if (bookInfoResponse.status !== 200) {
@@ -66,7 +66,7 @@ export class CheckoutRepositoryDB {
             // check out the book
             const query = 'INSERT INTO checkouts (user_id, book_id, checkout_date, due_date, returned) VALUES ($1, $2, $3, $4, $5) RETURNING *';
 
-            const values = [checkout.userId, checkout.bookId, checkout.checkoutDate, checkout.dueDate, checkout.returned];
+            const values = [checkout.user_id, checkout.book_id, checkout.checkout_date, checkout.due_date, checkout.returned];
 
             const result = await this.client.query(query, values);
             await this.client.query('COMMIT');
@@ -100,7 +100,8 @@ export class CheckoutRepositoryDB {
     public async updateCheckout(checkout: Checkout): Promise<void> {
         const query =
             'UPDATE checkouts SET user_id = $1, book_id = $2, checkout_date = $3, due_date = $4, returned = $5 WHERE id = $6';
-        const values = [checkout.userId, checkout.bookId, checkout.checkoutDate, checkout.dueDate, checkout.returned, checkout.checkoutId];
+        const values = [checkout.user_id, checkout.book_id, checkout.checkout_date, checkout.due_date, checkout.returned, checkout.id];
+        console.log(values);
         try {
             console.log('Updating checkout:', checkout);
             const result = await this.pool.query(query, values);

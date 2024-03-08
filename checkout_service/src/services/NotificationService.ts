@@ -1,6 +1,7 @@
 // src/services/NotificationService.ts
 
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
+import { Request } from 'express';
 
 export enum NotificationType {
     RENEWAL = 'renewal',
@@ -11,6 +12,7 @@ export enum NotificationType {
 
 export class NotificationService {
     public async sendNotification(
+        token: string,
         user_id: string,
         book_id: string,
         due_date: Date | null,
@@ -20,18 +22,24 @@ export class NotificationService {
             let message = '';
             let user = null;
 
-            // Fetch user details from User service
-            const userApiUrl = process.env.USER_SERVICE_BASE_URL + `/api/user/${user_id}`; // Replace with the correct API endpoint
-            console.log('Fetching user details...', userApiUrl);
-            const userResp = await axios.get(userApiUrl);
+            // Extract token from the incoming request
+
+            // Fetch user details from User service with the extracted token
+            const userApiUrl = process.env.USER_SERVICE_BASE_URL + `/api/user/${user_id}`;
+            const userRequestConfig: AxiosRequestConfig = {
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                },
+            };
+
+            const userResp = await axios.get(userApiUrl, userRequestConfig);
 
             if (userResp.status === 200) {
+                console.log('User details fetched successfully', userResp.data);
                 user = userResp.data;
-                console.log('User details:', user);
             } else {
                 throw new Error('Failed to fetch user details');
             }
-
             switch (type) {
                 case NotificationType.RENEWAL:
                     message = `Dear ${user.fullName}, you have successfully renewed the book with ID: ${book_id}.`;
@@ -49,7 +57,7 @@ export class NotificationService {
                     throw new Error('Invalid notification type');
             }
 
-            const notificationApiUrl = process.env.NOTIFICATION_SERVICE_BASE_URL + '/api/notifications/send-email'; // Replace with the correct API endpoint
+            const notificationApiUrl = process.env.NOTIFICATION_SERVICE_BASE_URL + '/api/notifications/send-email';
             const requestBody = {
                 email: user.email,
                 subject: 'Library Notification',

@@ -8,13 +8,12 @@ import e from 'express';
 
 export class CheckoutManager {
   private checkoutRepository: CheckoutRepositoryDB;
-  private notificationService: NotificationService;
   private checkoutValidator: CheckoutValidator;
-
+  private token: string;
   constructor() {
     this.checkoutRepository = new CheckoutRepositoryDB();
-    this.notificationService = new NotificationService();
     this.checkoutValidator = new CheckoutValidator();
+    this.token = '';
   }
 
   public async renewItems(items: Book[]): Promise<void> {
@@ -23,12 +22,9 @@ export class CheckoutManager {
 
       for (const item of items) {
         const checkoutData = await this.checkoutRepository.retrieveCheckout(item.bookId);
-
-        if (!checkoutData.returned && checkoutData.dueDate > new Date()) {
-          checkoutData.dueDate.setDate(checkoutData.dueDate.getDate() + 30); // Extend due date by 30 days
+        if (!checkoutData.returned && checkoutData.due_date > new Date()) {
+          checkoutData.due_date.setDate(checkoutData.due_date.getDate() + 30); // Extend due date by 30 days
           await this.checkoutRepository.updateCheckout(checkoutData);
-          const userId = checkoutData.userId;
-          await this.notificationService.sendNotification(userId, item.bookId, checkoutData.dueDate, NotificationType.RENEWAL);
         } else {
           throw new Error('Unable to renew the item. It may be returned or the due date is exceeded.');
         }
@@ -46,19 +42,16 @@ export class CheckoutManager {
         throw new Error('Invalid user or book information');
       }
       const checkout: Checkout = {
-        checkoutId: 0,
-        userId: userId,
-        bookId: bookId,
-        checkoutDate: new Date(),
-        dueDate: due_date,
+        id: 0,
+        user_id: userId,
+        book_id: bookId,
+        checkout_date: new Date(),
+        due_date: due_date,
         returned: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        created_at: new Date(),
+        updated_at: new Date(),
       };
       const checkedOut = await this.checkoutRepository.storeCheckout(checkout);
-      if (checkedOut) {
-        const success = await this.notificationService.sendNotification(userId, bookId, checkout.dueDate, NotificationType.CHECKOUT);
-      }
       return checkedOut;
     } catch (error: any) {
       console.error(`Error checking out item: ${error.message}`);
@@ -72,8 +65,6 @@ export class CheckoutManager {
       if (!checkoutData.returned) {
         checkoutData.returned = true;
         await this.checkoutRepository.updateCheckout(checkoutData);
-        const userId = checkoutData.userId;
-        await this.notificationService.sendNotification(userId, bookId, null, NotificationType.RETURN);
       } else {
         throw new Error('The item is already returned.');
       }

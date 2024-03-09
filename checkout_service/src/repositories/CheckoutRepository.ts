@@ -76,8 +76,6 @@ export class CheckoutRepositoryDB {
         } catch (error: any) {
             await this.client.query('ROLLBACK');
             throw error;
-        } finally {
-            this.client.release();
         }
     }
 

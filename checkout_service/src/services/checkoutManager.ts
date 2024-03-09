@@ -16,18 +16,15 @@ export class CheckoutManager {
     this.token = '';
   }
 
-  public async renewItems(items: Book[]): Promise<void> {
+  public async renewItems(checkoutId: string): Promise<void> {
     try {
-      this.checkoutValidator.validateItemsForRenewal(items);
-
-      for (const item of items) {
-        const checkoutData = await this.checkoutRepository.retrieveCheckout(item.bookId);
-        if (!checkoutData.returned && checkoutData.due_date > new Date()) {
-          checkoutData.due_date.setDate(checkoutData.due_date.getDate() + 30); // Extend due date by 30 days
-          await this.checkoutRepository.updateCheckout(checkoutData);
-        } else {
-          throw new Error('Unable to renew the item. It may be returned or the due date is exceeded.');
-        }
+      // this.checkoutValidator.validateItemsForRenewal(items);
+      const checkoutData = await this.checkoutRepository.retrieveCheckout(checkoutId);
+      if (!checkoutData.returned && checkoutData.due_date > new Date()) {
+        checkoutData.due_date.setDate(checkoutData.due_date.getDate() + 30); // Extend due date by 30 days
+        await this.checkoutRepository.updateCheckout(checkoutData);
+      } else {
+        throw new Error('Unable to renew the item. It may be returned or the due date is exceeded.');
       }
     } catch (error: any) {
       console.error(`Error renewing items: ${error.message}`);

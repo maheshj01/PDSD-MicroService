@@ -31,10 +31,14 @@ app.post('/api/checkout/renew-items', async (req: Request, res: Response, next: 
 app.post('/api/checkout/return-item', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { bookId, userId } = req.body;
-    await checkoutManager.returnItem(bookId, userId);
-    const token = (req.headers.authorization as string).split(' ')[1];
-    await notificationService.sendNotification(token, userId, bookId, null, NotificationType.RETURN);
-    res.status(200).json({ message: 'Item returned successfully' });
+    const returned = await checkoutManager.returnItem(bookId, userId);
+    if (returned) {
+      const token = (req.headers.authorization as string).split(' ')[1];
+      await notificationService.sendNotification(token, userId, bookId, null, NotificationType.RETURN);
+      res.status(200).json({ message: 'Item returned successfully' });
+    } else {
+      res.status(404).json({ message: 'Item not found' });
+    }
   } catch (error: any) {
     console.error(error.stack);
     res.status(500).json({ error: 'Internal Server Error' });

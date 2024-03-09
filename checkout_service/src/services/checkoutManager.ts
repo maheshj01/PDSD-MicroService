@@ -58,20 +58,22 @@ export class CheckoutManager {
       throw new Error(error.message);
     }
   }
-  public async returnItem(bookId: string, userId: string): Promise<void> {
+  public async returnItem(bookId: string, userId: string): Promise<boolean> {
     try {
       const checkoutData = await this.checkoutRepository.retrieveCheckout(bookId, userId);
 
       if (!checkoutData.returned) {
         checkoutData.returned = true;
         await this.checkoutRepository.updateCheckout(checkoutData);
+        return true;
       } else {
-        throw new Error('The item is already returned.');
+        return false;
       }
     } catch (error: any) {
       console.error(`Error returning item: ${error.message}`);
       throw new Error('Failed to return item. Please try again.');
     }
+
   }
 
 

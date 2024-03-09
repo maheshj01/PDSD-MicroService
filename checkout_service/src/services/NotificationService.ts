@@ -57,7 +57,7 @@ export class NotificationService {
                     throw new Error('Invalid notification type');
             }
 
-            const notificationApiUrl = process.env.NOTIFICATION_SERVICE_BASE_URL + '/api/notifications/send-email';
+            const notificationApiUrl = process.env.NOTIFICATION_SERVICE_BASE_URL + '/api/notifications/send';
             const requestBody = {
                 email: user.email,
                 subject: 'Library Notification',

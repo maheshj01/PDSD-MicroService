@@ -83,7 +83,7 @@ export class CheckoutRepositoryDB {
 
     public async retrieveCheckout(bookId: string, userId?: string): Promise<Checkout> {
         const query = userId ? 'SELECT * FROM checkouts WHERE book_id = $1 AND user_id = $2' : 'SELECT * FROM checkouts WHERE book_id = $1';
-        const values = [bookId];
+        const values = userId ? [bookId, userId] : [bookId];
 
         try {
             const result: QueryResult<Checkout> = await this.pool.query(query, values);

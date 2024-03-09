@@ -30,11 +30,11 @@ app.post('/api/checkout/renew-items', async (req: Request, res: Response, next: 
 
 app.post('/api/checkout/return-item', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { bookId, userId } = req.body;
-    const returned = await checkoutManager.returnItem(bookId, userId);
-    if (returned) {
+    const { checkoutId } = req.body;
+    const checkoutData = await checkoutManager.returnItem(checkoutId);
+    if (checkoutData) {
       const token = (req.headers.authorization as string).split(' ')[1];
-      await notificationService.sendNotification(token, userId, bookId, null, NotificationType.RETURN);
+      await notificationService.sendNotification(token, checkoutData.user_id, checkoutData.book_id, null, NotificationType.RETURN);
       res.status(200).json({ message: 'Item returned successfully' });
     } else {
       res.status(404).json({ message: 'Item not found' });

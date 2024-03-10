@@ -29,10 +29,10 @@ const Home: React.FC = () => {
   }, []);
 
   const handleSearch = _.debounce(
-    async (term: string, category: keyof Book) => {
+    async (term: string, category?: keyof Book) => {
       try {
         setLoading(true);
-        const results = await BookService.searchBooksByCategory(term, category);
+        const results = await BookService.searchBooksByCategory(term, category!);
         setBooks(results);
         setLoading(false);
       } catch (error) {
@@ -42,8 +42,7 @@ const Home: React.FC = () => {
       }
     },
     300
-  ); // Adjust the debounce time as needed (e.g., 300 milliseconds)
-
+  );
   return (
     <div className="home-container">
       <Header />

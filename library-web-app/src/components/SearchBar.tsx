@@ -4,21 +4,29 @@ import React, { useState, ChangeEvent } from "react";
 import { Book } from "../interfaces/Book";
 
 interface SearchBarProps {
-  onSearch: (term: string, category: keyof Book) => void;
+  onSearch: (term: string, category?: keyof Book) => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [searchCategory, setSearchCategory] = useState<keyof Book>("title"); // Default category
+  const [searchCategory, setSearchCategory] = useState<keyof Book | undefined>(undefined);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-    onSearch(event.target.value, searchCategory);
+    const term = event.target.value;
+    setSearchTerm(term);
+    onSearch(term, searchCategory);
   };
 
   const handleCategoryChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchCategory(event.target.value as keyof Book);
-    onSearch(searchTerm, event.target.value as keyof Book);
+    const category = event.target.value as keyof Book;
+    setSearchCategory(category);
+    onSearch(searchTerm, category);
+  };
+
+  const handleClear = () => {
+    setSearchTerm("");
+    setSearchCategory(undefined);
+    onSearch("", undefined);
   };
 
   return (
@@ -30,7 +38,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           value={searchTerm}
           onChange={handleInputChange}
         />
-        <button onClick={() => onSearch("", "title")}>Clear</button>
+        <button onClick={handleClear}>Clear</button>
       </div>
 
       {/* Add radio buttons for categories */}

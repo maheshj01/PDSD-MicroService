@@ -3,7 +3,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { Book } from '../interfaces/Book';
 
-const BASE_URL = process.env.BOOKS_SERVICE_BASE_URL || 'http://localhost:3001/api';
+const BASE_URL = process.env.BOOKS_SERVICE_BASE_URL || 'http://localhost:3001';
 
 if (!BASE_URL) {
     throw new Error('BOOKS_SERVICE_BASE_URL is not defined in the environment file.');
@@ -23,7 +23,7 @@ const handleRequest = async <T>(
 
 const BookService = {
     searchBooks: async (): Promise<Book[]> => {
-        return handleRequest(axios.get<Book[]>(`${BASE_URL}/books`));
+        return handleRequest(axios.get<Book[]>(`${BASE_URL}/api/books/search`));
     },
 
     viewBookDetails: async (bookId: string): Promise<Book> => {
@@ -35,20 +35,22 @@ const BookService = {
     },
 
     updateCopiesOnCheckout: async (bookId: string): Promise<void> => {
-        return handleRequest(axios.put<void>(`${BASE_URL}/books/${bookId}`));
+        return handleRequest(axios.put<void>(`${BASE_URL}/api/books/updateCopies`));
     },
 
     searchBooksByCategory: async (
         term: string,
         category: keyof Book
     ): Promise<Book[]> => {
-        let url = `${BASE_URL}/books`;
+        let url = `${BASE_URL}/api/books/search`;
 
-        // Append category-specific query parameter
-        if (category === 'title' || category === 'author' || category === 'category') {
-            url += `?${category}=${term}`;
+        if (term) {
+            // Append category-specific query parameter
+            if (category === 'title' || category === 'author' || category === 'category') {
+                url += `?${category}=${term}`;
+            }
+            console.log(url);
         }
-        console.log(url);
 
         return handleRequest(axios.get<Book[]>(url));
     },

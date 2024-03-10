@@ -47,7 +47,6 @@ const Home: React.FC = () => {
     <div className="home-container">
       <Header />
       <SearchBar onSearch={handleSearch} />
-
       {loading && <p>Loading...</p>}
       {error && <p className="error-message">{error}</p>}
       {!loading && !error && <BookDisplay books={books} />}

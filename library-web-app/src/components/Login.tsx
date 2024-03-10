@@ -3,9 +3,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../services/AuthService";
+import "./Login.css"; // Import the CSS file for styling
 
 const Login: React.FC = () => {
-    const navigate = useNavigate(); // Use useNavigate for v6 or later
+    const navigate = useNavigate();
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string | null>(null);

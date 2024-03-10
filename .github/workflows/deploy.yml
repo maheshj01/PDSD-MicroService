@@ -21,20 +21,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 14
+
       - name: Install Dependencies
         run: |
           cd ./library-web-app
           npm install
-          ls -al
+
       - name: Build
         run: |
           cd ./library-web-app
           npm run build
-      - name: debug
-        run: |
-          ls -al
-          ls -al ./library-web-app
-          ls -al ./library-web-app/build
+
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v2.0
         with:
@@ -48,4 +45,3 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        timeout-minutes: 1

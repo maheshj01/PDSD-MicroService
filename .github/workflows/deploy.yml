@@ -1,11 +1,14 @@
 # .github/workflows/netlify.yml
 
 name: Build and Deploy to Netlify
+
 on:
   push:
+    branches:
+      - redesign
   pull_request:
-  branches:
-    - redesign
+    branches:
+      - redesign
 jobs:
   build:
     runs-on: ubuntu-22.04

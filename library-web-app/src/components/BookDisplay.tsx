@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Book } from "../interfaces/Book";
-
+import './BookDisplay.css';
 interface BookDisplayProps {
   books: Book[];
 }
@@ -18,6 +18,7 @@ const BookDisplay: React.FC<BookDisplayProps> = ({ books }) => {
           <img src={bookCover} alt={book.title} />
           <div className="book-details">
             <p className="book-title">{book.title}</p>
+            <p className="book-category">({book.category})</p>
             <p className="book-author">by {book.author}</p>
             {/* Add more book details as needed */}
           </div>

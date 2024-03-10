@@ -2,7 +2,7 @@
 
 import React, { useState, ChangeEvent } from "react";
 import { Book } from "../interfaces/Book";
-
+import "./SearchBar.css";
 interface SearchBarProps {
   onSearch: (term: string, category?: keyof Book) => void;
 }

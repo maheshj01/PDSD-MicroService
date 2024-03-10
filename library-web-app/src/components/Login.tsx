@@ -27,6 +27,7 @@ const Login: React.FC = () => {
 
     return (
         <div className="login-container">
+            <h1>PDSD Library</h1>
             <h2>Login</h2>
             <div className="form-group">
                 <label htmlFor="email">Email:</label>

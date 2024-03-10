@@ -235,3 +235,20 @@ Admin: An administrator with full access and control over the application, inclu
 
 Feel free to contribute to the project by opening issues or creating pull requests.
 Feel free to customize and expand this template based on your project's specific details and requirements.
+
+<!-- Directory Structure -->
+
+```
+-- root
+  |-- user_service
+  |-- book_service
+  |-- checkout_service
+  |-- request_service
+  |-- librarian_service
+  |-- report_service
+  |-- notification_service
+  |-- library-web-app
+  |-- start.sh
+  |-- create_service.sh
+  |-- README.md
+```

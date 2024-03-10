@@ -9,7 +9,7 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [searchCategory, setSearchCategory] = useState<keyof Book | undefined>(undefined);
+  const [searchCategory, setSearchCategory] = useState<keyof Book | undefined>('title');
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value;
@@ -20,7 +20,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const handleCategoryChange = (event: ChangeEvent<HTMLInputElement>) => {
     const category = event.target.value as keyof Book;
     setSearchCategory(category);
-    onSearch(searchTerm, category);
+    if (searchTerm) {
+      onSearch(searchTerm, category);
+    }
   };
 
   const handleClear = () => {

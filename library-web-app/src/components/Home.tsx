@@ -41,7 +41,7 @@ const Home: React.FC = () => {
         console.error("Error searching books:", error);
       }
     },
-    300
+    600
   );
   return (
     <div className="home-container">

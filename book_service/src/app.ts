@@ -3,9 +3,11 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import BookController from './controllers/BookController';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 dotenv.config();
 const app = express();
+app.use(cors());
 const PORT = process.env.PORT || 3001;
 
 app.use(bodyParser.json());

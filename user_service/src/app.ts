@@ -2,8 +2,11 @@
 import express from 'express';
 import Database from './utils/Database';
 import userRoutes from './routes/userRoutes';
+import cors from 'cors';
 
 const app = express();
+app.use(cors());
+
 const PORT = process.env.PORT || 3000;
 
 // Connect to the database when the application starts

@@ -5,9 +5,11 @@ import bodyParser from 'body-parser';
 import { CheckoutManager } from './services/checkoutManager';
 import dotenv from 'dotenv';
 import { NotificationService, NotificationType } from './services/NotificationService';
+import cors from 'cors';
 
 dotenv.config();
 const app = express();
+app.use(cors());
 const port = process.env.PORT || 3002;
 const notificationService = new NotificationService();
 

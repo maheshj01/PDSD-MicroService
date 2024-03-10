@@ -4,10 +4,11 @@ import bodyParser from 'body-parser';
 import requestRoutes from './routes/requestRoutes';
 import dotenv from 'dotenv';
 import pool from './database/dbConfig';
+import cors from 'cors';
 
 dotenv.config();
 const app = express();
-
+app.use(cors());
 const PORT = process.env.PORT;
 app.use(bodyParser.json());
 

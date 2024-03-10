@@ -95,11 +95,20 @@ class UserRepository {
 
     }
 
-    async deleteUser(userId: number): Promise<void> {
-        const deleteUserQuery = 'DELETE FROM users WHERE user_id = $1';
-        const values = [userId];
-
-        await Database.executeQuery(deleteUserQuery, values);
+    async deleteUser(userId: string): Promise<boolean> {
+        try {
+            const deleteUserQuery = 'DELETE FROM users WHERE user_id = $1';
+            const values = [userId];
+            const result = await Database.executeQuery(deleteUserQuery, values);
+            console.log('User deleted:', result.rowCount);
+            if (result.rowCount === 0) {
+                return false;
+            }
+            return true;
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            throw error;
+        }
     }
 
     async retrieveUserByUsernameOrEmail(usernameOrEmail: string): Promise<User | null> {

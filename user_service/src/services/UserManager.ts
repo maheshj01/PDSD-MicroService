@@ -8,6 +8,7 @@ import User from '../models/User';
 import AuthenticationService from '../services/AuthenticationService';
 import RoleManager from './RoleManager';
 import TokenManager from './TokenManager';
+import axios from 'axios';
 class UserManager {
     async registerUser(req: Request, res: Response): Promise<void> {
         try {
@@ -41,6 +42,17 @@ class UserManager {
             }
             // Store user in the database
             await UserRepository.storeUser(newUser);
+
+            const notificationData = {
+                email: newUser.email,
+                subject: 'Welcome to the Library',
+                body: `Dear ${newUser.fullName},\n \n Your registration is successful! \n \n Username: ${newUser.username}\nPassword: ${password} \n Please keep your credentials secure.`
+            };
+
+            // Call the sendNotification API in the Notification microservice
+            const notificationApiUrl = process.env.NOTIFICATION_SERVICE_BASE_URL + '/api/notifications/send';
+            await axios.post(notificationApiUrl, notificationData);
+
             res.status(201).json({ message: 'User registered successfully' });
         } catch (error: any) {
             console.error('Error registering user:', error);
@@ -94,7 +106,7 @@ class UserManager {
         try {
             const userId = req.params.userId;
 
-            const { username, mailing_address, phone_number } = req.body;
+            const { username, mailing_address, email, phone_number, user_role } = req.body;
 
             // Retrieve user from the database
             const existingUser = await UserRepository.retrieveUserById(userId);
@@ -108,7 +120,8 @@ class UserManager {
             existingUser.username = username || existingUser.username;
             existingUser.mailingAddress = mailing_address || existingUser.mailingAddress;
             existingUser.phoneNumber = phone_number || existingUser.phoneNumber;
-
+            existingUser.userRole = user_role || existingUser.userRole;
+            existingUser.email = email || existingUser.email;
             // Update user in the database
             await UserRepository.updateUser(existingUser);
 
@@ -234,6 +247,24 @@ class UserManager {
             res.status(200).json({ message: 'Password changed successfully' });
         } catch (error) {
             console.error('Error changing password:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    }
+
+    async deleteUser(req: Request, res: Response): Promise<void> {
+        try {
+            const userId = req.params.userId;
+
+            // Delete user from the database
+            const success = await UserRepository.deleteUser(userId);
+
+            if (!success) {
+                res.status(500).json({ error: 'Error deleting user' });
+                return;
+            }
+            res.status(200).json({ message: 'User deleted successfully' });
+        } catch (error) {
+            console.error('Error deleting user:', error);
             res.status(500).json({ error: 'Internal server error' });
         }
     }

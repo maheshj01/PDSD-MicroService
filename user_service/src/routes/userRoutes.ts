@@ -18,4 +18,5 @@ router.post('/logout/:userId', authMiddleware(), userManager.logout); // Accessi
 router.put('/change-password/:userId', authMiddleware(), userManager.changePassword); // Accessible to authorized users
 
 router.post('/authenticate-by-role', userManager.authenticateUserByRole);
+router.delete('/delete/:userId', authMiddleware(['librarian']), userManager.deleteUser); // Accessible to librarian only
 export default router;

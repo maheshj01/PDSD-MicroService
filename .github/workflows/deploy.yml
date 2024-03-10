@@ -9,6 +9,7 @@ on:
   pull_request:
     branches:
       - redesign
+
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -24,16 +25,24 @@ jobs:
           node-version: 14
 
       - name: Install Dependencies
-        run: npm install
+        run: |
+          cd ./library-web-app
+          npm install
 
       - name: Build
-        run: npm run build
+        run: |
+          cd ./library-web-app
+          npm run build
 
+  deploy:
+    runs-on: ubuntu-22.04
+    needs: build
+    steps:
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v2.0
         with:
           publish-dir: "./library-web-app/build"
-          production-branch: master
+          production-branch: redesign  # Adjust if your main branch has a different name
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy from GitHub Actions"
           enable-pull-request-comment: false

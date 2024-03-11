@@ -2,6 +2,8 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
+import Menu from "./Menu";
+import "./Header.css";
 
 const Header: React.FC = () => {
   return (
@@ -11,9 +13,14 @@ const Header: React.FC = () => {
         <p>Explore our collection of books</p>
       </div>
       <div className="right-section">
-        <Link to="/login">
-          <button>Login</button>
-        </Link>
+        <Menu
+          trigger={<button className="account-button">Account</button>}
+        >
+          <Link to="/profile">Profile</Link>
+          <Link to="/register-user">Register User</Link>
+          <Link to="/add-request-book">Add/Request Book</Link>
+          <Link to="/signout">Sign Out</Link>
+        </Menu>
       </div>
     </div>
   );

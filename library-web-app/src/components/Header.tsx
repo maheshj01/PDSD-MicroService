@@ -1,13 +1,43 @@
 // src/components/Header.tsx
 
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Menu from "./Menu";
+import MenuOptions from "./MenuOptions";
+import { getUserRole } from "../utils/authUtils";
 import "./Header.css";
 
 const Header: React.FC = () => {
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    setUserRole(getUserRole());
+  }, []);
+
+  const handleMenuClick = (menuItem: string) => {
+    switch (menuItem) {
+      case "Profile":
+        // Handle logic for Profile click
+        console.log("Profile clicked!");
+        break;
+      case "Register User":
+        // Handle logic for Register User click
+        console.log("Register User clicked!");
+        break;
+      case "Add/Request Book":
+        // Handle logic for Add/Request Book click
+        console.log("Add/Request Book clicked!");
+        break;
+      case "Sign Out":
+        // Handle logic for Sign Out click
+        break;
+      default:
+        // Handle other menu items if needed
+        console.log("Unknown menu item clicked!");
+    }
+  };
+
   return (
     <div className="header">
       <div className="left-section">
@@ -15,12 +45,11 @@ const Header: React.FC = () => {
         <p className="header-subtitle">Explore our collection of books</p>
       </div>
       <div className="right-section">
-        <Menu trigger={<FontAwesomeIcon icon={faUser} />} >
-          <Link to="/profile">Profile</Link>
-          <Link to="/register-user">Register User</Link>
-          <Link to="/add-request-book">Add/Request Book</Link>
-          <Link to="/signout">Sign Out</Link>
-        </Menu>
+        {userRole && (
+          <Menu trigger={<FontAwesomeIcon icon={faUser} />}>
+            <MenuOptions userRole={userRole} onMenuClick={handleMenuClick} />
+          </Menu>
+        )}
       </div>
     </div>
   );

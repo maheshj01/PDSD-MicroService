@@ -35,6 +35,14 @@ const AuthService = {
         const data: AuthResponse = await response.json();
         return data;
     },
+
+    signout(): void {
+        // Clear the token from local storage
+        localStorage.removeItem("token");
+
+        // Redirect or perform any additional cleanup as needed
+        // Example: window.location.href = "/login";
+    }
 };
 
 export default AuthService;

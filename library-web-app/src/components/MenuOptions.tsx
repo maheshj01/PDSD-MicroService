@@ -27,7 +27,7 @@ const MenuOptions: React.FC<MenuOptionsProps> = ({ userRole, onMenuClick }) => {
             {getMenuItems().map((menuItem) => (
                 <div key={menuItem} onClick={() => onMenuClick(menuItem)}>
                     {menuItem === "Sign Out" ? (
-                        <Link to="#" onClick={() => onMenuClick(menuItem)}>
+                        <Link to="/login" onClick={() => onMenuClick(menuItem)}>
                             {menuItem}
                         </Link>
                     ) : (

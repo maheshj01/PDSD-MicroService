@@ -7,6 +7,7 @@ import Menu from "./Menu";
 import MenuOptions from "./MenuOptions";
 import { getUserRole } from "../utils/authUtils";
 import "./Header.css";
+import AuthService from "../services/AuthService";
 
 const Header: React.FC = () => {
   const [userRole, setUserRole] = useState<string | null>(null);
@@ -31,6 +32,7 @@ const Header: React.FC = () => {
         break;
       case "Sign Out":
         // Handle logic for Sign Out click
+        AuthService.signout();
         break;
       default:
         // Handle other menu items if needed

@@ -1,27 +1,41 @@
-/* Add this CSS to your existing styles */
+/* src/components/Header.css */
 
-.menu {
-    position: relative;
-    display: inline-block;
-}
-
-.account-button {
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
     background-color: #3498db;
     color: #fff;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
+}
+
+.left-section {
+    flex: 1;
+}
+
+.right-section {
+    display: flex;
+    align-items: center;
+}
+
+.header-title {
+    font-size: 24px;
+    margin: 0;
+}
+
+.header-subtitle {
+    font-size: 14px;
+    color: #ccc;
+    margin: 5px 0;
+}
+
+.account-icon {
+    font-size: 24px;
     cursor: pointer;
 }
 
 .menu-content {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    z-index: 1;
+    padding: 10px;
 }
 
 .menu-content a {
@@ -29,6 +43,7 @@
     padding: 10px;
     color: #333;
     text-decoration: none;
+    font-size: 16px;
 }
 
 .menu-content a:hover {

@@ -1,7 +1,8 @@
 // src/components/Menu.tsx
 
 import React, { ReactNode, useState, useRef, useEffect } from "react";
-import "./Header.css";
+import "./Menu.css"; // Import the Menu styles
+
 interface MenuProps {
     trigger: ReactNode;
     children: ReactNode;
@@ -30,7 +31,7 @@ const Menu: React.FC<MenuProps> = ({ trigger, children }) => {
     }, []);
 
     return (
-        <div className="menu" ref={menuRef}>
+        <div className={`menu ${isOpen ? "open" : ""}`} ref={menuRef}>
             <div className="trigger" onClick={toggleMenu}>
                 {trigger}
             </div>

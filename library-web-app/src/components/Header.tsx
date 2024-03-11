@@ -7,32 +7,24 @@ import Menu from "./Menu";
 import MenuOptions from "./MenuOptions";
 import { getUserRole } from "../utils/authUtils";
 import "./Header.css";
-import AuthService from "../services/AuthService";
 
 const Header: React.FC = () => {
   const [userRole, setUserRole] = useState<string | null>(null);
-
   useEffect(() => {
     setUserRole(getUserRole());
   }, []);
 
-  const handleMenuClick = (menuItem: string) => {
+  const handleMenuClick = (menuItem: string, path: string) => {
     switch (menuItem) {
       case "Profile":
-        // Handle logic for Profile click
-        console.log("Profile clicked!");
-        break;
       case "Register User":
-        // Handle logic for Register User click
-        console.log("Register User clicked!");
         break;
       case "Add/Request Book":
-        // Handle logic for Add/Request Book click
-        console.log("Add/Request Book clicked!");
         break;
       case "Sign Out":
-        // Handle logic for Sign Out click
-        AuthService.signout();
+        // Handle logic for signing out, e.g., clear local storage, etc.
+        localStorage.removeItem("token");
+        // navigate("/login");
         break;
       default:
         // Handle other menu items if needed

@@ -5,36 +5,29 @@ import { Link } from "react-router-dom";
 
 interface MenuOptionsProps {
     userRole: string;
-    onMenuClick: (menuItem: string) => void;
+    onMenuClick: (menuItem: string, path: string) => void;
 }
 
 const MenuOptions: React.FC<MenuOptionsProps> = ({ userRole, onMenuClick }) => {
-    const menuItems: { [key: string]: string[] } = {
-        librarian: ["Profile", "Register User", "Add/Request Book", "Sign Out"],
-        staff: ["Profile", "Add/Request Book", "Sign Out"],
-        default: ["Profile", "Sign Out"],
+    const menuItems: { [key: string]: string } = {
+        "Profile": "/profile",
+        "Register User": "/register",
+        "Add/Request Book": "/add-request",
+        "Sign Out": "/login",
     };
 
     const getMenuItems = () => {
-        const roles = Object.keys(menuItems);
-        const allowedRoles = roles.includes(userRole) ? [userRole] : ["default"];
-
-        return allowedRoles.flatMap((role) => menuItems[role]);
+        const allowedRoles = userRole in menuItems ? [userRole] : ["default"];
+        return allowedRoles.flatMap((role) => Object.keys(menuItems).filter(item => menuItems[item] !== '/login' || role === 'default'));
     };
 
     return (
         <div className="menu-options">
             {getMenuItems().map((menuItem) => (
-                <div key={menuItem} onClick={() => onMenuClick(menuItem)}>
-                    {menuItem === "Sign Out" ? (
-                        <Link to="/login" onClick={() => onMenuClick(menuItem)}>
-                            {menuItem}
-                        </Link>
-                    ) : (
-                        <Link to={`/${menuItem.toLowerCase().replace("/", "")}`}>
-                            {menuItem}
-                        </Link>
-                    )}
+                <div key={menuItem} onClick={() => onMenuClick(menuItem, menuItems[menuItem])}>
+                    {<Link to={menuItems[menuItem]}>
+                        {menuItem}
+                    </Link>}
                 </div>
             ))}
         </div>

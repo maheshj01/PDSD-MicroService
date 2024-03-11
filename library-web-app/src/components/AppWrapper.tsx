@@ -23,7 +23,7 @@ const AppWrapper: React.FC<BrowserRouterProps> = ({ children }) => {
             // Redirect to dashboard if authenticated
             navigate("/dashboard");
         }
-    }, [navigate]);
+    }, []);
 
     return <>{children}</>;
 };

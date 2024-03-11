@@ -18,6 +18,7 @@ app.post('/api/books/add', bookController.addBook);
 app.get('/api/books/search', bookController.searchBooks);
 // New route for updating availableCopies when a book is checked out
 app.put('/api/books/updateCopies', bookController.updateCopies);
+app.put('/api/books/updateBook', bookController.updateBook);
 
 app.listen(PORT, () => {
     console.log(`Book Service is running on http://localhost:${PORT}`);

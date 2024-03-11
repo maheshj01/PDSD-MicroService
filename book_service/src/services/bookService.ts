@@ -12,28 +12,42 @@ class BookService {
             if (!book.title || !book.author || !book.isbn) {
                 throw new Error('Title, author, and ISBN are required fields');
             }
-            // Additional validation as needed
 
-            // Using parameterized queries to prevent SQL injection
-            const result = await pool.query(
-                'INSERT INTO books (title, author, category, isbn, publication_date, available_copies, total_copies, location) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
-                [
-                    book.title,
-                    book.author,
-                    book.category,
-                    book.isbn,
-                    book.publicationDate,
-                    book.availableCopies,
-                    book.totalCopies,
-                    book.location,
-                ]
-            );
+            // Check if the book with the given ISBN already exists
+            const existingBook = await pool.query('SELECT * FROM books WHERE isbn = $1', [book.isbn]);
 
-            // Ensure the result.rows[0] is not null before returning
-            if (result.rows.length > 0) {
-                return result.rows[0];
+            if (existingBook.rows.length > 0) {
+                // Book with the same ISBN exists, set available_copies and total_copies to 1
+                const updatedBook = await pool.query(
+                    'UPDATE books SET available_copies = available_copies + 1, total_copies = total_copies + 1 WHERE isbn = $1 RETURNING *',
+                    [book.isbn]
+                );
+                if (updatedBook.rows.length > 0) {
+                    return updatedBook.rows[0];
+                } else {
+                    throw new Error('Failed to update existing book');
+                }
             } else {
-                throw new Error('Failed to add new book');
+                // Book with the given ISBN does not exist, insert a new book
+                const result = await pool.query(
+                    'INSERT INTO books (title, author, category, isbn, publication_date, available_copies, total_copies, location) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+                    [
+                        book.title,
+                        book.author,
+                        book.category,
+                        book.isbn,
+                        book.publication_date,
+                        book.available_copies,
+                        book.total_copies,
+                        book.location,
+                    ]
+                );
+
+                if (result.rows.length > 0) {
+                    return result.rows[0];
+                } else {
+                    throw new Error('Failed to add new book');
+                }
             }
         } catch (error) {
             console.error('Error in addBook:', error);
@@ -47,7 +61,6 @@ class BookService {
             if (!updatedBookData.title || !updatedBookData.author || !updatedBookData.isbn) {
                 throw new Error('Title, author, and ISBN are required fields');
             }
-
             // Additional validation as needed
 
             const result = await pool.query(
@@ -57,9 +70,9 @@ class BookService {
                     updatedBookData.author,
                     updatedBookData.category,
                     updatedBookData.isbn,
-                    updatedBookData.publicationDate,
-                    updatedBookData.availableCopies,
-                    updatedBookData.totalCopies,
+                    updatedBookData.publication_date,
+                    updatedBookData.available_copies,
+                    updatedBookData.total_copies,
                     updatedBookData.location,
                     bookId,
                 ]

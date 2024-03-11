@@ -38,6 +38,17 @@ class BookController {
         }
 
     }
+
+    public updateBook(req: Request, res: Response): void {
+        const { bookId, updatedBookData } = req.body;
+        try {
+            const result = BookService.updateBook(bookId, updatedBookData);
+            res.status(200).json(result);
+        } catch (error) {
+            console.error('Error updating book:', error);
+            res.status(500).json({ error: 'Failed to update book' });
+        }
+    }
 }
 
 export default BookController;

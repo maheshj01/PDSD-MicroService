@@ -5,9 +5,9 @@ class BookModel {
     author: string;
     category: string;
     isbn: string;
-    publicationDate: Date;
-    availableCopies: number;
-    totalCopies: number;
+    publication_date: Date;
+    available_copies: number;
+    total_copies: number;
     location: string;
 
     constructor(
@@ -16,9 +16,9 @@ class BookModel {
         author: string,
         category: string,
         isbn: string,
-        publicationDate: Date,
-        availableCopies: number,
-        totalCopies: number,
+        publication_date: Date,
+        available_copies: number,
+        total_copies: number,
         location: string
     ) {
         this.id = id;
@@ -26,9 +26,9 @@ class BookModel {
         this.author = author;
         this.category = category;
         this.isbn = isbn;
-        this.publicationDate = publicationDate;
-        this.availableCopies = availableCopies;
-        this.totalCopies = totalCopies;
+        this.publication_date = publication_date;
+        this.available_copies = available_copies;
+        this.total_copies = total_copies;
         this.location = location;
     }
 }

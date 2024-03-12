@@ -30,13 +30,13 @@ class BookService {
             } else {
                 // Book with the given ISBN does not exist, insert a new book
                 const result = await pool.query(
-                    'INSERT INTO books (title, author, category, isbn, publication_date, available_copies, total_copies, location) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+                    'INSERT INTO books (title, author, category, isbn, publication_year, available_copies, total_copies, location) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
                     [
                         book.title,
                         book.author,
                         book.category,
                         book.isbn,
-                        book.publication_date,
+                        book.publication_year,
                         book.available_copies,
                         book.total_copies,
                         book.location,
@@ -64,13 +64,13 @@ class BookService {
             // Additional validation as needed
 
             const result = await pool.query(
-                'UPDATE books SET title = $1, author = $2, category = $3, isbn = $4, publication_date = $5, available_copies = $6, total_copies = $7, location = $8 WHERE id = $9 RETURNING *',
+                'UPDATE books SET title = $1, author = $2, category = $3, isbn = $4, publication_year = $5, available_copies = $6, total_copies = $7, location = $8 WHERE id = $9 RETURNING *',
                 [
                     updatedBookData.title,
                     updatedBookData.author,
                     updatedBookData.category,
                     updatedBookData.isbn,
-                    updatedBookData.publication_date,
+                    updatedBookData.publication_year,
                     updatedBookData.available_copies,
                     updatedBookData.total_copies,
                     updatedBookData.location,
@@ -138,7 +138,7 @@ class BookService {
                         row.author,
                         row.category,
                         row.isbn,
-                        row.publication_date,
+                        row.publication_year,
                         row.available_copies,
                         row.total_copies,
                         row.location
@@ -163,7 +163,7 @@ class BookService {
                 row.author,
                 row.category,
                 row.ISBN,
-                row.publication_date,
+                row.publication_year,
                 row.available_copies,
                 row.total_copies,
                 row.location

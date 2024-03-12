@@ -5,7 +5,7 @@ class BookModel {
     author: string;
     category: string;
     isbn: string;
-    publication_date: Date;
+    publication_year: number;
     available_copies: number;
     total_copies: number;
     location: string;
@@ -16,7 +16,7 @@ class BookModel {
         author: string,
         category: string,
         isbn: string,
-        publication_date: Date,
+        publication_year: number,
         available_copies: number,
         total_copies: number,
         location: string
@@ -26,7 +26,7 @@ class BookModel {
         this.author = author;
         this.category = category;
         this.isbn = isbn;
-        this.publication_date = publication_date;
+        this.publication_year = publication_year;
         this.available_copies = available_copies;
         this.total_copies = total_copies;
         this.location = location;

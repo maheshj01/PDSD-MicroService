@@ -15,6 +15,7 @@ const Header: React.FC = () => {
   }, []);
 
   const handleMenuClick = (menuItem: string, path: string) => {
+    // console.log(`Menu item cslicked: ${menuItem} role: ${userRole} path: ${path}`);
     switch (menuItem) {
       case "Profile":
       case "Register User":

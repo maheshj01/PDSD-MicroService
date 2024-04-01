@@ -11,14 +11,20 @@ interface MenuOptionsProps {
 const MenuOptions: React.FC<MenuOptionsProps> = ({ userRole, onMenuClick }) => {
     const menuItems: { [key: string]: string } = {
         "Profile": "/profile",
-        "Register User": "/register",
-        "Add/Request Book": "/add-request",
-        "Sign Out": "/login",
     };
 
+    if (userRole === "staff" || userRole === "librarian") {
+        menuItems["Add/Request Book"] = "/add-request";
+    }
+
+    if (userRole === "librarian") {
+        menuItems["Register User"] = "/register";
+    }
+
+    menuItems["Sign Out"] = "/login";
+
     const getMenuItems = () => {
-        const allowedRoles = userRole in menuItems ? [userRole] : ["default"];
-        return allowedRoles.flatMap((role) => Object.keys(menuItems).filter(item => menuItems[item] !== '/login' || role === 'default'));
+        return Object.keys(menuItems);
     };
 
     return (

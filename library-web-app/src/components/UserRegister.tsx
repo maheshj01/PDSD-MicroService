@@ -1,22 +1,23 @@
-// src/components/RegisterUser.tsx
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserService from "../services/UserService";
 import "./UserRegister.css";
+
 const RegisterUser: React.FC = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: "",
-        email: "",
-        password: "",
-        fullName: "",
+        passwordHash: "",
         userRole: "patron", // Default user role
+        fullName: "",
         schoolId: 0,
-        mailingAddress: "",
+        email: "",
         phoneNumber: "",
+        mailingAddress: "",
     });
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -28,16 +29,21 @@ const RegisterUser: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        setLoading(true);
         try {
-            // You should perform additional client-side validation here if needed
-
-            const response = await UserService.registerUser(formData);
-            console.log("User registered successfully:", response);
-            navigate("/login"); // Redirect to login page after successful registration
-        } catch (error) {
-            setError("Error registering user. Please try again.");
-            console.error("Registration error:", error);
+            const data = await UserService.registerUser(formData);
+            setSuccessMessage("User registered successfully!");
+            setTimeout(() => {
+                navigate("/login");
+            }, 2000); // Navigate after 2 seconds
+        } catch (error: any) {
+            setError(error.message || "Failed to register user. Please try again later.");
+        } finally {
+            setLoading(false);
+            setTimeout(() => {
+                setError(null);
+                setSuccessMessage(null);
+            }, 5000); // Clear error and success message after 5 seconds
         }
     };
 
@@ -73,8 +79,8 @@ const RegisterUser: React.FC = () => {
                     <input
                         type="password"
                         id="password"
-                        name="password"
-                        value={formData.password}
+                        name="passwordHash"
+                        value={formData.passwordHash}
                         onChange={handleChange}
                         required
                     />
@@ -135,8 +141,10 @@ const RegisterUser: React.FC = () => {
                         value={formData.phoneNumber}
                         onChange={handleChange}
                     />
-                    <button type="submit">Register</button>
+                    <button type="submit" disabled={loading}>Register</button>
                 </div>
+                {loading && <p className="loading">Loading...</p>}
+                {successMessage && <p className="success-message">{successMessage}</p>}
                 {error && <p className="error-message">{error}</p>}
             </form>
         </div>

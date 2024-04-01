@@ -1,8 +1,11 @@
+import { jwtDecode } from 'jwt-decode';
+
 export const getUserRole = (): string | null => {
     const token = localStorage.getItem("token");
     if (token) {
-        const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decoding JWT token payload
-        return decodedToken.userRole;
+        const payload = jwtDecode(token) as { userRole: string };
+        console.log("User role:", payload.userRole);
+        return payload.userRole || null;
     }
     return null;
 };

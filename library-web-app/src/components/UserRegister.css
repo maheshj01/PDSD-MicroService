@@ -16,3 +16,9 @@
     margin-top: 10px;
     /* Add spacing between the title and button */
 }
+
+.loading{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

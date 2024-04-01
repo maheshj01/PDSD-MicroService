@@ -3,10 +3,11 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import LibrarianController from './controllers/LibrarianController';
 import dotenv from 'dotenv';
-
+import cors from 'cors';
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3004;
+app.use(cors());
 
 app.use(bodyParser.json());
 

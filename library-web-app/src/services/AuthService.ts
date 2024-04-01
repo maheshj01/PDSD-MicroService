@@ -19,22 +19,26 @@ interface AuthCredentials {
 
 const AuthService = {
     authenticateUser: async (credentials: AuthCredentials): Promise<AuthResponse> => {
-        const response = await fetch(API_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(credentials),
-        });
-        console.log("response:", response.body);
-        if (!response.ok) {
-            // You might want to handle different error scenarios here
+        try {
+            const response = await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(credentials),
+            });
+
+            if (!response.ok) {
+                throw new Error("Authentication failed");
+            }
+
+            const data: AuthResponse = await response.json();
+            return data;
+        } catch (error) {
             throw new Error("Authentication failed");
         }
-
-        const data: AuthResponse = await response.json();
-        return data;
     },
+
 
     signout(): void {
         // Clear the token from local storage

@@ -37,7 +37,7 @@ class UserManager {
             const hashedPassword = await UserManager.validateAndHashPassword(password);
             newUser.password = hashedPassword!;
             if (!hashedPassword) {
-                res.status(400).json({ error: 'Invalid password' });
+                res.status(400).json({ error: 'Password Invalid' });
                 return;
             }
             // Store user in the database

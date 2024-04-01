@@ -19,16 +19,18 @@ const UserService = {
             if (response.status === 200) {
                 console.log("User registered successfully:", response.data);
                 return response.data;
-            }else if (response.status === 400) {
-                console.error("Failed to register user. Bad request.");
-                throw new Error("Failed to register user. Bad request.");
             } else {
                 console.error("Failed to register user. Status code:", response.status);
                 throw new Error(`Failed to register user. Status code: ${response.status}`);
             }
-        } catch (error) {
+        } catch (error: any) {
             // Handle network errors and other errors
-            console.error("Failed to register user:", error);
+            if (error.response.status === 400) {
+                throw new Error("Failed to register user. Bad request.");
+            }
+            else if (error.response.status === 403) {
+                throw new Error("Failed to register user. You are not authorized to perform this action.");
+            }
             throw new Error("Failed to register user.");
         }
     },

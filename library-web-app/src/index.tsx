@@ -7,6 +7,7 @@ import AppWrapper from "./components/AppWrapper";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import RegisterUser from "./components/UserRegister";
+import RequestBook from "./components/RequestBook";
 
 const root = document.getElementById("root");
 
@@ -19,6 +20,7 @@ if (root) {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Home />} />
           <Route path="/register" element={<RegisterUser />} />
+          <Route path="/add-request" element={<RequestBook />} />
           {/* Add more routes as needed */}
         </Routes>
       </AppWrapper>

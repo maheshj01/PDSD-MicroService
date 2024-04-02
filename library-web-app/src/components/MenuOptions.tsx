@@ -16,6 +16,9 @@ const MenuOptions: React.FC<MenuOptionsProps> = ({ userRole, onMenuClick }) => {
     if (userRole === "staff" || userRole === "librarian") {
         menuItems["Add/Request Book"] = "/add-request";
     }
+    if (userRole === "librarian") {
+        menuItems["Book Requests"] = "/book-requests";
+    }
 
     if (userRole === "librarian") {
         menuItems["Register User"] = "/register";

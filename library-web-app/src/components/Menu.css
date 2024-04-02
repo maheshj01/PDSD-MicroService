@@ -22,8 +22,9 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   z-index: 1;
-  overflow: hidden;
-  transition: max-height 0.3s ease-in-out;
+  overflow-y: auto;
+  /* Allow vertical scrolling */
+  transition: max-height 4.3s ease-in-out;
   max-height: 0;
 }
 
@@ -32,6 +33,7 @@
   padding: 10px 20px;
   color: #333;
   text-decoration: none;
+  transition: background-color 0.3s;
 }
 
 .menu-content a:hover {

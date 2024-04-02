@@ -29,7 +29,7 @@ const Header: React.FC = () => {
         // navigate("/login");
         break;
       default:
-        // Handle other menu items if needed
+      // Handle other menu items if needed
     }
   };
 
@@ -41,7 +41,14 @@ const Header: React.FC = () => {
         <h1 className="header-title">PDSD Library</h1>
         <p className="header-subtitle">Explore our collection of books</p>
       </div>
-      {userData?.fullName}
+      <div className="">
+        <p>
+          {userData?.fullName}
+        </p>
+        <p>
+          ({userData?.userRole})
+        </p>
+      </div>
       <div className="right-section">
         {userRole && (
           <Menu trigger={<FontAwesomeIcon icon={faUser} />}>
@@ -49,7 +56,7 @@ const Header: React.FC = () => {
           </Menu>
         )}
       </div>
-    </div>
+    </div >
   );
 };
 

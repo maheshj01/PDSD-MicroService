@@ -1,0 +1,9 @@
+.loading-message {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 20px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

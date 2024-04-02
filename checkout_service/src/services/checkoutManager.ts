@@ -55,6 +55,31 @@ export class CheckoutManager {
       throw new Error(error.message);
     }
   }
+
+  public async checkoutItems(bookIds: string[], userId: string, due_date: Date): Promise<Checkout[]> {
+    try {
+      // Start a transaction
+      await this.checkoutRepository.beginTransaction();
+
+      const checkedOutItems: Checkout[] = [];
+
+      // Loop through each book ID and checkout the item
+      for (const bookId of bookIds) {
+        const checkedOutItem = await this.checkoutItem(bookId, userId, due_date);
+        checkedOutItems.push(checkedOutItem);
+      }
+
+      // Commit the transaction
+      await this.checkoutRepository.commitTransaction();
+
+      return checkedOutItems;
+    } catch (error: any) {
+      // Rollback the transaction if an error occurs
+      await this.checkoutRepository.rollbackTransaction();
+      console.error(`Error checking out items: ${error.message}`);
+      throw new Error(error.message);
+    }
+  }
   public async returnItem(checkoutId: string): Promise<Checkout> {
     try {
       const checkoutData = await this.checkoutRepository.retrieveCheckout(checkoutId);

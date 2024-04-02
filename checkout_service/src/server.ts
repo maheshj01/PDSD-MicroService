@@ -6,6 +6,7 @@ import { CheckoutManager } from './services/checkoutManager';
 import dotenv from 'dotenv';
 import { NotificationService, NotificationType } from './services/NotificationService';
 import cors from 'cors';
+import { Checkout } from './models/Checkout';
 
 dotenv.config();
 const app = express();
@@ -56,6 +57,38 @@ app.post('/api/checkout/checkout-item', async (req: Request, res: Response, next
       const success = await notificationService.sendNotification(token, userId, bookId, checkedOut.due_date, NotificationType.CHECKOUT);
     }
     res.status(200).json({ message: 'Item checked out successfully', data: checkedOut });
+  } catch (error: any) {
+    console.error(error.stack);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.post('/api/checkout/checkout-items', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { items } = req.body;
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: 'Invalid or empty array of items' });
+    }
+
+    const checkedOutItems: Checkout[] = [];
+    const token = (req.headers.authorization as string).split(' ')[1];
+
+    await Promise.all(items.map(async (item: any) => {
+      const { userId, bookId, due_date } = item;
+      if (!userId || !bookId || !due_date) {
+        console.error('Invalid item:', item);
+        return;
+      }
+      const checkedOutItem = await checkoutManager.checkoutItem(bookId, userId, due_date);
+      checkedOutItems.push(checkedOutItem);
+      await notificationService.sendNotification(token, userId, bookId, due_date, NotificationType.CHECKOUT);
+    }));
+
+    if (checkedOutItems.length > 0) {
+      return res.status(200).json({ message: 'Items checked out successfully', data: checkedOutItems });
+    } else {
+      return res.status(404).json({ error: 'No items found to checkout' });
+    }
   } catch (error: any) {
     console.error(error.stack);
     res.status(500).json({ error: 'Internal Server Error' });

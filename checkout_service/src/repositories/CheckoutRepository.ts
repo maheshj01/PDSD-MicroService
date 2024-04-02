@@ -10,7 +10,7 @@ dotenv.config();
 export class CheckoutRepositoryDB {
     private pool: Pool;
     private client: PoolClient;
-
+    private transactionInProgress: boolean;
     constructor() {
         this.client = {} as PoolClient;
         this.pool = new Pool({
@@ -20,7 +20,7 @@ export class CheckoutRepositoryDB {
             password: process.env.DB_PASSWORD,
             port: parseInt(process.env.DB_PORT || '5432', 10),
         });
-
+        this.transactionInProgress = false;
         this.connect(); // Connect to the database when the class is instantiated
     }
 
@@ -40,6 +40,31 @@ export class CheckoutRepositoryDB {
             console.error('Error disconnecting from the database:', err.message);
         }
     }
+
+    public async beginTransaction(): Promise<void> {
+        if (this.transactionInProgress) {
+            throw new Error('Transaction already in progress');
+        }
+        await this.client.query('BEGIN');
+        this.transactionInProgress = true;
+    }
+
+    public async commitTransaction(): Promise<void> {
+        if (!this.transactionInProgress) {
+            throw new Error('No transaction in progress');
+        }
+        await this.client.query('COMMIT');
+        this.transactionInProgress = false;
+    }
+
+    public async rollbackTransaction(): Promise<void> {
+        if (!this.transactionInProgress) {
+            throw new Error('No transaction in progress');
+        }
+        await this.client.query('ROLLBACK');
+        this.transactionInProgress = false;
+    }
+
 
     public async storeCheckout(checkout: Checkout): Promise<Checkout> {
 

@@ -8,7 +8,7 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import RegisterUser from "./components/UserRegister";
 import RequestBook from "./components/RequestBook";
-import { AuthProvider } from "./context/AuthContext"; // Import AuthProvider
+import { AuthProvider, useAuth } from "./context/AuthContext"; // Import AuthProvider
 import BookDetails from "./components/BookDetails";
 
 const root = document.getElementById("root");

@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { Book } from "../interfaces/Book";
 import { Link, useParams } from "react-router-dom";
-import "./BookDetails.css";
 import config from "../config";
+import "./BookDetails.css";
 
 interface BookDetailsProps {
     book?: Book;
@@ -58,13 +58,13 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
     const bookCover =
         "https://content.wepik.com/statics/90897927/preview-page0.jpg";
     return (
-        <div className="container mx-auto px-4 py-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="book-details-container">
+            <div className="book-details-grid">
                 <div>
-                    <img src={bookCover} alt={bookDetails.title} className="bookDetails-cover mx-auto md:mx-0" />
+                    <img src={bookCover} alt={bookDetails.title} className="book-details-cover" />
                 </div>
-                <div className="flex flex-col justify-center">
-                    <h2 className="text-2xl font-semibold mb-4">{bookDetails.title}</h2>
+                <div className="book-details-info">
+                    <h2 className="book-details-title">{bookDetails.title}</h2>
                     <p><strong>Author:</strong> {bookDetails.author}</p>
                     {bookDetails.category && <p><strong>Category:</strong> {bookDetails.category}</p>}
                     {bookDetails.isbn && <p><strong>ISBN:</strong> {bookDetails.isbn}</p>}
@@ -74,11 +74,9 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
                     {bookDetails.location && <p><strong>Location:</strong> {bookDetails.location}</p>}
                     <p><strong>Created At:</strong> {bookDetails.created_at}</p>
                     <p><strong>Updated At:</strong> {bookDetails.updated_at}</p>
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4">Add to Cart</button>
+                    <button className="book-details-button">Add to Cart</button>
+                    <Link to="/" className="back-to-home-link">Back to Home</Link>
                 </div>
-            </div>
-            <div className="mt-8 text-center">
-                <Link to="/" className="text-blue-500">Back to Home</Link>
             </div>
         </div>
     );

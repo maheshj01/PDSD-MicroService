@@ -30,7 +30,7 @@ const RequestBook: React.FC = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await RequestService.requestBook(formData);
+            await RequestService.requestBook(formData);
             setSuccessMessage("Book request submitted successfully!");
             setTimeout(() => {
                 navigate("/dashboard");

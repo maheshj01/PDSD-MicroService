@@ -3,20 +3,27 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../services/AuthService";
+import { useAuth } from "../context/AuthContext";
 import "./Login.css"; // Import the CSS file for styling
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
+    const { setAuthData } = useAuth();
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
 
     const handleLogin = async () => {
         try {
-            const response = await AuthService.authenticateUser({ username: email, password });
-            const token = response.token.token_value;
+            const response = await AuthService.authenticateUser({
+                username: email,
+                password,
+            });
+            const { user_id, token_value } = response.token;
 
-            localStorage.setItem("token", token);
+            setAuthData(user_id, token_value);
+
+            localStorage.setItem("token", token_value);
 
             navigate("/dashboard");
         } catch (error) {

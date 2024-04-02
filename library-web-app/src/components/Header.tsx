@@ -7,6 +7,7 @@ import Menu from "./Menu";
 import MenuOptions from "./MenuOptions";
 import { getUserRole } from "../utils/authUtils";
 import "./Header.css";
+import { useAuth } from "../context/AuthContext";
 
 const Header: React.FC = () => {
   const [userRole, setUserRole] = useState<string | null>(null);
@@ -33,12 +34,15 @@ const Header: React.FC = () => {
     }
   };
 
+  const { userData } = useAuth();
+
   return (
     <div className="header">
       <div className="left-section">
         <h1 className="header-title">PDSD Library</h1>
         <p className="header-subtitle">Explore our collection of books</p>
       </div>
+      {userData?.fullName}
       <div className="right-section">
         {userRole && (
           <Menu trigger={<FontAwesomeIcon icon={faUser} />}>

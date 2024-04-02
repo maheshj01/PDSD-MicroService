@@ -52,7 +52,6 @@ export class CheckoutRepositoryDB {
 
             if (bookInfoResponse.status !== 200) {
                 console.error(`Failed to retrieve book information. Status Code: ${bookInfoResponse.status}`);
-                console.log(bookInfoResponse.data);
                 throw new Error('Failed to retrieve book information');
             }
 
@@ -99,7 +98,6 @@ export class CheckoutRepositoryDB {
         const query =
             'UPDATE checkouts SET user_id = $1, book_id = $2, checkout_date = $3, due_date = $4, returned = $5 WHERE id = $6';
         const values = [checkout.user_id, checkout.book_id, checkout.checkout_date, checkout.due_date, checkout.returned, checkout.id];
-        console.log(values);
         try {
             console.log('Updating checkout:', checkout);
             const result = await this.pool.query(query, values);

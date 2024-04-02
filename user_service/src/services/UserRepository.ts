@@ -34,8 +34,6 @@ class UserRepository {
             user.updatedAt,
         ];
 
-        console.log('values:', values);
-
         await Database.executeQuery(insertUserQuery, values);
     }
 
@@ -80,7 +78,6 @@ class UserRepository {
     }
 
     async updatePassword(userId: number, newPassword: string): Promise<boolean> {
-        console.log('Updating password for user:', userId);
         const updatePasswordQuery = 'UPDATE users SET password = $1 WHERE user_id = $2';
         const values = [newPassword, userId];
 
@@ -100,7 +97,6 @@ class UserRepository {
             const deleteUserQuery = 'DELETE FROM users WHERE user_id = $1';
             const values = [userId];
             const result = await Database.executeQuery(deleteUserQuery, values);
-            console.log('User deleted:', result.rowCount);
             if (result.rowCount === 0) {
                 return false;
             }

@@ -35,7 +35,6 @@ export class NotificationService {
             const userResp = await axios.get(userApiUrl, userRequestConfig);
 
             if (userResp.status === 200) {
-                console.log('User details fetched successfully', userResp.data);
                 user = userResp.data;
             } else {
                 throw new Error('Failed to fetch user details');

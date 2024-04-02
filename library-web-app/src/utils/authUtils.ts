@@ -4,7 +4,6 @@ export const getUserRole = (): string | null => {
     const token = localStorage.getItem("token");
     if (token) {
         const payload = jwtDecode(token) as { userRole: string };
-        console.log("User role:", payload.userRole);
         return payload.userRole || null;
     }
     return null;

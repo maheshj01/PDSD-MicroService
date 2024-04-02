@@ -89,8 +89,6 @@ class UserManager {
 
             // Authenticate user
             const sessionToken = await AuthenticationService.handleAuthentication(username, password);
-            console.log('sessionToken:', sessionToken?.token_value);
-            console.log('sessionToken userId:', sessionToken?.user_id);
             if (sessionToken) {
                 res.status(200).json({ token: sessionToken });
             } else {

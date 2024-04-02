@@ -16,7 +16,7 @@ const Header: React.FC = () => {
   }, []);
 
   const handleMenuClick = (menuItem: string, path: string) => {
-    // console.log(`Menu item cslicked: ${menuItem} role: ${userRole} path: ${path}`);
+    // console.log(`Menu item clicked: ${menuItem} role: ${userRole} path: ${path}`);
     switch (menuItem) {
       case "Profile":
       case "Register User":
@@ -30,7 +30,6 @@ const Header: React.FC = () => {
         break;
       default:
         // Handle other menu items if needed
-        console.log("Unknown menu item clicked!");
     }
   };
 

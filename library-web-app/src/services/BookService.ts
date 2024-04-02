@@ -49,7 +49,6 @@ const BookService = {
             if (category === 'title' || category === 'author' || category === 'category') {
                 url += `?${category}=${term}`;
             }
-            console.log(url);
         }
 
         return handleRequest(axios.get<Book[]>(url));

@@ -36,8 +36,8 @@ const RegisterUser: React.FC = () => {
             const data = await UserService.registerUser(formData);
             setSuccessMessage("User registered successfully!");
             setTimeout(() => {
-                navigate("/login");
-            }, 2000); // Navigate after 2 seconds
+                setSuccessMessage("");
+            }, 5000); // Navigate after 2 seconds
         } catch (error: any) {
             setError(error.message || "Failed to register user. Please try again later.");
         } finally {

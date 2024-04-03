@@ -1,3 +1,5 @@
+// CheckoutPage.js
+
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -6,7 +8,7 @@ import Header from './Header';
 import './Checkout.css';
 
 const CheckoutPage = () => {
-    const { cart, removeFromCart } = useCart(); // Add removeFromCart function from CartContext
+    const { cart, removeFromCart } = useCart();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
@@ -34,28 +36,28 @@ const CheckoutPage = () => {
     };
 
     const handleRemoveItem = (bookId: string) => {
-        removeFromCart(bookId); // Call removeFromCart function with the bookId
+        removeFromCart(bookId);
     };
 
     return (
         <div className="checkout-container">
             <Header />
             <div className="checkout-content">
-                <h1>Checkout</h1>
+                <h1 className="checkout-heading">Checkout</h1>
                 <div className="cart-items">
                     {cart.map(item => (
                         <div key={item.book.id} className="cart-item">
-                            <p>{item.book.title}</p>
-                            <p>Quantity: {item.quantity}</p>
-                            <button onClick={() => handleRemoveItem(item.book.id.toString())}>Remove</button>
+                            <p className="cart-item-title">{item.book.title}</p>
+                            <p className="cart-item-quantity">Quantity: {item.quantity}</p>
+                            <button className="remove-button" onClick={() => handleRemoveItem(item.book.id.toString())}>Remove</button>
                         </div>
                     ))}
                 </div>
-                {loading && <p>Loading...</p>}
-                {error && <p>Error: {error}</p>}
+                {loading && <p className="loading-message">Loading...</p>}
+                {error && <p className="error-message">Error: {error}</p>}
                 {success && <p className="success-message">Items successfully checked out!</p>}
                 {!loading && !success && (
-                    <button onClick={handleCheckout} className="checkout-button">Checkout</button>
+                    <button className="checkout-button" onClick={handleCheckout}>Proceed to Checkout</button>
                 )}
             </div>
         </div>

@@ -1,15 +1,16 @@
-// src/components/SearchBar.tsx
-
 import React, { useState, ChangeEvent } from "react";
 import { Book } from "../interfaces/Book";
 import "./SearchBar.css";
+
 interface SearchBarProps {
   onSearch: (term: string, category?: keyof Book) => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [searchCategory, setSearchCategory] = useState<keyof Book | undefined>('title');
+  const [searchCategory, setSearchCategory] = useState<keyof Book | undefined>(
+    "title"
+  );
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value;
@@ -17,8 +18,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     onSearch(term, searchCategory);
   };
 
-  const handleCategoryChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const category = event.target.value as keyof Book;
+  const handleCategoryChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    category: keyof Book
+  ) => {
     setSearchCategory(category);
     if (searchTerm) {
       onSearch(searchTerm, category);
@@ -36,11 +39,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
       <div className="search-bar">
         <input
           type="text"
+          className="search-input"
           placeholder="Search for books..."
           value={searchTerm}
           onChange={handleInputChange}
         />
-        <button onClick={handleClear}>Clear</button>
+        <button className="clear-button" onClick={handleClear}>
+          Clear
+        </button>
       </div>
 
       {/* Add radio buttons for categories */}
@@ -50,7 +56,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
             type="radio"
             value="title"
             checked={searchCategory === "title"}
-            onChange={handleCategoryChange}
+            onChange={(e) => handleCategoryChange(e, "title")}
           />
           Title
         </label>
@@ -59,7 +65,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
             type="radio"
             value="author"
             checked={searchCategory === "author"}
-            onChange={handleCategoryChange}
+            onChange={(e) => handleCategoryChange(e, "author")}
           />
           Author
         </label>
@@ -68,7 +74,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
             type="radio"
             value="category"
             checked={searchCategory === "category"}
-            onChange={handleCategoryChange}
+            onChange={(e) => handleCategoryChange(e, "category")}
           />
           Category
         </label>

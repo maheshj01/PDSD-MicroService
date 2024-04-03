@@ -33,28 +33,32 @@ const Login: React.FC = () => {
 
     return (
         <div className="login-container">
-            <h1>PDSD Library</h1>
-            <h2>Login</h2>
-            <div className="form-group">
-                <label htmlFor="email">Email:</label>
-                <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
+            <div className="login-form">
+                <h1 className="login-title">PDSD Library</h1>
+                <h2 className="login-subtitle">Login</h2>
+                <div className="form-group">
+                    <label className="form-label" htmlFor="email">Email:</label>
+                    <input
+                        className="form-input"
+                        type="email"
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </div>
+                <div className="form-group">
+                    <label className="form-label" htmlFor="password">Password:</label>
+                    <input
+                        className="form-input"
+                        type="password"
+                        id="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </div>
+                {error && <p className="error-message">{error}</p>}
+                <button className="login-button" onClick={handleLogin}>Login</button>
             </div>
-            <div className="form-group">
-                <label htmlFor="password">Password:</label>
-                <input
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-            </div>
-            {error && <p className="error-message">{error}</p>}
-            <button onClick={handleLogin}>Login</button>
         </div>
     );
 };

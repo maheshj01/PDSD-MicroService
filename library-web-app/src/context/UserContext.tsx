@@ -25,26 +25,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Initialize userDetails state
   const [userDetails, setUserDetails] = useState<any>(null);
 
-  // Fetch user details on component mount if authenticated
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userId = parseInt(localStorage.getItem("userId") || "");
-
-    const fetchData = async () => {
-      try {
-        // const userData = await UserService.getUserInfo(userId, token!);
-        // setUserDetails(userData);
-      } catch (error) {
-        console.error("Error fetching user details:", error);
-        // Handle error if needed
-      }
-    };
-
-    if (token && userId) {
-      fetchData();
-    }
-  }, []);
-
   // Function to set user details
   const setUserDetailsHandler = (userData: any) => {
     setUserDetails(userData);

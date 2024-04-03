@@ -1,5 +1,3 @@
-// src/context/AuthContext.tsx
-
 import React, { createContext, useState, useContext, useEffect } from "react";
 import config from "../config";
 
@@ -23,44 +21,27 @@ interface AuthContextType {
     isAuthenticated: () => boolean;
     setAuthData: (userId: number, token: string) => void;
 }
+
 const AuthContext = createContext<AuthContextType>({
     userId: null,
     token: null,
     userData: null,
     setAuthData: () => { },
-    isAuthenticated: () => false, // Initialize with a default implementation
+    isAuthenticated: () => false,
 });
+
 export const useAuth = () => useContext(AuthContext);
 
 const API_BASE_URL = `${config.userServiceBaseUrl}/api/user`;
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [userId, setUserId] = useState<number | null>(null);
-    const [token, setToken] = useState<string | null>(null);
+    const [userId, setUserId] = useState<number | null>(() => {
+        const storedUserId = localStorage.getItem("userId");
+        return storedUserId ? parseInt(storedUserId) : null;
+    });
+
+    const [token, setToken] = useState<string | null>(() => localStorage.getItem("token"));
     const [userData, setUserData] = useState<UserData | null>(null);
-
-    // Derive isAuthenticated from userId and token
-    const isAuthenticated = () => {
-        // Check if the token is present in state
-        if (token) {
-            try {
-                // Decode the token to get its payload (assuming it's a JWT)
-                const payload = JSON.parse(atob(token.split(".")[1]));
-
-                // Check if the token is expired
-                const isExpired = payload.exp * 1000 < Date.now();
-
-                // Return true if the token exists and is not expired
-                return !isExpired;
-            } catch (error) {
-                // Token decoding or parsing failed, consider it invalid
-                return false;
-            }
-        }
-
-        // Return false if the token is not present
-        return false;
-    };
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -82,9 +63,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         fetchUserData();
     }, [userId, token]);
 
+    const isAuthenticated = () => {
+        if (token) {
+            try {
+                const payload = JSON.parse(atob(token.split(".")[1]));
+                const isExpired = payload.exp * 1000 < Date.now();
+                return !isExpired;
+            } catch (error) {
+                return false;
+            }
+        }
+        return false;
+    };
+
     const setAuthData = (userId: number, token: string) => {
         setUserId(userId);
         setToken(token);
+        localStorage.setItem("userId", userId.toString());
+        localStorage.setItem("token", token);
     };
 
     return (

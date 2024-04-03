@@ -20,7 +20,6 @@ const Login: React.FC = () => {
                 password,
             });
             const { user_id, token_value } = response.token;
-
             setAuthData(user_id, token_value);
 
             localStorage.setItem("token", token_value);

@@ -33,3 +33,31 @@
     font-size: 24px;
     cursor: pointer;
 }
+
+.cart-icon-container {
+    position: relative;
+    display: inline-block;
+    padding: 10px 15px;
+}
+
+.cart-icon {
+    font-size: 1.2rem;
+    color: #fff;
+    /* Adjust the font size as needed */
+}
+
+.cart-item-count {
+    position: absolute;
+    top: -6px;
+    right: 0px;
+    background-color: #ff0000;
+    /* Background color for the item count */
+    color: #ffffff;
+    /* Text color for the item count */
+    font-size: 0.75rem;
+    /* Font size for the item count */
+    padding: 4px 8px;
+    /* Adjust padding as needed */
+    border-radius: 50%;
+    /* Make it a circle */
+}

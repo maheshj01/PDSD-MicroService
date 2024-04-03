@@ -1,71 +1,71 @@
 .loading-message {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 20px;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 20px;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* src/components/BookDetails.css */
 
 .book-details-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .book-details-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-  }
-  
-  .book-details-cover {
-    width: 100%;
-    height: auto;
-    max-height: 400px;
-    object-fit: cover;
-  }
-  
-  .book-details-info {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .book-details-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .book-details-info p {
-    margin-bottom: 8px;
-  }
-  
-  .book-details-button {
-    background-color: #3498db;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .book-details-button:hover {
-    background-color: #2980b9;
-  }
-  
-  .back-to-home-link {
-    color: #3498db;
-    text-decoration: none;
-    margin-top: 20px;
-    display: inline-block;
-  }
-  
-  .back-to-home-link:hover {
-    text-decoration: underline;
-  }
-  
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.book-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.book-details-cover {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.book-details-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.book-details-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.book-details-info p {
+  margin-bottom: 8px;
+}
+
+.book-details-button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 2rem;
+}
+
+.book-details-button:hover {
+  background-color: #2980b9;
+}
+
+.back-to-home-link {
+  color: #3498db;
+  text-decoration: none;
+  margin-top: 20px;
+  display: inline-block;
+}
+
+.back-to-home-link:hover {
+  text-decoration: underline;
+}

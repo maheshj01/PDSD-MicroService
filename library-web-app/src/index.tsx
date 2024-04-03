@@ -10,6 +10,7 @@ import RegisterUser from "./components/UserRegister";
 import RequestBook from "./components/RequestBook";
 import { AuthProvider, useAuth } from "./context/AuthContext"; // Import AuthProvider
 import BookDetails from "./components/BookDetails";
+import Checkout from "./components/Checkout";
 
 const root = document.getElementById("root");
 
@@ -25,6 +26,7 @@ if (root) {
             <Route path="/register" element={<RegisterUser />} />
             <Route path="/add-request" element={<RequestBook />} />
             <Route path="/book/:id" element={<BookDetails />} /> {/* Add route for Book Details */}
+            <Route path="/checkout" element={<Checkout />} />
             {/* Add more routes as needed */}
           </Routes>
         </AppWrapper>

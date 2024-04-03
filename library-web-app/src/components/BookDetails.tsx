@@ -5,6 +5,7 @@ import { Book } from "../interfaces/Book";
 import { Link, useParams } from "react-router-dom";
 import config from "../config";
 import "./BookDetails.css";
+import { useCart } from "../context/CartContext";
 
 interface BookDetailsProps {
     book?: Book;
@@ -16,7 +17,14 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [bookDetails, setBookDetails] = useState<Book>({} as Book); // Initialize with an empty object
+    const { addToCart } = useCart();
     const API_URL = config.booksServiceBaseUrl + '/api/books';
+
+    // Function to handle adding the book to cart
+    const handleAddToCart = () => {
+        // Add the book to cart
+        addToCart(bookDetails.id, 1);
+    };
 
     useEffect(() => {
         // Fetch book details only if book prop is not provided
@@ -55,6 +63,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
     if (error) {
         return <p className="error-message">{error}</p>;
     }
+
     const bookCover =
         "https://content.wepik.com/statics/90897927/preview-page0.jpg";
     return (
@@ -72,9 +81,9 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
                     <p><strong>Available Copies:</strong> {bookDetails.available_copies}</p>
                     <p><strong>Total Copies:</strong> {bookDetails.total_copies}</p>
                     {bookDetails.location && <p><strong>Location:</strong> {bookDetails.location}</p>}
-                    <p><strong>Created At:</strong> {bookDetails.created_at}</p>
-                    <p><strong>Updated At:</strong> {bookDetails.updated_at}</p>
-                    <button className="book-details-button">Add to Cart</button>
+                    {/* <p><strong>Created At:</strong> {bookDetails.created_at}</p>
+                    <p><strong>Updated At:</strong> {bookDetails.updated_at}</p> */}
+                    <button className="book-details-button" onClick={handleAddToCart}>Add to Cart</button>
                     <Link to="/" className="back-to-home-link">Back to Home</Link>
                 </div>
             </div>

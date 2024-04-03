@@ -8,7 +8,7 @@ import Header from './Header';
 import './Checkout.css';
 
 const CheckoutPage = () => {
-    const { cart, removeFromCart } = useCart();
+    const { cart, removeFromCart, clearCart } = useCart();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
@@ -26,6 +26,7 @@ const CheckoutPage = () => {
                 due_date: due_date
             }));
             await checkoutService.checkoutItems(items);
+            clearCart();
             setSuccess(true);
         } catch (error) {
             console.error('Error checking out items:', error);

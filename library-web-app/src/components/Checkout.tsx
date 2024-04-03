@@ -12,7 +12,7 @@ const CheckoutPage = () => {
     const [success, setSuccess] = useState(false);
     const userAuth = useAuth(); // Assuming you have an auth context or hook
     const checkoutService = new CheckoutService(userAuth.token!);
-
+    const { clearCart } = useCart();
     const handleCheckout = async () => {
         setLoading(true);
         try {
@@ -30,7 +30,7 @@ const CheckoutPage = () => {
             await checkoutService.checkoutItems(items);
 
             // If successful, clear the cart or perform any other actions
-            // clearCart(); // Implement clearCart function if needed
+            clearCart(); // Implement clearCart function if needed
             setSuccess(true);
         } catch (error) {
             console.error('Error checking out items:', error);

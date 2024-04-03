@@ -1,24 +1,65 @@
-/* Add this to your CSS */
-.login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    /* Adjust as needed */
+.register-user-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
-.login-container h2 {
-    text-align: center;
+.form-group {
+    margin-bottom: 15px;
 }
 
-.login-container button {
-    margin-top: 10px;
-    /* Add spacing between the title and button */
+label {
+    display: block;
+    margin-bottom: 5px;
 }
 
-.loading{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+input,
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+select {
+    appearance: none;
+}
+
+.register-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.register-button:hover {
+    background-color: #0056b3;
+}
+
+.loading,
+.error-message,
+.success-message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.loading {
+    background-color: #f0f0f0;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
 }

@@ -50,9 +50,9 @@ const RegisterUser: React.FC = () => {
     return (
         <div className="register-user-container">
             <form onSubmit={handleSubmit}>
+                <h2>Register User</h2>
                 <div className="form-group">
-                    <h2>Register User</h2>
-                    <label htmlFor="username">Username:</label>
+                    <label htmlFor="username">Username</label>
                     <input
                         type="text"
                         id="username"
@@ -62,9 +62,8 @@ const RegisterUser: React.FC = () => {
                         required
                     />
                 </div>
-                {/* Add more form fields based on your schema */}
                 <div className="form-group">
-                    <label htmlFor="email">Email:</label>
+                    <label htmlFor="email">Email</label>
                     <input
                         type="email"
                         id="email"
@@ -75,7 +74,7 @@ const RegisterUser: React.FC = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="password">Password:</label>
+                    <label htmlFor="password">Password</label>
                     <input
                         type="password"
                         id="password"
@@ -85,9 +84,8 @@ const RegisterUser: React.FC = () => {
                         required
                     />
                 </div>
-                {/* Add more form fields based on your schema */}
                 <div className="form-group">
-                    <label htmlFor="fullName">Full Name:</label>
+                    <label htmlFor="fullName">Full Name</label>
                     <input
                         type="text"
                         id="fullName"
@@ -98,7 +96,7 @@ const RegisterUser: React.FC = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="userRole">User Role:</label>
+                    <label htmlFor="userRole">User Role</label>
                     <select
                         id="userRole"
                         name="userRole"
@@ -111,9 +109,8 @@ const RegisterUser: React.FC = () => {
                         <option value="librarian">Librarian</option>
                     </select>
                 </div>
-                {/* Add more form fields based on your schema */}
                 <div className="form-group">
-                    <label htmlFor="schoolId">School ID:</label>
+                    <label htmlFor="schoolId">School ID</label>
                     <input
                         type="number"
                         id="schoolId"
@@ -123,7 +120,7 @@ const RegisterUser: React.FC = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="mailingAddress">Mailing Address:</label>
+                    <label htmlFor="mailingAddress">Mailing Address</label>
                     <input
                         type="text"
                         id="mailingAddress"
@@ -133,7 +130,7 @@ const RegisterUser: React.FC = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="phoneNumber">Phone Number:</label>
+                    <label htmlFor="phoneNumber">Phone Number</label>
                     <input
                         type="text"
                         id="phoneNumber"
@@ -141,9 +138,10 @@ const RegisterUser: React.FC = () => {
                         value={formData.phoneNumber}
                         onChange={handleChange}
                     />
-                    <button type="submit" disabled={loading}>Register</button>
                 </div>
-                {loading && <p className="loading">Loading...</p>}
+                <button type="submit" className="register-button" disabled={loading}>
+                    {loading ? "Registering..." : "Register"}
+                </button>
                 {successMessage && <p className="success-message">{successMessage}</p>}
                 {error && <p className="error-message">{error}</p>}
             </form>
@@ -152,3 +150,4 @@ const RegisterUser: React.FC = () => {
 };
 
 export default RegisterUser;
+

@@ -51,7 +51,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
       {/* Add radio buttons for categories */}
       <div className="radio-container">
-        <label>
+        <label className="radio-label">
           <input
             type="radio"
             value="title"
@@ -60,7 +60,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           />
           Title
         </label>
-        <label>
+        <label className="radio-label">
           <input
             type="radio"
             value="author"
@@ -69,7 +69,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           />
           Author
         </label>
-        <label>
+        <label className="radio-label">
           <input
             type="radio"
             value="category"

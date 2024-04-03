@@ -118,4 +118,14 @@ export class CheckoutManager {
       throw new Error('Failed to retrieve due checkouts');
     }
   }
+
+  public async checkedOutBooksByUser(userId: string): Promise<Checkout[]> {
+    try {
+      const checkouts = await this.checkoutRepository.retrieveCheckoutsByUser(userId);
+      return checkouts;
+    } catch (error: any) {
+      console.error(`Error retrieving checkouts by user: ${error.message}`);
+      throw new Error('Failed to retrieve checkouts by user');
+    }
+  }
 }

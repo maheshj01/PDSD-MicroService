@@ -107,6 +107,18 @@ app.get('/api/checkout/checkouts', async (req: Request, res: Response, next: Nex
 });
 
 
+app.get('/api/checkout/checked-out-books/:userId', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.params.userId;
+    const checkedOutBooks = await checkoutManager.checkedOutBooksByUser(userId);
+    res.status(200).json({ data: checkedOutBooks });
+  } catch (error: any) {
+    console.error(error.stack);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 app.get('/api/checkout/due-checkouts', async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Get all due checkouts

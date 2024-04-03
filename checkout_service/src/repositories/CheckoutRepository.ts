@@ -156,4 +156,16 @@ export class CheckoutRepositoryDB {
             throw new Error(`Error retrieving due checkouts: ${error.message}`);
         }
     }
+
+    public async retrieveCheckoutsByUser(userId: string): Promise<Checkout[]> {
+        const query = 'SELECT * FROM checkouts WHERE user_id = $1';
+        const values = [userId];
+        try {
+            const result: QueryResult<Checkout> = await this.pool.query(query, values);
+            const checkouts = result.rows;
+            return checkouts;
+        } catch (error: any) {
+            throw new Error(`Error retrieving checkouts by user: ${error.message}`);
+        }
+    }
 }

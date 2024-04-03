@@ -1,6 +1,6 @@
-// CartContext.tsx
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { Book } from "../interfaces/Book";
+
 // Define the shape of a CartItem
 interface CartItem {
     book: Book;
@@ -24,7 +24,10 @@ export const useCart = () => useContext(CartContext);
 
 // CartProvider component to wrap the application and provide the CartContext
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [cart, setCart] = useState<CartItem[]>([]);
+    const [cart, setCart] = useState<CartItem[]>(() => {
+        const storedCart = localStorage.getItem("cart");
+        return storedCart ? JSON.parse(storedCart) : [];
+    });
 
     // Function to add items to the cart
     const addToCart = (book: Book, quantity: number) => {
@@ -39,6 +42,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
         setCart(updatedCart);
     };
+
+    // Update local storage whenever the cart changes
+    useEffect(() => {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }, [cart]);
 
     return (
         <CartContext.Provider value={{ cart, addToCart }}>

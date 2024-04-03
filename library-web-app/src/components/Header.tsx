@@ -10,11 +10,12 @@ import "./Header.css";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import AuthService from "../services/AuthService";
 
 const Header: React.FC = () => {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [cartItemCount, setCartItemCount] = useState<number>(0); // State to keep track of cart items count
-
+  const { clearCart } = useCart();
   useEffect(() => {
     setUserRole(getUserRole());
     // Fetch cart items count from localStorage or your state management library
@@ -35,7 +36,8 @@ const Header: React.FC = () => {
         break;
       case "Sign Out":
         // Handle logic for signing out, e.g., clear local storage, etc.
-        localStorage.removeItem("token");
+        AuthService.signout();
+        clearCart();
         // navigate("/login");
         break;
       default:

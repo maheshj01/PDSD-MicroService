@@ -1,5 +1,7 @@
 // src/services/AuthService.ts
 import config from "../config";
+import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 
 const API_URL = `${config.userServiceBaseUrl}/api/user/authenticate`;
 
@@ -19,6 +21,7 @@ interface AuthCredentials {
 
 const AuthService = {
     authenticateUser: async (credentials: AuthCredentials): Promise<AuthResponse> => {
+
         try {
             const response = await fetch(API_URL, {
                 method: "POST",
@@ -43,7 +46,6 @@ const AuthService = {
     signout(): void {
         // Clear the token from local storage
         localStorage.removeItem("token");
-
         // Redirect or perform any additional cleanup as needed
         // Example: window.location.href = "/login";
     }

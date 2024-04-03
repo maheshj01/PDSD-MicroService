@@ -1,7 +1,7 @@
 .register-user-container {
     max-width: 400px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 65px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -18,12 +18,15 @@ label {
 input,
 select {
     width: 100%;
+    /* Set width to 100% for uniform width */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-select {
+select#userRole {
+    width: calc(100% - 2px);
+    /* Subtract 2px to account for the border width */
     appearance: none;
 }
 

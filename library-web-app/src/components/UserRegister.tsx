@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserService from "../services/UserService";
+import Input from "./Input"; // Import the Input component
 import "./UserRegister.css";
+import Header from "./Header";
 
 const RegisterUser: React.FC = () => {
     const navigate = useNavigate();
@@ -48,12 +50,13 @@ const RegisterUser: React.FC = () => {
     };
 
     return (
-        <div className="register-user-container">
-            <form onSubmit={handleSubmit}>
-                <h2>Register User</h2>
-                <div className="form-group">
-                    <label htmlFor="username">Username</label>
-                    <input
+        <div>
+            <Header />
+            <div className="register-user-container">
+                <form onSubmit={handleSubmit}>
+                    <h2>Register User</h2>
+                    <Input
+                        label="Username"
                         type="text"
                         id="username"
                         name="username"
@@ -61,10 +64,8 @@ const RegisterUser: React.FC = () => {
                         onChange={handleChange}
                         required
                     />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="email">Email</label>
-                    <input
+                    <Input
+                        label="Email"
                         type="email"
                         id="email"
                         name="email"
@@ -72,10 +73,8 @@ const RegisterUser: React.FC = () => {
                         onChange={handleChange}
                         required
                     />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input
+                    <Input
+                        label="Password"
                         type="password"
                         id="password"
                         name="passwordHash"
@@ -83,10 +82,8 @@ const RegisterUser: React.FC = () => {
                         onChange={handleChange}
                         required
                     />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="fullName">Full Name</label>
-                    <input
+                    <Input
+                        label="Full Name"
                         type="text"
                         id="fullName"
                         name="fullName"
@@ -94,60 +91,53 @@ const RegisterUser: React.FC = () => {
                         onChange={handleChange}
                         required
                     />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="userRole">User Role</label>
-                    <select
-                        id="userRole"
-                        name="userRole"
-                        value={formData.userRole}
-                        onChange={handleChange}
-                        required
-                    >
-                        <option value="patron">Patron</option>
-                        <option value="staff">Staff</option>
-                        <option value="librarian">Librarian</option>
-                    </select>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="schoolId">School ID</label>
-                    <input
+                    <div className="form-group">
+                        <label htmlFor="userRole">User Role</label>
+                        <select
+                            id="userRole"
+                            name="userRole"
+                            value={formData.userRole}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="patron">Patron</option>
+                            <option value="staff">Staff</option>
+                            <option value="librarian">Librarian</option>
+                        </select>
+                    </div>
+                    <Input
+                        label="School ID (8-9 digits)"
                         type="number"
                         id="schoolId"
                         name="schoolId"
                         value={formData.schoolId}
                         onChange={handleChange}
                     />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="mailingAddress">Mailing Address</label>
-                    <input
+                    <Input
+                        label="Mailing Address"
                         type="text"
                         id="mailingAddress"
                         name="mailingAddress"
                         value={formData.mailingAddress}
                         onChange={handleChange}
                     />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="phoneNumber">Phone Number</label>
-                    <input
+                    <Input
+                        label="Phone Number"
                         type="text"
                         id="phoneNumber"
                         name="phoneNumber"
                         value={formData.phoneNumber}
                         onChange={handleChange}
                     />
-                </div>
-                <button type="submit" className="register-button" disabled={loading}>
-                    {loading ? "Registering..." : "Register"}
-                </button>
-                {successMessage && <p className="success-message">{successMessage}</p>}
-                {error && <p className="error-message">{error}</p>}
-            </form>
+                    <button type="submit" className="register-button" disabled={loading}>
+                        {loading ? "Registering..." : "Register"}
+                    </button>
+                    {successMessage && <p className="success-message">{successMessage}</p>}
+                    {error && <p className="error-message">{error}</p>}
+                </form>
+            </div>
         </div>
     );
 };
 
 export default RegisterUser;
-

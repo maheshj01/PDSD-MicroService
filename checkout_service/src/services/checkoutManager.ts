@@ -5,6 +5,7 @@ import { CheckoutValidator } from '../validators/CheckoutValidator';
 import { User } from '../models/User';
 import { Book } from '../models/Book';
 import e from 'express';
+import axios from 'axios';
 
 export class CheckoutManager {
   private checkoutRepository: CheckoutRepositoryDB;
@@ -119,10 +120,23 @@ export class CheckoutManager {
     }
   }
 
-  public async checkedOutBooksByUser(userId: string): Promise<Checkout[]> {
+  public async checkedOutBooksByUser(userId: string): Promise<any[]> {
     try {
       const checkouts = await this.checkoutRepository.retrieveCheckoutsByUser(userId);
-      return checkouts;
+      const checkedOutBooks = await Promise.all(checkouts.map(async (checkout: any) => {
+        const bookSearchApiUrl = `${process.env.BOOKS_SERVICE_BASE_URL}/api/books/search?id=${checkout.book_id}`;
+        const bookInfoResponse = await axios.get(bookSearchApiUrl);
+        if (bookInfoResponse.status !== 200) {
+          console.error(`Failed to retrieve book information for book ID ${checkout.book_id}. Status Code: ${bookInfoResponse.status}`);
+          return null;
+        }
+        const bookInfo = bookInfoResponse.data[0]; // Assuming the API returns an array of books, take the first one
+        return {
+          ...checkout,
+          book: bookInfo,
+        };
+      }));
+      return checkedOutBooks.filter((book) => book !== null);
     } catch (error: any) {
       console.error(`Error retrieving checkouts by user: ${error.message}`);
       throw new Error('Failed to retrieve checkouts by user');

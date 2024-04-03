@@ -1,21 +1,12 @@
-/* src/components/Header.css */
+/* Header.css */
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    background-color: #3498db;
-    color: #fff;
-}
-
-.left-section {
-    flex: 1;
-}
-
-.right-section {
-    display: flex;
-    align-items: center;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .header-title {
@@ -25,39 +16,48 @@
 
 .header-subtitle {
     font-size: 14px;
-    color: #ccc;
-    margin: 5px 0;
+    color: #666;
+    margin-top: 5px;
 }
 
-.account-icon {
-    font-size: 24px;
-    cursor: pointer;
+.right-section {
+    display: flex;
+    align-items: center;
 }
 
 .cart-icon-container {
     position: relative;
-    display: inline-block;
-    padding: 10px 15px;
+    margin-right: 1.5rem;
+}
+
+.cart-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
 }
 
 .cart-icon {
-    font-size: 1.2rem;
-    color: #fff;
-    /* Adjust the font size as needed */
+    font-size: 24px;
 }
 
 .cart-item-count {
     position: absolute;
-    top: -6px;
-    right: 0px;
-    background-color: #ff0000;
-    /* Background color for the item count */
-    color: #ffffff;
-    /* Text color for the item count */
-    font-size: 0.75rem;
-    /* Font size for the item count */
-    padding: 4px 8px;
-    /* Adjust padding as needed */
+    top: -8px;
+    right: -8px;
+    background-color: #ff4d4d;
+    color: #fff;
     border-radius: 50%;
-    /* Make it a circle */
+    padding: 5px;
+    font-size: 12px;
+}
+
+.menu-icon {
+    cursor: pointer;
+    font-size: 24px;
+    color: #333;
+}
+
+.menu-icon:hover {
+    color: #007bff;
 }

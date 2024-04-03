@@ -67,6 +67,7 @@ const Header: React.FC = () => {
             )}
           </Link>
         </div>
+
         {userRole && (
           <Menu trigger={<FontAwesomeIcon icon={faUser} />}>
             <MenuOptions userRole={userRole} onMenuClick={handleMenuClick} />

@@ -1,36 +1,29 @@
 import React, { useState } from 'react';
-import { useCart } from '../context/CartContext'; // Import the useCart hook
+import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import CheckoutService from '../services/CheckoutService';
 import Header from './Header';
-import './Checkout.css'; // Import CSS file for styling
+import './Checkout.css';
 
 const CheckoutPage = () => {
-    const { cart } = useCart();
+    const { cart, removeFromCart } = useCart(); // Add removeFromCart function from CartContext
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
-    const userAuth = useAuth(); // Assuming you have an auth context or hook
+    const userAuth = useAuth();
     const checkoutService = new CheckoutService(userAuth.token!);
-    const { clearCart } = useCart();
+
     const handleCheckout = async () => {
         setLoading(true);
         try {
-            // due date = today + 30 days in YYYY-MM-DD format
             const due_date = new Date();
             due_date.setDate(due_date.getDate() + 30);
-            // Extract bookIds and quantities from cart items
             const items = cart.map(item => ({
-                userId: userAuth.userId, // Assuming userId is available in your context or state
+                userId: userAuth.userId,
                 bookId: item.book.id,
-                due_date: due_date // Replace with the desired due date
+                due_date: due_date
             }));
-
-            // Call the checkoutItems API
             await checkoutService.checkoutItems(items);
-
-            // If successful, clear the cart or perform any other actions
-            clearCart(); // Implement clearCart function if needed
             setSuccess(true);
         } catch (error) {
             console.error('Error checking out items:', error);
@@ -40,18 +33,21 @@ const CheckoutPage = () => {
         }
     };
 
+    const handleRemoveItem = (bookId: string) => {
+        removeFromCart(bookId); // Call removeFromCart function with the bookId
+    };
+
     return (
         <div className="checkout-container">
             <Header />
             <div className="checkout-content">
                 <h1>Checkout</h1>
                 <div className="cart-items">
-                    {/* Display cart items */}
                     {cart.map(item => (
                         <div key={item.book.id} className="cart-item">
                             <p>{item.book.title}</p>
                             <p>Quantity: {item.quantity}</p>
-                            {/* Add more details as needed */}
+                            <button onClick={() => handleRemoveItem(item.book.id.toString())}>Remove</button>
                         </div>
                     ))}
                 </div>

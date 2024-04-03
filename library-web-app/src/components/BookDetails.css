@@ -69,3 +69,24 @@
 .back-to-home-link:hover {
   text-decoration: underline;
 }
+
+.add-to-cart-button,
+.remove-from-cart-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.add-to-cart-button {
+  background-color: #4caf50;
+  /* Green */
+  color: white;
+}
+
+.remove-from-cart-button {
+  background-color: #f44336;
+  /* Red */
+  color: white;
+}

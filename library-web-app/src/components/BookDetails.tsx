@@ -18,14 +18,8 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [bookDetails, setBookDetails] = useState<Book>({} as Book); // Initialize with an empty object
-    const { addToCart } = useCart();
+    const { cart, addToCart, removeFromCart } = useCart(); // Use removeFromCart from the CartContext
     const API_URL = config.booksServiceBaseUrl + '/api/books';
-
-    // Function to handle adding the book to cart
-    const handleAddToCart = () => {
-        // Add the book to cart
-        addToCart(bookDetails, 1);
-    };
 
     useEffect(() => {
         // Fetch book details only if book prop is not provided
@@ -57,6 +51,18 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
         }
     };
 
+    // Function to handle adding or removing the book from cart
+    const handleAddToCart = () => {
+        const isBookInCart = cart.some(item => item.book.id === bookDetails.id);
+        if (isBookInCart) {
+            // Book is already in cart, so remove it
+            removeFromCart(bookDetails.id.toString());
+        } else {
+            // Book is not in cart, so add it
+            addToCart(bookDetails, 1);
+        }
+    };
+
     if (loading) {
         return <p className="loading-message">Loading book details...</p>;
     }
@@ -84,9 +90,12 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
                         <p><strong>Available Copies:</strong> {bookDetails.available_copies}</p>
                         <p><strong>Total Copies:</strong> {bookDetails.total_copies}</p>
                         {bookDetails.location && <p><strong>Location:</strong> {bookDetails.location}</p>}
-                        {/* <p><strong>Created At:</strong> {bookDetails.created_at}</p>
-                    <p><strong>Updated At:</strong> {bookDetails.updated_at}</p> */}
-                        <button className="book-details-button" onClick={handleAddToCart}>Add to Cart</button>
+                        {/* Render "Add to Cart" or "Remove from Cart" button based on whether the book is in the cart */}
+                        {cart.some(item => item.book.id === bookDetails.id) ? (
+                            <button className="remove-from-cart-button" onClick={handleAddToCart}>Remove from Cart</button>
+                        ) : (
+                            <button className="add-to-cart-button" onClick={handleAddToCart}>Add to Cart</button>
+                        )}
                     </div>
                 </div>
             </div>

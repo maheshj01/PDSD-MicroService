@@ -11,14 +11,16 @@ interface CartItem {
 interface CartContextType {
     cart: CartItem[];
     addToCart: (book: Book, quantity: number) => void;
-    clearCart: () => void; // Define clearCart function
+    removeFromCart: (bookId: string) => void; // Define removeFromCart function
+    clearCart: () => void;
 }
 
 // Create the CartContext
 const CartContext = createContext<CartContextType>({
     cart: [],
     addToCart: () => { },
-    clearCart: () => { }, // Initialize clearCart function
+    removeFromCart: () => { }, // Initialize removeFromCart function
+    clearCart: () => { },
 });
 
 // Custom hook to consume the CartContext
@@ -45,6 +47,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setCart(updatedCart);
     };
 
+    // Function to remove items from the cart
+    const removeFromCart = (bookId: string) => {
+        const updatedCart = cart.filter(item => item.book.id !== parseInt(bookId!));
+        setCart(updatedCart);
+    };
+
     // Update local storage whenever the cart changes
     useEffect(() => {
         localStorage.setItem("cart", JSON.stringify(cart));
@@ -55,8 +63,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setCart([]);
         localStorage.removeItem("cart");
     };
+
     return (
-        <CartContext.Provider value={{ cart, addToCart, clearCart }}>
+        <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
             {children}
         </CartContext.Provider>
     );

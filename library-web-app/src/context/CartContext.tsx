@@ -1,16 +1,16 @@
 // CartContext.tsx
 import React, { createContext, useContext, useState } from "react";
-
+import { Book } from "../interfaces/Book";
 // Define the shape of a CartItem
 interface CartItem {
-    bookId: number;
+    book: Book;
     quantity: number;
 }
 
 // Define the shape of the CartContext
 interface CartContextType {
     cart: CartItem[];
-    addToCart: (bookId: number, quantity: number) => void;
+    addToCart: (book: Book, quantity: number) => void;
 }
 
 // Create the CartContext
@@ -27,15 +27,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [cart, setCart] = useState<CartItem[]>([]);
 
     // Function to add items to the cart
-    const addToCart = (bookId: number, quantity: number) => {
+    const addToCart = (book: Book, quantity: number) => {
         const updatedCart = [...cart];
         const existingItemIndex = updatedCart.findIndex(
-            (item) => item.bookId === bookId
+            (item) => item.book.id === book.id
         );
         if (existingItemIndex !== -1) {
             updatedCart[existingItemIndex].quantity += quantity;
         } else {
-            updatedCart.push({ bookId, quantity });
+            updatedCart.push({ book, quantity });
         }
         setCart(updatedCart);
     };

@@ -6,6 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import config from "../config";
 import "./BookDetails.css";
 import { useCart } from "../context/CartContext";
+import Header from "./Header";
 
 interface BookDetailsProps {
     book?: Book;
@@ -23,7 +24,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
     // Function to handle adding the book to cart
     const handleAddToCart = () => {
         // Add the book to cart
-        addToCart(bookDetails.id, 1);
+        addToCart(bookDetails, 1);
     };
 
     useEffect(() => {
@@ -67,24 +68,26 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
     const bookCover =
         "https://content.wepik.com/statics/90897927/preview-page0.jpg";
     return (
-        <div className="book-details-container">
-            <div className="book-details-grid">
-                <div>
-                    <img src={bookCover} alt={bookDetails.title} className="book-details-cover" />
-                </div>
-                <div className="book-details-info">
-                    <h2 className="book-details-title">{bookDetails.title}</h2>
-                    <p><strong>Author:</strong> {bookDetails.author}</p>
-                    {bookDetails.category && <p><strong>Category:</strong> {bookDetails.category}</p>}
-                    {bookDetails.isbn && <p><strong>ISBN:</strong> {bookDetails.isbn}</p>}
-                    {bookDetails.publication_date && <p><strong>Publication Date:</strong> {bookDetails.publication_date}</p>}
-                    <p><strong>Available Copies:</strong> {bookDetails.available_copies}</p>
-                    <p><strong>Total Copies:</strong> {bookDetails.total_copies}</p>
-                    {bookDetails.location && <p><strong>Location:</strong> {bookDetails.location}</p>}
-                    {/* <p><strong>Created At:</strong> {bookDetails.created_at}</p>
+        <div>
+            <Header />
+            <div className="book-details-container">
+                <div className="book-details-grid">
+                    <div>
+                        <img src={bookCover} alt={bookDetails.title} className="book-details-cover" />
+                    </div>
+                    <div className="book-details-info">
+                        <h2 className="book-details-title">{bookDetails.title}</h2>
+                        <p><strong>Author:</strong> {bookDetails.author}</p>
+                        {bookDetails.category && <p><strong>Category:</strong> {bookDetails.category}</p>}
+                        {bookDetails.isbn && <p><strong>ISBN:</strong> {bookDetails.isbn}</p>}
+                        {bookDetails.publication_date && <p><strong>Publication Date:</strong> {bookDetails.publication_date}</p>}
+                        <p><strong>Available Copies:</strong> {bookDetails.available_copies}</p>
+                        <p><strong>Total Copies:</strong> {bookDetails.total_copies}</p>
+                        {bookDetails.location && <p><strong>Location:</strong> {bookDetails.location}</p>}
+                        {/* <p><strong>Created At:</strong> {bookDetails.created_at}</p>
                     <p><strong>Updated At:</strong> {bookDetails.updated_at}</p> */}
-                    <button className="book-details-button" onClick={handleAddToCart}>Add to Cart</button>
-                    <Link to="/" className="back-to-home-link">Back to Home</Link>
+                        <button className="book-details-button" onClick={handleAddToCart}>Add to Cart</button>
+                    </div>
                 </div>
             </div>
         </div>

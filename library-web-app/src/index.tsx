@@ -11,6 +11,7 @@ import RequestBook from "./components/RequestBook";
 import { AuthProvider, useAuth } from "./context/AuthContext"; // Import AuthProvider
 import BookDetails from "./components/BookDetails";
 import Checkout from "./components/Checkout";
+import { CartProvider } from "./context/CartContext";
 
 const root = document.getElementById("root");
 
@@ -19,17 +20,19 @@ if (root) {
   reactRoot.render(
     <Router>
       <AuthProvider> {/* Wrap your routes with AuthProvider */}
-        <AppWrapper>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={<Home />} />
-            <Route path="/register" element={<RegisterUser />} />
-            <Route path="/add-request" element={<RequestBook />} />
-            <Route path="/book/:id" element={<BookDetails />} /> {/* Add route for Book Details */}
-            <Route path="/checkout" element={<Checkout />} />
-            {/* Add more routes as needed */}
-          </Routes>
-        </AppWrapper>
+        <CartProvider>
+          <AppWrapper>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/dashboard" element={<Home />} />
+              <Route path="/register" element={<RegisterUser />} />
+              <Route path="/add-request" element={<RequestBook />} />
+              <Route path="/book/:id" element={<BookDetails />} /> {/* Add route for Book Details */}
+              <Route path="/checkout" element={<Checkout />} />
+              {/* Add more routes as needed */}
+            </Routes>
+          </AppWrapper>
+        </CartProvider>
       </AuthProvider>
     </Router>
   );

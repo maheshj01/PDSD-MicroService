@@ -13,6 +13,7 @@ import BookDetails from "./components/BookDetails";
 import Checkout from "./components/Checkout";
 import { CartProvider } from "./context/CartContext";
 import UserProfile from "./components/Profile";
+import BookRequests from "./components/BookRequests";
 
 const root = document.getElementById("root");
 
@@ -31,6 +32,7 @@ if (root) {
               <Route path="/book/:id" element={<BookDetails />} /> {/* Add route for Book Details */}
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/profile" element={<UserProfile />} />
+              <Route path="/book-requests" element={<BookRequests />} />
               {/* Add more routes as needed */}
             </Routes>
           </AppWrapper>

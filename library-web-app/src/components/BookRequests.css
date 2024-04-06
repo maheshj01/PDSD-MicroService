@@ -1,0 +1,125 @@
+/* src/components/BookRequests.css */
+
+.book-requests-container {
+    padding: 20px;
+}
+
+.content {
+    margin-top: 20px;
+}
+
+.request-list {
+    display: grid;
+    grid-gap: 20px;
+}
+
+.request-item {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.request-item p {
+    margin: 5px 0;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    /* Add standard spacing between buttons */
+}
+
+.approve-button,
+.reject-button {
+    flex: 1;
+    /* Make buttons flexible to share the available space */
+    padding: 8px 0;
+    /* Adjust padding */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.approve-button {
+    background-color: #4caf50;
+    color: white;
+}
+
+.reject-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.approve-button:disabled,
+.reject-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* src/components/BookRequests.css */
+
+.book-requests-container {
+    padding: 20px;
+}
+
+.request-list {
+    margin-top: 20px;
+}
+
+.request-item {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.request-details {
+    margin-bottom: 10px;
+}
+
+.action-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.approve-button {
+    background-color: #4caf50;
+    color: white;
+}
+
+.reject-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.action-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.loading,
+.error-message,
+.success-message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.loading {
+    background-color: #f0f0f0;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+}

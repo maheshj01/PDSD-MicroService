@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./RequestBook.css";
 import { useAuth } from "../context/AuthContext";
 import config from "../config";
+import Header from "./Header";
 
 const RequestBook: React.FC = () => {
     const navigate = useNavigate();
@@ -64,50 +65,54 @@ const RequestBook: React.FC = () => {
     };
 
     return (
-        <div className="request-book-container">
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <h2>Request Book</h2>
-                    <label htmlFor="bookTitle">Book Title:</label>
-                    <input
-                        type="text"
-                        id="bookTitle"
-                        name="book_title"
-                        value={formData.book_title}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="bookAuthor">Book Author:</label>
-                    <input
-                        type="text"
-                        id="bookAuthor"
-                        name="book_author"
-                        value={formData.book_author}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="justification">Justification:</label>
-                    <textarea
-                        id="justification"
-                        name="justification"
-                        value={formData.justification}
-                        onChange={handleChange}
-                        rows={5}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <button type="submit" disabled={loading}>Submit Request</button>
-                </div>
-                {loading && <p className="loading">Loading...</p>}
-                {successMessage && <p className="success-message">{successMessage}</p>}
-                {error && <p className="error-message">{error}</p>}
-            </form>
+        <div>
+            <Header />
+            <div className="request-book-container">
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <h2>Request Book</h2>
+                        <label htmlFor="bookTitle">Book Title:</label>
+                        <input
+                            type="text"
+                            id="bookTitle"
+                            name="book_title"
+                            value={formData.book_title}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="bookAuthor">Book Author:</label>
+                        <input
+                            type="text"
+                            id="bookAuthor"
+                            name="book_author"
+                            value={formData.book_author}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="justification">Justification:</label>
+                        <textarea
+                            id="justification"
+                            name="justification"
+                            value={formData.justification}
+                            onChange={handleChange}
+                            rows={5}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <button type="submit" disabled={loading}>Submit Request</button>
+                    </div>
+                    {loading && <p className="loading">Loading...</p>}
+                    {successMessage && <p className="success-message">{successMessage}</p>}
+                    {error && <p className="error-message">{error}</p>}
+                </form>
+            </div>
         </div>
+
     );
 };
 

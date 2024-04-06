@@ -41,27 +41,31 @@ const CheckoutPage = () => {
     };
 
     return (
-        <div className="checkout-container">
+        <div>
             <Header />
-            <div className="checkout-content">
-                <h1 className="checkout-heading">Checkout</h1>
-                <div className="cart-items">
-                    {cart.map(item => (
-                        <div key={item.book.id} className="cart-item">
-                            <p className="cart-item-title">{item.book.title}</p>
-                            <p className="cart-item-quantity">Quantity: {item.quantity}</p>
-                            <button className="remove-button" onClick={() => handleRemoveItem(item.book.id.toString())}>Remove</button>
-                        </div>
-                    ))}
+
+            <div className="checkout-container">
+                <div className="checkout-content">
+                    <h1 className="checkout-heading">Checkout</h1>
+                    <div className="cart-items">
+                        {cart.map(item => (
+                            <div key={item.book.id} className="cart-item">
+                                <p className="cart-item-title">{item.book.title}</p>
+                                <p className="cart-item-quantity">Quantity: {item.quantity}</p>
+                                <button className="remove-button" onClick={() => handleRemoveItem(item.book.id.toString())}>Remove</button>
+                            </div>
+                        ))}
+                    </div>
+                    {loading && <p className="loading-message">Loading...</p>}
+                    {error && <p className="error-message">Error: {error}</p>}
+                    {success && <p className="success-message">Items successfully checked out!</p>}
+                    {!loading && !success && (
+                        <button className="checkout-button" onClick={handleCheckout}>Proceed to Checkout</button>
+                    )}
                 </div>
-                {loading && <p className="loading-message">Loading...</p>}
-                {error && <p className="error-message">Error: {error}</p>}
-                {success && <p className="success-message">Items successfully checked out!</p>}
-                {!loading && !success && (
-                    <button className="checkout-button" onClick={handleCheckout}>Proceed to Checkout</button>
-                )}
             </div>
         </div>
+
     );
 };
 

@@ -44,12 +44,14 @@ const Home: React.FC = () => {
     600
   );
   return (
-    <div className="home-container">
+    <div>
       <Header />
-      <SearchBar onSearch={handleSearch} />
-      {loading && <p>Loading...</p>}
-      {error && <p className="error-message">{error}</p>}
-      {!loading && !error && <BookDisplay books={books} />}
+      <div className="home-container">
+        <SearchBar onSearch={handleSearch} />
+        {loading && <p>Loading...</p>}
+        {error && <p className="error-message">{error}</p>}
+        {!loading && !error && <BookDisplay books={books} />}
+      </div>
     </div>
   );
 };

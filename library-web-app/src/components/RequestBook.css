@@ -1,0 +1,64 @@
+.request-book-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 50px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.loading,
+.error-message,
+.success-message {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.loading {
+    background-color: #f0f0f0;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+}

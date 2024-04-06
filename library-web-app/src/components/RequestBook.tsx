@@ -1,37 +1,58 @@
-// src/components/RequestBook.tsx
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import RequestService from "../services/RequestService";
 import "./RequestBook.css";
+import { useAuth } from "../context/AuthContext";
+import config from "../config";
 
 const RequestBook: React.FC = () => {
     const navigate = useNavigate();
+    const auth = useAuth();
     const [formData, setFormData] = useState({
-        user_id: 0,
+        user_id: auth.userId,
         book_title: "",
         book_author: "",
         justification: "",
-        role: "staff" // Default role for staff
+        role: localStorage.getItem("role") || "staff",
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
     };
+    const API_URL = config.requestServiceBaseUrl;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
+        setError(null); // Reset error message
         try {
-            await RequestService.requestBook(formData);
-            setSuccessMessage("Book request submitted successfully!");
+            console.log("Submitting request...", formData);
+            const response = await fetch(API_URL + "/api/requests/submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${auth.token}`,
+                },
+                body: JSON.stringify(formData),
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || "Failed to submit book request.");
+            }
+            setSuccessMessage(data.message);
+            // Clear form data
+            setFormData({
+                user_id: auth.userId,
+                book_title: "",
+                book_author: "",
+                justification: "",
+                role: "staff",
+            });
             setTimeout(() => {
                 navigate("/dashboard");
             }, 2000); // Navigate to dashboard after 2 seconds
@@ -39,10 +60,6 @@ const RequestBook: React.FC = () => {
             setError(error.message || "Failed to submit book request. Please try again later.");
         } finally {
             setLoading(false);
-            setTimeout(() => {
-                setError(null);
-                setSuccessMessage(null);
-            }, 5000); // Clear error and success message after 5 seconds
         }
     };
 
@@ -62,10 +79,10 @@ const RequestBook: React.FC = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="author">Author:</label>
+                    <label htmlFor="bookAuthor">Book Author:</label>
                     <input
                         type="text"
-                        id="author"
+                        id="bookAuthor"
                         name="book_author"
                         value={formData.book_author}
                         onChange={handleChange}

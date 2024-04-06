@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import RequestService from "../services/RequestService";
 import "./BookRequests.css";
 import { useAuth } from "../context/AuthContext";
+import Header from "./Header";
 
 const BookRequests: React.FC = () => {
     const navigate = useNavigate();
@@ -52,39 +53,43 @@ const BookRequests: React.FC = () => {
     }, []);
 
     return (
-        <div className="book-requests-container">
-            <h2>Book Requests</h2>
-            {loading && <p className="loading">Loading...</p>}
-            {successMessage && <p className="success-message">{successMessage}</p>}
-            {error && <p className="error-message">{error}</p>}
-            <div className="request-list">
-                {requests.map((request: any) => (
-                    <div key={request.id} className="request-item">
-                        <div className="request-details">
-                            <p><strong>Title:</strong> {request.book_title}</p>
-                            <p><strong>Author:</strong> {request.book_author}</p>
-                            <p><strong>Justification:</strong> {request.justification}</p>
-                            <p><strong>Status:</strong> {request.status}</p>
-                            <p><strong>Requested On:</strong> {new Date(request.created_at).toLocaleString()}</p>
+        <div>
+            <Header />
+
+            <div className="book-requests-container">
+                <h2>Book Requests</h2>
+                {loading && <p className="loading">Loading...</p>}
+                {successMessage && <p className="success-message">{successMessage}</p>}
+                {error && <p className="error-message">{error}</p>}
+                <div className="request-list">
+                    {requests.map((request: any) => (
+                        <div key={request.id} className="request-item">
+                            <div className="request-details">
+                                <p><strong>Title:</strong> {request.book_title}</p>
+                                <p><strong>Author:</strong> {request.book_author}</p>
+                                <p><strong>Justification:</strong> {request.justification}</p>
+                                <p><strong>Status:</strong> {request.status}</p>
+                                <p><strong>Requested On:</strong> {new Date(request.created_at).toLocaleString()}</p>
+                            </div>
+                            <div className="button-group">
+                                <button
+                                    className="action-button approve-button"
+                                    onClick={() => handleAction(request.id, "approve")}
+                                    disabled={loading}
+                                >
+                                    Approve
+                                </button>
+                                <button
+                                    className="action-button reject-button"
+                                    onClick={() => handleAction(request.id, "reject")}
+                                    disabled={loading}
+                                >
+                                    Reject
+                                </button>
+                            </div>
                         </div>
-                        <div className="button-group">
-                            <button
-                                className="action-button approve-button"
-                                onClick={() => handleAction(request.id, "approve")}
-                                disabled={loading}
-                            >
-                                Approve
-                            </button>
-                            <button
-                                className="action-button reject-button"
-                                onClick={() => handleAction(request.id, "reject")}
-                                disabled={loading}
-                            >
-                                Reject
-                            </button>
-                        </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
         </div>
     );
